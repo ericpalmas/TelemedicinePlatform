@@ -1,40 +1,53 @@
 import React from 'react'
-import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
-import Patient from '../components/Patient'
-import patients from '../patients'
+import { Row,  Col, Card } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const HomeScreen = () => {
   return (
     <>
-      <h1>List of patients</h1>
+    <Row className="justify-content-md-center">
 
+
+
+  <Col xs lg="2">
+  <Card className='my-3 p-3 rounded' >
+      {/* Link is better of href because we don't need to load a page, is a single page application */}
+      <Link to={`/surveyCreation`}>
+          <Card.Img src={process.env.PUBLIC_URL + '/images/Survey.png'} variant='top'  />
+      </Link>
+      <Card.Body>
+      <Link to={`/surveyCreation`}>
+              <Card.Title as='div'>
+                  <strong>
+                      Manage surveys
+                  </strong>
+              </Card.Title>
+          </Link>
+      </Card.Body>
+  </Card>
+    </Col>
+
+    <Col xs lg="2">
+    <Card className='my-3 p-3 rounded' >
+      {/* Link is better of href because we don't need to load a page, is a single page application */}
+      <Link to={`/patients`}>
+          <Card.Img  src={process.env.PUBLIC_URL + '/images/Monitor.png'} variant="top"  />
+      </Link>
+      <Card.Body>
+      <Link to={`/patients`}>
+              <Card.Title as='div'>
+                  <strong>
+                      Manage patients
+                  </strong>
+              </Card.Title>
+          </Link>
+      </Card.Body>
+  </Card>
+    </Col>
+
+    </Row>
       
-      {/* <InputGroup className="mb-3 mt-4" style={{  width: '20rem'}}>  
-          <FormControl
-             placeholder="Search"
-             aria-label="Recipient's username"
-             aria-describedby="basic-addon2"
-          />
-      </InputGroup> */}
 
-
-      <Row className='mt-4' style={{ float: 'left', display: 'inline-block' }}>
-        {patients.map(patient => (
-          <Col sm={12} md={6} lg={4}>
-            <Patient patient={patient} />
-          </Col>
-        ))}
-      </Row>
-
-      {/* <div className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-       <Button variant="primary" size="lg">
-          New patient
-       </Button>{' '}
-       <Button variant="primary" size="lg">
-          Remove patient
-       </Button>
-      </div> */}
-   
     </>
   )
 }
