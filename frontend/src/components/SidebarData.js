@@ -5,6 +5,7 @@ import * as AiIcons from 'react-icons/ai'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
+import AddQuestionModal from '../modals/AddQuestionModal'
 
 export const SidebarData = [
   {
@@ -35,8 +36,14 @@ export const SidebarData = [
     ],
   },
   {
-    title: 'Add question',
+    title: 'New survey',
     //path: '/team',
+    icon: <IoIcons.IoIosPaper />,
+  },
+  {
+    title: <AddQuestionModal />,
+    //path: '/team',
+
     icon: <IoIcons.IoMdAddCircle />,
   },
   {

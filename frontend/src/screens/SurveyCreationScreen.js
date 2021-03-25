@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Row, Col, Button, Card, Form } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
+import AddQuestionModal from '../modals/AddQuestionModal'
 
 // Patient Table
 const columns = [
@@ -150,6 +151,7 @@ const SurveyCreationScreen = () => {
             selectRow={selectRow}
           />
         </Col>
+        <AddQuestionModal>bottone</AddQuestionModal>
       </Row>
     </div>
   )

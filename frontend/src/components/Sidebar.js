@@ -5,13 +5,13 @@ import { SidebarData } from './SidebarData'
 import SubMenu from './SubMenu'
 import { IconContext } from 'react-icons/lib'
 
-const Nava = styled.div`
-  background: #75787d;
-  height: 80px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`
+// const Nava = styled.div`
+//   background: #75787d;
+//   height: 80px;
+//   display: flex;
+//   justify-content: flex-start;
+//   align-items: center;
+// `
 
 const NavIcon = styled(Link)`
   margin-left: 2rem;
@@ -23,7 +23,7 @@ const NavIcon = styled(Link)`
 `
 
 const SidebarNav = styled.nav`
-  background: #75787d;
+  background: #adb5bd;
   width: 250px;
   height: 100vh;
   display: flex;
