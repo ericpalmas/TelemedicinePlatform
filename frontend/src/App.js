@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Sidebar from './components/Sidebar'
 import HomeScreen from './screens/HomeScreen'
 import PatientListScreen from './screens/PatientListScreen'
 import SurveyCreationScreen from './screens/SurveyCreationScreen'
 import LoginScreen from './screens/LoginScreen'
 import DiseaseListScreen from './screens/DiseaseListScreen'
 import PatientScreen from './screens/PatientScreen'
+import Sidebar from './components/Sidebar'
 
 const App = () => {
   return (

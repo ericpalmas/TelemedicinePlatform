@@ -1,58 +1,94 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import { SidebarData } from './SidebarData'
-import SubMenu from './SubMenu'
 import { IconContext } from 'react-icons/lib'
+import AddQuestionModal from '../modals/AddQuestionModal'
 
-// const Nava = styled.div`
-//   background: #75787d;
-//   height: 80px;
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-// `
-
-const NavIcon = styled(Link)`
-  margin-left: 2rem;
-  font-size: 2rem;
-  height: 80px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`
-
-const SidebarNav = styled.nav`
-  background: #adb5bd;
-  width: 250px;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: ${({ sidebar }) => (sidebar ? '0' : '-100%')};
-  transition: 350ms;
-  z-index: 10;
-`
-
-const SidebarWrap = styled.div`
-  width: 100%;
-`
+import * as FaIcons from 'react-icons/fa'
+import * as AiIcons from 'react-icons/ai'
+import * as IoIcons from 'react-icons/io'
+import * as RiIcons from 'react-icons/ri'
+import * as VscIcons from 'react-icons/vsc'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)
 
+  const [subnav, setSubnav] = useState(false)
+
+  const showSubnav = () => setSubnav(!subnav)
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
-        <SidebarNav sidebar={true}>
-          <SidebarWrap>
-            <NavIcon to="#"></NavIcon>
-            {SidebarData.map((item, index) => {
-              return <SubMenu item={item} key={index} />
-            })}
-          </SidebarWrap>
-        </SidebarNav>
+        <nav id="sidebarNav" sidebar={true}>
+          <div id="sidebarWrap">
+            <div id="navIcon" to="#"></div>
+            {/* if a menu item have a sub menu */}
+            <div
+              id="sidebarLink"
+              onClick={showSubnav}
+              style={{ justifyContent: 'space-between' }}
+            >
+              <div>
+                <IoIcons.IoIosPaper />
+                <span id="sidebarLabel"> Surveys</span>
+              </div>
+              <div>
+                {subnav ? (
+                  <RiIcons.RiArrowUpSFill />
+                ) : !subnav ? (
+                  <RiIcons.RiArrowDownSFill />
+                ) : null}
+              </div>
+            </div>
+
+            {subnav ? (
+              <>
+                <div id="dropdownLink">
+                  <IoIcons.IoIosPaper />
+                  <span id="sidebarLabel"> Parkinson</span>
+                </div>
+                <div id="dropdownLink">
+                  <IoIcons.IoIosPaper />
+                  <span id="sidebarLabel"> Sleep disorders</span>
+                </div>
+                <div id="dropdownLink">
+                  <IoIcons.IoIosPaper />
+                  <span id="sidebarLabel"> Obesity</span>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+
+            {/* Normal menu item */}
+            <id id="sidebarLink">
+              <div>
+                <IoIcons.IoIosPaper />
+                <span id="sidebarLabel"> New survey</span>
+              </div>
+            </id>
+
+            {/* Normal menu item */}
+            <id id="sidebarLink">
+              <div>
+                <IoIcons.IoMdRemoveCircle />
+                <span id="sidebarLabel"> Remove question</span>
+              </div>
+            </id>
+
+            <div id="sidebarLink">
+              <IoIcons.IoMdAddCircle />
+              <AddQuestionModal />
+            </div>
+
+            {/* Normal menu item */}
+            <id id="sidebarLink">
+              <div>
+                <VscIcons.VscPreview />
+                <span id="sidebarLabel"> Preview</span>
+              </div>
+            </id>
+          </div>
+        </nav>
       </IconContext.Provider>
     </>
   )

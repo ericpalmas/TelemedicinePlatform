@@ -12,6 +12,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
 } from 'react-bootstrap'
 
 const AddQuestionModal = () => {
@@ -45,17 +46,18 @@ const AddQuestionModal = () => {
   }
 
   // type of question selected
-  const [radioOption, setRadioOption] = useState(-1)
+  const [radioOption, setRadioOption] = useState('')
   const setRadioOptionValue = (event) => {
     setRadioOption(event.target.value)
+    console.log(event.target.checked)
     setItems([])
   }
 
   return (
     <>
-      <Button variant="secondary" onClick={handleShow}>
+      <FormLabel variant="secondary" onClick={handleShow} className="ml-3">
         Add question
-      </Button>
+      </FormLabel>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -82,7 +84,6 @@ const AddQuestionModal = () => {
                         name="react-tips"
                         value="open"
                         onChange={setRadioOptionValue}
-                        //defaultChecked={true}
                         className="form-check-input"
                       />
                       Open question
@@ -118,6 +119,7 @@ const AddQuestionModal = () => {
               </div>
             </div>
           </div>
+
           {radioOption === 'multiRadio' ? (
             <>
               <Form.Label className="mt-2">
