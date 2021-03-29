@@ -17,10 +17,6 @@ const Patient = ({ patient }) => {
         </Card.Title>
 
         <div class="span6"> </div>
-
-        <Card.Text as="div" className="mr-10">
-          {patient.pathology}
-        </Card.Text>
       </a>
     </Card>
   )

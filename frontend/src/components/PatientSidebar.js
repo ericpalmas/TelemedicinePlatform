@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
-import AddQuestionModal from '../modals/AddQuestionModal'
+import AddSensorModal from '../modals/AddSensorModal'
 
 import * as FaIcons from 'react-icons/fa'
 import * as AiIcons from 'react-icons/ai'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
-import { Button } from 'react-bootstrap'
+import * as TiIcons from 'react-icons/ti'
 
-const Sidebar = () => {
+import { Button, Form, FormCheck } from 'react-bootstrap'
+
+const PatientSidebar = () => {
   const [sidebar, setSidebar] = useState(false)
 
   const [subnav, setSubnav] = useState(false)
@@ -33,8 +35,8 @@ const Sidebar = () => {
               style={{ justifyContent: 'space-between' }}
             >
               <div>
-                <IoIcons.IoIosPaper />
-                <span id="sidebarLabel"> Surveys</span>
+                <TiIcons.TiFlowSwitch />
+                <span id="sidebarLabel"> Sensors</span>
               </div>
               <div>
                 {subnav ? (
@@ -48,16 +50,38 @@ const Sidebar = () => {
             {subnav ? (
               <>
                 <div id="dropdownLink">
-                  <IoIcons.IoIosPaper />
-                  <span id="sidebarLabel"> Parkinson</span>
+                  <TiIcons.TiFlowSwitch />
+                  <span id="sidebarLabel"> Sensor 1</span>
+
+                  <Form>
+                    <Form.Check
+                      className="ml-3"
+                      type="switch"
+                      id="custom-switch1"
+                    />
+                  </Form>
                 </div>
                 <div id="dropdownLink">
-                  <IoIcons.IoIosPaper />
-                  <span id="sidebarLabel"> Sleep disorders</span>
+                  <TiIcons.TiFlowSwitch />
+                  <span id="sidebarLabel"> Sensor 2</span>
+                  <Form>
+                    <Form.Check
+                      className="ml-3"
+                      type="switch"
+                      id="custom-switch2"
+                    />
+                  </Form>
                 </div>
                 <div id="dropdownLink">
-                  <IoIcons.IoIosPaper />
-                  <span id="sidebarLabel"> Obesity</span>
+                  <TiIcons.TiFlowSwitch />
+                  <span id="sidebarLabel"> Sensor 3</span>
+                  <Form>
+                    <Form.Check
+                      className="ml-3"
+                      type="switch"
+                      id="custom-switch3"
+                    />
+                  </Form>
                 </div>
               </>
             ) : (
@@ -68,20 +92,7 @@ const Sidebar = () => {
             <id id="sidebarLink">
               <div>
                 <IoIcons.IoIosPaper />
-                <span id="sidebarLabel"> New survey</span>
-              </div>
-            </id>
-
-            <div id="sidebarLink">
-              <IoIcons.IoMdAddCircle />
-              <AddQuestionModal />
-            </div>
-
-            {/* Normal menu item */}
-            <id id="sidebarLink">
-              <div>
-                <VscIcons.VscPreview />
-                <span id="sidebarLabel"> Preview</span>
+                <AddSensorModal />
               </div>
             </id>
           </div>
@@ -91,4 +102,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default PatientSidebar

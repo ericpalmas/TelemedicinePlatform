@@ -9,7 +9,9 @@ import SurveyCreationScreen from './screens/SurveyCreationScreen'
 import LoginScreen from './screens/LoginScreen'
 import DiseaseListScreen from './screens/DiseaseListScreen'
 import PatientScreen from './screens/PatientScreen'
+import PatientsByDisease from './screens/PatientsByDisease'
 import Sidebar from './components/Sidebar'
+import PatientSidebar from './components/PatientSidebar'
 
 const App = () => {
   return (
@@ -20,9 +22,15 @@ const App = () => {
           <Route path="/" component={HomeScreen} exact />
           <Route path="/patients" component={PatientListScreen} exact />
           <Route path="/patients/:id" component={PatientScreen} />
-          <Route path="/diseases" component={DiseaseListScreen} />
+          <Route path="/diseases" component={DiseaseListScreen} exact />
+          <Route
+            path="/diseases/:id/patients"
+            component={PatientsByDisease}
+            exact
+          />
           <Route path="/surveyCreation" component={SurveyCreationScreen} />
           <Route path="/surveyCreation" component={Sidebar} />
+          <Route path="/patients/:id" component={PatientSidebar} />
           <Route path="/login" component={LoginScreen} />
         </Container>
       </main>

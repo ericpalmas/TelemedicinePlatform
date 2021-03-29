@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Row, Col, Button, Card, Form } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
-import AddQuestionModal from '../modals/AddQuestionModal'
+import * as FaIcons from 'react-icons/fa'
+import * as TiIcons from 'react-icons/ti'
 
 // Patient Table
 const columns = [
@@ -50,7 +51,14 @@ const questions = [
   { _id: 3, question: 'Ultima domanda?', type: 'radio' },
 ]
 
-const SurveyCreationScreen = () => {
+const deleteHandler = (id) => {
+  if (window.confirm('Are you sure')) {
+    console.log(id)
+  }
+}
+
+const SurveyCreationScreen = ({ removeQuestionMode }) => {
+  console.log(removeQuestionMode)
   return (
     <div>
       <Row
@@ -75,7 +83,7 @@ const SurveyCreationScreen = () => {
                 paddingRight: '2rem',
               }}
             >
-              Name: Giacomo
+              Name: Giacomo {removeQuestionMode}
             </h4>
             <h4>Surname: Rossi</h4>
           </div>
@@ -83,7 +91,22 @@ const SurveyCreationScreen = () => {
             <Col key={question._id}>
               <br />
               <Card>
-                <Card.Header>Domanda {question._id}</Card.Header>
+                <Card.Header>
+                  Domanda {question._id}
+                  <Button
+                    style={{
+                      float: 'right',
+                      display: 'inline-block',
+                    }}
+                    // variant="danger"
+                    variant="light"
+                    className="btn-sm"
+                    onClick={() => deleteHandler(question._id)}
+                  >
+                    <TiIcons.TiDelete size={30} />
+                  </Button>
+                </Card.Header>
+
                 <Card.Body>
                   <blockquote className="blockquote mb-0">
                     <Card.Title>{question.question}</Card.Title>
@@ -151,7 +174,6 @@ const SurveyCreationScreen = () => {
             selectRow={selectRow}
           />
         </Col>
-        <AddQuestionModal>bottone</AddQuestionModal>
       </Row>
     </div>
   )

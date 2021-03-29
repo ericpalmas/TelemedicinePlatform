@@ -7,7 +7,7 @@ const Disease = ({ disease }) => {
       className="my-3 p-3 rounded"
       style={{ width: '60rem', height: '5rem' }}
     >
-      <a href={`/diseases/${disease._id}`}>
+      <a href={`/diseases/${disease._id}/patients`}>
         <Card.Title as="div" className="mr-1" style={{ float: 'left' }}>
           <strong>{disease.name}</strong>
         </Card.Title>
