@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+// import { Link } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 //import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+// import Message from '../components/Message'
+// import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainter'
 // import { login } from '../actions/userActions'
 
@@ -16,7 +16,7 @@ const LoginScreen = ({ location, history }) => {
   //const userLogin = useSelector((state) => state.userLogin)
   //const { loading, error, userInfo } = userLogin
 
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  //const redirect = location.search ? location.search.split('=')[1] : '/'
 
   // useEffect(() => {
   //   if (userInfo) {

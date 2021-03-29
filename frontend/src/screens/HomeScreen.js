@@ -8,7 +8,7 @@ const HomeScreen = () => {
       <Row className="justify-content-md-center">
         {/* Link is better of href because we don't need to load a page, is a single page application */}
 
-        {/* <Col xs lg="2">
+        <Col xs lg="2">
           <Card className="my-3 p-3 rounded">
             <Link to={`/surveyCreation`}>
               <Card.Img
@@ -24,11 +24,11 @@ const HomeScreen = () => {
               </Link>
             </Card.Body>
           </Card>
-        </Col> */}
+        </Col>
 
         {/* Link is better of href because we don't need to load a page, is a single page application */}
 
-        {/* <Col xs lg="2">
+        <Col xs lg="2">
           <Card className="my-3 p-3 rounded">
             <Link to={`/patients`}>
               <Card.Img
@@ -44,7 +44,7 @@ const HomeScreen = () => {
               </Link>
             </Card.Body>
           </Card>
-        </Col> */}
+        </Col>
       </Row>
     </>
   )

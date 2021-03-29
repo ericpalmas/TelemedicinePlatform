@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
 import AddQuestionModal from '../modals/AddQuestionModal'
 
-import * as FaIcons from 'react-icons/fa'
-import * as AiIcons from 'react-icons/ai'
+// import * as FaIcons from 'react-icons/fa'
+// import * as AiIcons from 'react-icons/ai'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
-import { Button } from 'react-bootstrap'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)

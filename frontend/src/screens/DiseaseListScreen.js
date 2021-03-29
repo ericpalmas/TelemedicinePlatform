@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Disease from '../components/Disease'
-
-import diseases from '../diseases'
+import axios from 'axios'
 
 const DiseaseListScreen = () => {
+  const [diseases, setDiseases] = useState([])
+
+  useEffect(() => {
+    const fetchDiseases = async () => {
+      const { data } = await axios.get('/api/diseases')
+
+      setDiseases(data)
+    }
+    fetchDiseases()
+  }, [])
+
   return (
     <>
       <h1>List of diseases</h1>

@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Patient from '../components/Patient'
-import patients from '../patients'
+import axios from 'axios'
 
 const PatientsByDisease = () => {
+  const [patients, setPatients] = useState([])
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      const { data } = await axios.get('/api/patients')
+
+      setPatients(data)
+    }
+    fetchPatients()
+  }, [])
   return (
     <>
       <h1>List of patients</h1>

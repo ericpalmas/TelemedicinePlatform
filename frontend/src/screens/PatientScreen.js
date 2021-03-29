@@ -1,8 +1,8 @@
-import React from 'react'
-import patients from '../patients'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
+import axios from 'axios'
 
 // Patient Table
 const columns = [
@@ -43,19 +43,30 @@ const data = [
 
 //dentro use effect farò la query per avere il singolo paziente
 const PatientScreen = ({ history, match }) => {
+  const [patient, setPatient] = useState([])
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      const { data } = await axios.get(`/api/patients/${match.params.id}`)
+
+      setPatient(data)
+    }
+    fetchPatient()
+  }, [match])
+
   return (
     <>
       <Row className="mt-4 mb-4">
         <Col md={6} className="mb-4">
           <h2 className="mt-4 mb-4">Patient Profile</h2>
           <h4>
-            {patients[0].name} {patients[0].surname}
+            {patient.name} {patient.surname}
           </h4>
           <h2 className="mt-4 mb-4">Disease</h2>
           <h4>Imsomnia</h4>
-          {patients[0].pathology}
+          {patient.pathology}
           <h2 className="mt-4 mb-4">Treatment</h2>
-          {patients[0].therapy}
+          {patient.therapy}
         </Col>
       </Row>
       <Row className="mt-4 mb-4">

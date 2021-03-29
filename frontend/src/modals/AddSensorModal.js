@@ -1,19 +1,6 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
-import {
-  Row,
-  Col,
-  Button,
-  Card,
-  Form,
-  Radio,
-  ButtonGroup,
-  InputGroup,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-} from 'react-bootstrap'
+import { Button, Form, FormLabel } from 'react-bootstrap'
 
 const AddSensorModal = () => {
   const [show, setShow] = useState(false)

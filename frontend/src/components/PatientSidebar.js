@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
 import AddSensorModal from '../modals/AddSensorModal'
 
-import * as FaIcons from 'react-icons/fa'
-import * as AiIcons from 'react-icons/ai'
+// import * as FaIcons from 'react-icons/fa'
+// import * as AiIcons from 'react-icons/ai'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
-import * as VscIcons from 'react-icons/vsc'
+// import * as VscIcons from 'react-icons/vsc'
 import * as TiIcons from 'react-icons/ti'
 
-import { Button, Form, FormCheck } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 
 const PatientSidebar = () => {
   const [sidebar, setSidebar] = useState(false)
