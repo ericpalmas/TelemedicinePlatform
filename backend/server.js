@@ -1,9 +1,13 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import connectDB from './config/db.js'
+import colors from 'colors'
 import patients from './data/patients.js'
 import diseases from './data/diseases.js'
 
 dotenv.config()
+
+connectDB()
 
 const app = express()
 
