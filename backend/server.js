@@ -6,6 +6,8 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 import patientRoutes from './routes/patientRoutes.js'
 import diseasesRoutes from './routes/diseaseRoutes.js'
+import sensorRoutes from './routes/sensorRoutes.js'
+import surveyRoutes from './routes/surveyRoutes.js'
 
 dotenv.config()
 
@@ -15,6 +17,8 @@ const app = express()
 
 app.use('/api/patients', patientRoutes)
 app.use('/api/diseases', diseasesRoutes)
+app.use('/api/sensors', sensorRoutes)
+app.use('/api/surveys', surveyRoutes)
 
 app.use(notFound)
 app.use(errorHandler)

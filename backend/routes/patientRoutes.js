@@ -10,6 +10,7 @@ router.get(
   '/',
   asyncHandler(async (req, res) => {
     const patients = await Patient.find({})
+
     res.json(patients)
   }),
 )

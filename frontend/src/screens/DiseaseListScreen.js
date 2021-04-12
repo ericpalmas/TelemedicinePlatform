@@ -1,48 +1,64 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Disease from '../components/Disease'
-import axios from 'axios'
+
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listDiseases } from '../actions/diseaseActions'
 
 const DiseaseListScreen = () => {
-  const [diseases, setDiseases] = useState([])
+  const dispatch = useDispatch()
+
+  const diseaseList = useSelector((state) => state.diseaseList)
+  const { loading, error, diseases } = diseaseList
 
   useEffect(() => {
-    const fetchDiseases = async () => {
-      const { data } = await axios.get('/api/diseases')
-
-      setDiseases(data)
-    }
-    fetchDiseases()
-  }, [])
+    dispatch(listDiseases())
+  }, [dispatch])
 
   return (
     <>
       <h1>List of diseases</h1>
 
-      <InputGroup className="mb-3 mt-4" style={{ width: '20rem' }}>
-        <FormControl
-          placeholder="Search"
-          aria-label="Recipient's username"
-          aria-describedby="basic-addon2"
-        />
-      </InputGroup>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <>
+          <InputGroup className="mb-3 mt-4" style={{ width: '20rem' }}>
+            <FormControl
+              placeholder="Search"
+              aria-label="Recipient's username"
+              aria-describedby="basic-addon2"
+            />
+          </InputGroup>
 
-      <Row className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-        {diseases.map((disease) => (
-          <Col sm={12} md={6} lg={4}>
-            <Disease disease={disease} />
-          </Col>
-        ))}
-      </Row>
+          <Row
+            className="mt-4"
+            style={{ float: 'left', display: 'inline-block' }}
+          >
+            {diseases.map((disease) => (
+              <Col sm={12} md={6} lg={4}>
+                <Disease disease={disease} />
+              </Col>
+            ))}
+          </Row>
 
-      <div className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-        <Button variant="primary" size="lg">
-          New disease
-        </Button>{' '}
-        <Button variant="primary" size="lg">
-          Remove disease
-        </Button>
-      </div>
+          <div
+            className="mt-4"
+            style={{ float: 'left', display: 'inline-block' }}
+          >
+            <Button variant="primary" size="lg">
+              New disease
+            </Button>{' '}
+            <Button variant="primary" size="lg">
+              Remove disease
+            </Button>
+          </div>
+        </>
+      )}
     </>
   )
 }

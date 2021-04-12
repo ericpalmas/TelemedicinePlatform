@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Patient from '../components/Patient'
-import axios from 'axios'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listPatients } from '../actions/patientActions'
 
 const PatientListScreen = () => {
-  const [patients, setPatients] = useState([])
+  const dispatch = useDispatch()
+
+  const patientList = useSelector((state) => state.patientList)
+  const { loading, error, patients } = patientList
 
   useEffect(() => {
-    const fetchPatients = async () => {
-      const { data } = await axios.get('/api/patients')
+    dispatch(listPatients())
+  }, [dispatch])
 
-      setPatients(data)
-    }
-    fetchPatients()
-  }, [])
   return (
     <>
       <h1>List of patients</h1>
@@ -26,13 +29,22 @@ const PatientListScreen = () => {
         />
       </InputGroup>
 
-      <Row className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-        {patients.map((patient) => (
-          <Col sm={12} md={6} lg={4}>
-            <Patient patient={patient} />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Row
+          className="mt-4"
+          style={{ float: 'left', display: 'inline-block' }}
+        >
+          {patients.map((patient) => (
+            <Col sm={12} md={6} lg={4}>
+              <Patient patient={patient} />
+            </Col>
+          ))}
+        </Row>
+      )}
 
       <div className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
         <Button variant="primary" size="lg">
