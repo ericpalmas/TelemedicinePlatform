@@ -6,6 +6,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { patientDetails } from '../actions/patientActions'
+import { listPatientDiseases } from '../actions/diseaseActions'
 
 // Patient Table
 const columns = [
@@ -51,8 +52,16 @@ const PatientScreen = ({ history, match }) => {
   const patientDetail = useSelector((state) => state.patientDetail)
   const { loading, error, patient } = patientDetail
 
+  const patientDiseasesList = useSelector((state) => state.patientDiseasesList)
+  const {
+    loadingPatientDiseases,
+    errorPatientDiseases,
+    patientDiseases,
+  } = patientDiseasesList
+
   useEffect(() => {
     dispatch(patientDetails(match.params.id))
+    dispatch(listPatientDiseases(match.params.id))
   }, [dispatch, match])
 
   return (
@@ -70,7 +79,10 @@ const PatientScreen = ({ history, match }) => {
                 {patient.name} {patient.surname}
               </h4>
               <h2 className="mt-4 mb-4">Disease</h2>
-              <h4>Imsomnia</h4>
+
+              {patientDiseases.map((disease) => (
+                <h4>{disease.disease.name}</h4>
+              ))}
               {patient.pathology}
               <h2 className="mt-4 mb-4">Treatment</h2>
               {patient.therapy}

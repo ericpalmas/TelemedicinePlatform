@@ -89,7 +89,7 @@ const importData = async () => {
       },
       {
         patient: createdPatients[1]._id,
-        disease: createdDiseases[1]._id,
+        disease: createdDiseases[2]._id,
       },
     ]
     const createdPatientDisease = await PatientDisease.insertMany(

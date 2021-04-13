@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { IconContext } from 'react-icons/lib'
 import AddSensorModal from '../modals/AddSensorModal'
 
@@ -8,8 +10,11 @@ import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 // import * as VscIcons from 'react-icons/vsc'
 import * as TiIcons from 'react-icons/ti'
-
 import { Form } from 'react-bootstrap'
+
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listSensors } from '../actions/sensorActions'
 
 const PatientSidebar = () => {
   const [sidebar, setSidebar] = useState(false)
@@ -21,6 +26,15 @@ const PatientSidebar = () => {
   const removeQuestion = () => setRemoveQuestionMode(!removeQuestionMode)
 
   const showSubnav = () => setSubnav(!subnav)
+
+  const dispatch = useDispatch()
+
+  const sensorList = useSelector((state) => state.sensorList)
+  const { loading, error, sensors } = sensorList
+
+  useEffect(() => {
+    dispatch(listSensors())
+  }, [dispatch])
 
   return (
     <>
@@ -49,40 +63,20 @@ const PatientSidebar = () => {
 
             {subnav ? (
               <>
-                <div id="dropdownLink">
-                  <TiIcons.TiFlowSwitch />
-                  <span id="sidebarLabel"> Sensor 1</span>
+                {sensors.map((sensor) => (
+                  <div id="dropdownLink">
+                    <TiIcons.TiFlowSwitch />
+                    <span id="sidebarLabel"> {sensor.name}</span>
 
-                  <Form>
-                    <Form.Check
-                      className="ml-3"
-                      type="switch"
-                      id="custom-switch1"
-                    />
-                  </Form>
-                </div>
-                <div id="dropdownLink">
-                  <TiIcons.TiFlowSwitch />
-                  <span id="sidebarLabel"> Sensor 2</span>
-                  <Form>
-                    <Form.Check
-                      className="ml-3"
-                      type="switch"
-                      id="custom-switch2"
-                    />
-                  </Form>
-                </div>
-                <div id="dropdownLink">
-                  <TiIcons.TiFlowSwitch />
-                  <span id="sidebarLabel"> Sensor 3</span>
-                  <Form>
-                    <Form.Check
-                      className="ml-3"
-                      type="switch"
-                      id="custom-switch3"
-                    />
-                  </Form>
-                </div>
+                    <Form>
+                      <Form.Check
+                        className="ml-3"
+                        type="switch"
+                        id="custom-switch1"
+                      />
+                    </Form>
+                  </div>
+                ))}
               </>
             ) : (
               <></>

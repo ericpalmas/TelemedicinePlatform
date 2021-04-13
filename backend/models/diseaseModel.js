@@ -9,10 +9,6 @@ const diseaseSchema = mongoose.Schema({
     type: String,
     required: false,
   },
-  therapy: {
-    type: String,
-    required: false,
-  },
 })
 
 const Disease = mongoose.model('Disease', diseaseSchema)

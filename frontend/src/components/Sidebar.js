@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { IconContext } from 'react-icons/lib'
 import AddQuestionModal from '../modals/AddQuestionModal'
 
@@ -7,6 +9,10 @@ import AddQuestionModal from '../modals/AddQuestionModal'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
+
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listSurveyTemplates } from '../actions/surveyActions'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)
@@ -18,6 +24,15 @@ const Sidebar = () => {
   const removeQuestion = () => setRemoveQuestionMode(!removeQuestionMode)
 
   const showSubnav = () => setSubnav(!subnav)
+
+  const dispatch = useDispatch()
+
+  const surveyTemplateList = useSelector((state) => state.surveyTemplateList)
+  const { loading, error, surveys } = surveyTemplateList
+
+  useEffect(() => {
+    dispatch(listSurveyTemplates())
+  }, [dispatch])
 
   return (
     <>
@@ -46,18 +61,12 @@ const Sidebar = () => {
 
             {subnav ? (
               <>
-                <div id="dropdownLink">
-                  <IoIcons.IoIosPaper />
-                  <span id="sidebarLabel"> Parkinson</span>
-                </div>
-                <div id="dropdownLink">
-                  <IoIcons.IoIosPaper />
-                  <span id="sidebarLabel"> Sleep disorders</span>
-                </div>
-                <div id="dropdownLink">
-                  <IoIcons.IoIosPaper />
-                  <span id="sidebarLabel"> Obesity</span>
-                </div>
+                {surveys.map((survey) => (
+                  <div id="dropdownLink">
+                    <IoIcons.IoIosPaper />
+                    <span id="sidebarLabel"> {survey.name}</span>
+                  </div>
+                ))}
               </>
             ) : (
               <></>
