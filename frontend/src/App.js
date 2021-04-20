@@ -21,16 +21,17 @@ const App = () => {
         <Container>
           <Route path="/" component={HomeScreen} exact />
           <Route path="/patients" component={PatientListScreen} exact />
-          <Route path="/patients/:id" component={PatientScreen} />
-          <Route path="/diseases" component={DiseaseListScreen} exact />
           <Route
-            path="/diseases/:id/patients"
+            path="/patients/patientsByDisease/:id"
             component={PatientsByDisease}
-            exact
           />
+          <Route path="/patients/:id" component={PatientScreen} exact />
+
+          <Route path="/diseases" component={DiseaseListScreen} exact />
+
           <Route path="/surveyCreation" component={SurveyCreationScreen} />
-          <Route path="/surveyCreation" component={Sidebar} />
-          <Route path="/patients/:id" component={PatientSidebar} />
+          <Route path="/surveyCreation" component={Sidebar} exact />
+          <Route path="/patients/:id" component={PatientSidebar} exact />
           <Route path="/login" component={LoginScreen} />
         </Container>
       </main>

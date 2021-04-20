@@ -8,6 +8,7 @@ import patientRoutes from './routes/patientRoutes.js'
 import diseasesRoutes from './routes/diseaseRoutes.js'
 import sensorRoutes from './routes/sensorRoutes.js'
 import surveyRoutes from './routes/surveyRoutes.js'
+import patientsAndDiseasesRoutes from './routes/patientsAndDiseasesRoutes.js'
 
 dotenv.config()
 
@@ -15,11 +16,14 @@ connectDB()
 
 const app = express()
 
+// with this instruction i can pass json to the server
+app.use(express.json())
+
 app.use('/api/patients', patientRoutes)
 app.use('/api/diseases', diseasesRoutes)
 app.use('/api/sensors', sensorRoutes)
 app.use('/api/surveys', surveyRoutes)
-
+app.use('/api/patientsAndDiseases', patientsAndDiseasesRoutes)
 app.use(notFound)
 app.use(errorHandler)
 

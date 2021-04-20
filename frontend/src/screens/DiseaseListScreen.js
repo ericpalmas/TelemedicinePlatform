@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Disease from '../components/Disease'
+import AddDiseaseModal from '../modals/AddDiseaseModal'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listDiseases } from '../actions/diseaseActions'
+import { DISEASE_CREATE_RESET } from '../constants/diseaseConstants'
 
 const DiseaseListScreen = () => {
   const dispatch = useDispatch()
@@ -14,6 +16,7 @@ const DiseaseListScreen = () => {
   const { loading, error, diseases } = diseaseList
 
   useEffect(() => {
+    dispatch({ type: DISEASE_CREATE_RESET })
     dispatch(listDiseases())
   }, [dispatch])
 
@@ -50,9 +53,8 @@ const DiseaseListScreen = () => {
             className="mt-4"
             style={{ float: 'left', display: 'inline-block' }}
           >
-            <Button variant="primary" size="lg">
-              New disease
-            </Button>{' '}
+            <AddDiseaseModal />
+
             <Button variant="primary" size="lg">
               Remove disease
             </Button>

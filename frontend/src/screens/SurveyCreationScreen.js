@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Row, Col, Button, Card, Form } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import * as FaIcons from 'react-icons/fa'
 import * as TiIcons from 'react-icons/ti'
 
+import Patient from '../components/Patient'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listPatientsAndDisease } from '../actions/patientActions'
+
 // Patient Table
 const columns = [
-  {
-    dataField: 'id',
-    text: 'Product ID',
-  },
   {
     dataField: 'name',
     text: 'Name',
@@ -18,6 +21,10 @@ const columns = [
     dataField: 'surname',
     text: 'Surname',
   },
+  {
+    dataField: 'disease',
+    text: 'diseases',
+  },
 ]
 
 const selectRow = {
@@ -25,14 +32,14 @@ const selectRow = {
   clickToSelect: true,
 }
 
-const patients = [
-  { id: 1, name: 'Luca', surname: 'Rossi' },
-  { id: 2, name: 'Giacomo', surname: 'Verdi' },
-  { id: 3, name: 'Luca', surname: 'Rossi' },
-  { id: 4, name: 'Giacomo', surname: 'Verdi' },
-  { id: 5, name: 'Luca', surname: 'Rossi' },
-  { id: 6, name: 'Giacomo', surname: 'Verdi' },
-]
+// const patients = [
+//   { _id: 1, name: 'Luca', surname: 'Rossi' },
+//   { _id: 2, name: 'Giacomo', surname: 'Verdi' },
+//   { _id: 3, name: 'Luca', surname: 'Rossi' },
+//   { _id: 4, name: 'Giacomo', surname: 'Verdi' },
+//   { _id: 5, name: 'Luca', surname: 'Rossi' },
+//   { _id: 6, name: 'Giacomo', surname: 'Verdi' },
+// ]
 
 // Questions
 const questions = [
@@ -58,7 +65,16 @@ const deleteHandler = (id) => {
 }
 
 const SurveyCreationScreen = ({ removeQuestionMode }) => {
-  console.log(removeQuestionMode)
+  const dispatch = useDispatch()
+
+  const patientList = useSelector((state) => state.patientAndDiseaseList)
+  const { loading, error, patients } = patientList
+
+  useEffect(() => {
+    dispatch(listPatientsAndDisease())
+    console.log(patients)
+  }, [dispatch])
+
   return (
     <div>
       <Row
@@ -74,19 +90,6 @@ const SurveyCreationScreen = ({ removeQuestionMode }) => {
             borderLeft: 'solid 1px grey',
           }}
         >
-          <br />
-          <div>
-            <h4
-              style={{
-                float: 'left',
-                display: 'inline-block',
-                paddingRight: '2rem',
-              }}
-            >
-              Name: Giacomo {removeQuestionMode}
-            </h4>
-            <h4>Surname: Rossi</h4>
-          </div>
           {questions.map((question) => (
             <Col key={question._id}>
               <br />

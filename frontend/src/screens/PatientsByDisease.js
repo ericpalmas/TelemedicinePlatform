@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Patient from '../components/Patient'
-import axios from 'axios'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listPatientsByDisease } from '../actions/patientActions'
 
-const PatientsByDisease = () => {
-  const [patients, setPatients] = useState([])
+const PatientsByDisease = ({ history, match }) => {
+  const dispatch = useDispatch()
+
+  const patientListByDisease = useSelector(
+    (state) => state.patientByDiseaseList,
+  )
+  const { loading, error, patients } = patientListByDisease
+  console.log(patients)
 
   useEffect(() => {
-    const fetchPatients = async () => {
-      const { data } = await axios.get('/api/patients')
+    dispatch(listPatientsByDisease(match.params.id))
+  }, [dispatch, match])
 
-      setPatients(data)
-    }
-    fetchPatients()
-  }, [])
   return (
     <>
       <h1>List of patients</h1>
@@ -29,7 +35,7 @@ const PatientsByDisease = () => {
       <Row className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
         {patients.map((patient) => (
           <Col sm={12} md={6} lg={4}>
-            <Patient patient={patient} />
+            <Patient patient={patient.patient} />
           </Col>
         ))}
       </Row>

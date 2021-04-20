@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import AddPatientModal from '../modals/AddPatientModal'
 
 import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Patient from '../components/Patient'
@@ -47,9 +48,10 @@ const PatientListScreen = () => {
       )}
 
       <div className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-        <Button variant="primary" size="lg">
+        <AddPatientModal />
+        {/* <Button variant="primary" size="lg">
           New patient
-        </Button>{' '}
+        </Button>{' '} */}
         <Button variant="primary" size="lg">
           Remove patient
         </Button>

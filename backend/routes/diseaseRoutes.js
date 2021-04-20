@@ -15,6 +15,24 @@ router.get(
   }),
 )
 
+// @desc Add new disease
+// @route POST /api/diseases
+// @access Public
+router.post(
+  '/',
+  asyncHandler(async (req, res) => {
+    const { name, description } = req.body
+
+    const disease = new Disease({
+      name: name,
+      description: description,
+    })
+
+    const createdDisease = await disease.save()
+    res.status(201).json(createdDisease)
+  }),
+)
+
 // @desc Fetch patientDiseases
 // @route GET /api/diseases/:patientId
 // @access Public
