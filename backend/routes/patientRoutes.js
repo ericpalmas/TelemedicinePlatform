@@ -22,7 +22,7 @@ router.get(
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const { name, surname, age, therapy } = req.body
+    const { name, surname, age, therapy, items } = req.body
 
     const patient = new Patient({
       name: name,
@@ -32,7 +32,66 @@ router.post(
     })
 
     const createdPatient = await patient.save()
+
+    if (items.length !== 0) {
+      for (var i = 0; i < items.length; i++) {
+        const newDisease = new PatientDisease({
+          patient: createdPatient._id,
+          disease: items[i],
+        })
+        const assignedDiseases = await newDisease.save()
+      }
+    }
     res.status(201).json(createdPatient)
+  }),
+)
+
+// @desc    Delete a patient
+// @route   DELETE /api/patients/:id
+// @access  Private
+
+router.delete(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const patient = await Patient.findById(req.params.id)
+
+    if (patient) {
+      await patient.remove()
+      await PatientDisease.deleteMany({ patient: req.params.id })
+
+      res.json({ message: 'Patient removed' })
+    } else {
+      res.status(404)
+      throw new Error('Patient not found')
+    }
+  }),
+)
+
+// @desc    Update a patient
+// @route   PUT /api/patients/:id
+// @access  Private
+router.put(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const { name, surname, age, therapy, items } = req.body
+
+    const patient = await Patient.findById(req.params.id)
+
+    if (patient) {
+      patient.name = name
+      patient.surname = surname
+      patient.age = age
+      patient.therapy = therapy
+
+      //patient.items = items
+      //serve il for per fare assegnamento dei nuovi disease scelti
+
+      const updatedPatient = await patient.save()
+      res.json(updatedPatient)
+    } else {
+      res.status(404)
+      throw new Error('Product not found')
+    }
   }),
 )
 

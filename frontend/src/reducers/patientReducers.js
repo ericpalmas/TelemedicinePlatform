@@ -14,6 +14,13 @@ import {
   PATIENT_CREATE_REQUEST,
   PATIENT_CREATE_SUCCESS,
   PATIENT_CREATE_FAIL,
+  PATIENT_DELETE_REQUEST,
+  PATIENT_DELETE_SUCCESS,
+  PATIENT_DELETE_FAIL,
+  PATIENT_UPDATE_REQUEST,
+  PATIENT_UPDATE_SUCCESS,
+  PATIENT_UPDATE_FAIL,
+  PATIENT_UPDATE_RESET,
 } from '../constants/patientConstants'
 
 export const patientListReducer = (state = { patients: [] }, action) => {
@@ -94,6 +101,34 @@ export const patientCreateReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       }
+    default:
+      return state
+  }
+}
+
+export const patientDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PATIENT_DELETE_REQUEST:
+      return { loading: true }
+    case PATIENT_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case PATIENT_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const patientUpdateReducer = (state = { patient: {} }, action) => {
+  switch (action.type) {
+    case PATIENT_UPDATE_REQUEST:
+      return { loading: true }
+    case PATIENT_UPDATE_SUCCESS:
+      return { loading: false, success: true, patient: action.payload }
+    case PATIENT_UPDATE_FAIL:
+      return { loading: false, error: action.payload }
+    case PATIENT_UPDATE_RESET:
+      return { patient: {} }
     default:
       return state
   }

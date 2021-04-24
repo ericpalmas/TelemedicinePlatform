@@ -5,58 +5,41 @@ import Loader from '../components/Loader'
 
 import Modal from 'react-bootstrap/Modal'
 import { Button, Form, FormLabel } from 'react-bootstrap'
-import { createDisease, listDiseases } from '../actions/diseaseActions'
+import { updateDisease, listDiseases } from '../actions/diseaseActions'
 
-const AddDiseaseModal = ({ history }) => {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-
-  const dispatch = useDispatch()
-
-  const diseaseCreated = useSelector((state) => state.diseaseCreate)
-  const {
-    loading: loadingCreate,
-    success: successCreate,
-    error: errorCreate,
-    disease: diseaseCreate,
-  } = diseaseCreated
-
+const EditDiseaseModal = ({ history, disease }) => {
+  const [name, setName] = useState(disease.name)
+  const [description, setDescription] = useState(disease.description)
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
+  const dispatch = useDispatch()
+
   const submitHandler = (e) => {
     e.preventDefault()
     const newDisease = {
+      _id: disease._id,
       name,
       description,
     }
-    dispatch(createDisease(newDisease))
+
+    dispatch(updateDisease(newDisease)).then(() => {
+      dispatch(listDiseases())
+    })
   }
 
-  useEffect(() => {
-    if (successCreate) {
-      dispatch(listDiseases())
-      setName('')
-      setDescription('')
-    }
-  }, [dispatch, successCreate])
+  useEffect(() => {}, [dispatch])
 
   return (
     <>
-      <Button
-        variant="primary"
-        size="lg"
-        //className="ml-3"
-        style={{ float: 'right' }}
-        onClick={handleShow}
-      >
-        <i className="fas fa-plus mr-2"></i>
-        New disease
+      <Button variant="light" style={{ float: 'right' }} onClick={handleShow}>
+        <i className="fas fa-edit"></i>
       </Button>
 
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
-      {loadingCreate && <Loader />}
+      {/* controllare errore update disese */}
+      {/* {errorCreate && <Message variant="danger">{errorCreate}</Message>}
+      {loadingCreate && <Loader />} */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>New disease</Modal.Title>
@@ -96,4 +79,4 @@ const AddDiseaseModal = ({ history }) => {
   )
 }
 
-export default AddDiseaseModal
+export default EditDiseaseModal

@@ -4,14 +4,14 @@ import { Button, Form, FormLabel } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { createPatient, listPatients } from '../actions/patientActions'
+import { updatePatient, listPatients } from '../actions/patientActions'
 import { listDiseases } from '../actions/diseaseActions'
 
-const AddPatientModal = () => {
-  const [name, setName] = useState('')
-  const [surname, setSurname] = useState('')
-  const [age, setAge] = useState('')
-  const [therapy, setTherapy] = useState('')
+const EditPatientModal = ({ patient }) => {
+  const [name, setName] = useState(patient.name)
+  const [surname, setSurname] = useState(patient.surname)
+  const [age, setAge] = useState(patient.age)
+  const [therapy, setTherapy] = useState(patient.therapy)
 
   // array of diseases
   const [items, setItems] = useState([])
@@ -19,17 +19,16 @@ const AddPatientModal = () => {
 
   const dispatch = useDispatch()
 
-  const patientCreated = useSelector((state) => state.patientCreate)
-  const {
-    loading: loadingCreate,
-    success: successCreate,
-    error: errorCreate,
-    disease: diseaseCreate,
-  } = patientCreated
+  //   const patientCreated = useSelector((state) => state.patientCreate)
+  //   const {
+  //     loading: loadingCreate,
+  //     success: successCreate,
+  //     error: errorCreate,
+  //     disease: diseaseCreate,
+  //   } = patientCreated
 
   const diseaseList = useSelector((state) => state.diseaseList)
   const { loading, error, diseases } = diseaseList
-
   const defaultDisease = diseases[0]
 
   const [show, setShow] = useState(false)
@@ -46,23 +45,23 @@ const AddPatientModal = () => {
       items,
     }
 
-    dispatch(createPatient(newPatient))
-    setItems([])
-    console.log(items)
+    // dispatch(createPatient(newPatient))
+    // setItems([])
+    // console.log(items)
   }
 
   useEffect(() => {
     dispatch(listDiseases())
 
-    if (successCreate) {
-      dispatch(listPatients())
-      setName('')
-      setSurname('')
-      setAge('')
-      setTherapy('')
-      setItems([])
-    }
-  }, [dispatch, successCreate])
+    // if (successCreate) {
+    //   dispatch(listPatients())
+    //   setName('')
+    //   setSurname('')
+    //   setAge('')
+    //   setTherapy('')
+    //   setItems([])
+    // }
+  }, [dispatch])
 
   const handleAddFields = () => {
     const values = [...items]
@@ -85,19 +84,12 @@ const AddPatientModal = () => {
 
   return (
     <>
-      <Button
-        variant="primary"
-        size="lg"
-        //className="ml-3"
-        style={{ float: 'right' }}
-        onClick={handleShow}
-      >
-        <i className="fas fa-plus mr-2"></i>
-        New patient
+      <Button variant="light" style={{ float: 'right' }} onClick={handleShow}>
+        <i className="fas fa-edit"></i>
       </Button>
 
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
-      {loadingCreate && <Loader />}
+      {/* {errorCreate && <Message variant="danger">{errorCreate}</Message>}
+      {loadingCreate && <Loader />} */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>New patient</Modal.Title>
@@ -198,4 +190,4 @@ const AddPatientModal = () => {
   )
 }
 
-export default AddPatientModal
+export default EditPatientModal

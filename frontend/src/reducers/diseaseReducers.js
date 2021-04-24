@@ -9,6 +9,13 @@ import {
   DISEASE_CREATE_SUCCESS,
   DISEASE_CREATE_FAIL,
   DISEASE_CREATE_RESET,
+  DISEASE_DELETE_REQUEST,
+  DISEASE_DELETE_SUCCESS,
+  DISEASE_DELETE_FAIL,
+  DISEASE_UPDATE_REQUEST,
+  DISEASE_UPDATE_SUCCESS,
+  DISEASE_UPDATE_FAIL,
+  DISEASE_UPDATE_RESET,
 } from '../constants/diseaseConstants'
 
 export const diseaseListReducer = (state = { diseases: [] }, action) => {
@@ -61,6 +68,45 @@ export const diseaseCreateReducer = (state = {}, action) => {
       }
     case DISEASE_CREATE_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+// delete a disease from database
+export const diseaseDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DISEASE_DELETE_REQUEST:
+      return {
+        loading: true,
+      }
+    case DISEASE_DELETE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case DISEASE_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+// update a disease
+export const diseaseUpdateReducer = (state = { disease: {} }, action) => {
+  switch (action.type) {
+    case DISEASE_UPDATE_REQUEST:
+      return { loading: true }
+    case DISEASE_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        disease: action.payload,
+      }
+    case DISEASE_UPDATE_FAIL:
+      return { loading: false, error: action.payload }
+    case DISEASE_UPDATE_RESET:
+      return { disease: {} }
     default:
       return state
   }

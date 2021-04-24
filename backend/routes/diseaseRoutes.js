@@ -33,6 +33,50 @@ router.post(
   }),
 )
 
+// @desc    Delete a disease
+// @route   DELETE /api/diseases/:id
+// @access  Private
+router.delete(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const diseases = await Disease.find({}).where('_id').ne(req.params.id)
+    const disease = await Disease.findById(req.params.id)
+
+    if (disease) {
+      const result = await disease.remove()
+      await PatientDisease.deleteMany({ disease: req.params.id })
+      res.json(diseases)
+    } else {
+      res.status(404)
+      throw new Error('Disease not found')
+    }
+  }),
+)
+
+// @desc    Update a disease
+// @route   PUT /api/diseases/:id
+// @access  Private
+
+router.put(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const { name, description } = req.body
+
+    const disease = await Disease.findById(req.params.id)
+
+    if (disease) {
+      disease.name = name
+      disease.description = description
+
+      const updatedDisease = await disease.save()
+      res.json(updatedDisease)
+    } else {
+      res.status(404)
+      throw new Error('Disease not found')
+    }
+  }),
+)
+
 // @desc Fetch patientDiseases
 // @route GET /api/diseases/:patientId
 // @access Public

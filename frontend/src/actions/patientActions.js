@@ -15,6 +15,12 @@ import {
   PATIENT_CREATE_REQUEST,
   PATIENT_CREATE_SUCCESS,
   PATIENT_CREATE_FAIL,
+  PATIENT_DELETE_REQUEST,
+  PATIENT_DELETE_SUCCESS,
+  PATIENT_DELETE_FAIL,
+  PATIENT_UPDATE_REQUEST,
+  PATIENT_UPDATE_SUCCESS,
+  PATIENT_UPDATE_FAIL,
 } from '../constants/patientConstants'
 
 export const listPatients = () => async (dispatch) => {
@@ -120,6 +126,55 @@ export const createPatient = (patient) => async (dispatch) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
+    })
+  }
+}
+
+export const deletePatient = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: PATIENT_DELETE_REQUEST,
+    })
+
+    await axios.delete(`/api/patients/${id}`)
+
+    dispatch({
+      type: PATIENT_DELETE_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+
+    dispatch({
+      type: PATIENT_DELETE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const updatePatient = (patient) => async (dispatch) => {
+  try {
+    dispatch({
+      type: PATIENT_UPDATE_REQUEST,
+    })
+
+    const { data } = await axios.put(`/api/patients/${patient._id}`, patient)
+
+    dispatch({
+      type: PATIENT_UPDATE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+
+    dispatch({
+      type: PATIENT_UPDATE_FAIL,
+      payload: message,
     })
   }
 }

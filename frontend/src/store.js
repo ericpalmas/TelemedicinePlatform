@@ -7,11 +7,15 @@ import {
   patientByDiseaseListReducer,
   patientAndDiseaseListReducer,
   patientCreateReducer,
+  patientDeleteReducer,
+  patientUpdateReducer,
 } from './reducers/patientReducers'
 import {
   diseaseListReducer,
   patientDiseasesListReducer,
   diseaseCreateReducer,
+  diseaseDeleteReducer,
+  diseaseUpdateReducer,
 } from './reducers/diseaseReducers'
 import { sensorListReducer } from './reducers/sensorReducers'
 import { surveyTemplateListReducer } from './reducers/surveyReducers'
@@ -22,14 +26,24 @@ const reducer = combineReducers({
   patientByDiseaseList: patientByDiseaseListReducer,
   patientAndDiseaseList: patientAndDiseaseListReducer,
   patientCreate: patientCreateReducer,
+  patientDelete: patientDeleteReducer,
+  patientUpdate: patientUpdateReducer,
   diseaseList: diseaseListReducer,
+  diseaseDelete: diseaseDeleteReducer,
+  diseaseUpdate: diseaseUpdateReducer,
   sensorList: sensorListReducer,
   patientDiseasesList: patientDiseasesListReducer,
   surveyTemplateList: surveyTemplateListReducer,
   diseaseCreate: diseaseCreateReducer,
 })
 
-const initialState = {}
+// const diseasesFromStorage = localStorage.getItem('diseases')
+//   ? JSON.parse(localStorage.getItem('diseases'))
+//   : []
+
+const initialState = {
+  // diseaseList: { diseases: diseasesFromStorage },
+}
 
 const middleware = [thunk]
 
