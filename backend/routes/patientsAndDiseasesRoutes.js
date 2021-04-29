@@ -15,6 +15,8 @@ router.get(
       .populate('disease')
       .exec()
 
+    // in questo array non vengono ritornati i pazienti che non hanno problemi
+
     var patientDiseases = []
     if (ress) {
       for (var i = 0; i < ress.length; i++) {
@@ -25,7 +27,8 @@ router.get(
         ) {
           let founded = patientDiseases.find((o, j) => {
             if (o._id === ress[i].patient._id) {
-              //patientDiseases[j].disease.push(ress[i].disease.name)
+              patientDiseases[j].diseases.push(ress[i].disease._id)
+
               patientDiseases[j].disease.concat(', ', ress[i].disease.name)
               var newVal = patientDiseases[j].disease.concat(
                 ', ',
@@ -40,8 +43,10 @@ router.get(
             _id: ress[i].patient._id,
             name: ress[i].patient.name,
             surname: ress[i].patient.surname,
-            // disease: [ress[i].disease.name],
+            age: ress[i].patient.age,
+            therapy: ress[i].patient.therapy,
             disease: ress[i].disease.name,
+            diseases: [ress[i].disease._id],
           }
           patientDiseases.push(obj)
         }

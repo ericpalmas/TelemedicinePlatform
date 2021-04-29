@@ -13,7 +13,7 @@ import {
 import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listPatients } from '../actions/patientActions'
+import { listPatients, listPatientsAndDisease } from '../actions/patientActions'
 
 const PatientListScreen = () => {
   const dispatch = useDispatch()
@@ -21,7 +21,17 @@ const PatientListScreen = () => {
   const patientList = useSelector((state) => state.patientList)
   const { loading, error, patients } = patientList
 
+  const patientAndDiseasesList = useSelector(
+    (state) => state.patientsAndDiseaseList,
+  )
+  const {
+    loading: loadingPatientAndDiseases,
+    error: errorPatientAndDiseases,
+    patients: patientAndDiseases,
+  } = patientAndDiseasesList
+
   useEffect(() => {
+    dispatch(listPatientsAndDisease())
     dispatch(listPatients())
   }, [dispatch])
 
@@ -43,17 +53,17 @@ const PatientListScreen = () => {
         </Col>
       </Row>
 
-      {loading ? (
+      {loadingPatientAndDiseases ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
+      ) : errorPatientAndDiseases ? (
+        <Message variant="danger">{errorPatientAndDiseases}</Message>
       ) : (
         <Row
           className="mt-4"
           style={{ float: 'left', display: 'inline-block' }}
         >
-          {patients.map((patient) => (
-            <Col sm={12}>
+          {patientAndDiseases.map((patient) => (
+            <Col sm={12} key={patient._id}>
               <Patient key={patient._id} patient={patient} />
             </Col>
           ))}

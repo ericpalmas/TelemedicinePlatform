@@ -37,12 +37,9 @@ const EditDiseaseModal = ({ history, disease }) => {
         <i className="fas fa-edit"></i>
       </Button>
 
-      {/* controllare errore update disese */}
-      {/* {errorCreate && <Message variant="danger">{errorCreate}</Message>}
-      {loadingCreate && <Loader />} */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>New disease</Modal.Title>
+          <Modal.Title>Edit disease</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Label className="mt-2">

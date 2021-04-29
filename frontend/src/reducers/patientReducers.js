@@ -67,7 +67,7 @@ export const patientByDiseaseListReducer = (
 }
 
 // get the list of patient and the relative diseases
-export const patientAndDiseaseListReducer = (
+export const patientsAndDiseaseListReducer = (
   state = { patients: [] },
   action,
 ) => {

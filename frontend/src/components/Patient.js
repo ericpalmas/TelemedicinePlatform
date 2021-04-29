@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import EditPatientModal from '../modals/EditPatientModal'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+// delete and update the page
 import {
   listPatients,
   deletePatient,
-  updatePatient,
+  listPatientsAndDisease,
 } from '../actions/patientActions'
 
 const Patient = ({ patient }) => {
@@ -17,9 +18,12 @@ const Patient = ({ patient }) => {
     if (window.confirm('Are you sure')) {
       dispatch(deletePatient(id)).then(() => {
         dispatch(listPatients())
+        dispatch(listPatientsAndDisease())
       })
     }
   }
+
+  useEffect(() => {}, [dispatch])
 
   return (
     <Card

@@ -41,10 +41,8 @@ const DiseaseListScreen = () => {
     }
   }
 
-  const editHandler = (id) => {}
-
   return (
-    <h1>
+    <>
       <h1>List of diseases</h1>
       <Row className="align-items-center">
         <Col className="text-right" sm={6} md={4}>
@@ -105,7 +103,7 @@ const DiseaseListScreen = () => {
           </Row>
         </>
       )}
-    </h1>
+    </>
   )
 }
 

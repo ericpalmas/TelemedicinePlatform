@@ -67,7 +67,7 @@ const deleteHandler = (id) => {
 const SurveyCreationScreen = ({ removeQuestionMode }) => {
   const dispatch = useDispatch()
 
-  const patientList = useSelector((state) => state.patientAndDiseaseList)
+  const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const { loading, error, patients } = patientList
 
   useEffect(() => {

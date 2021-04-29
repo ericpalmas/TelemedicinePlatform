@@ -83,10 +83,22 @@ router.put(
       patient.age = age
       patient.therapy = therapy
 
-      //patient.items = items
-      //serve il for per fare assegnamento dei nuovi disease scelti
-
       const updatedPatient = await patient.save()
+
+      const deletePatientDiseases = await PatientDisease.deleteMany({
+        patient: req.params.id,
+      })
+
+      if (deletePatientDiseases) {
+        for (var i = 0; i < items.length; i++) {
+          const newDisease = new PatientDisease({
+            patient: req.params.id,
+            disease: items[i],
+          })
+          await newDisease.save()
+        }
+      }
+
       res.json(updatedPatient)
     } else {
       res.status(404)

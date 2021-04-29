@@ -5,10 +5,10 @@ import {
   patientListReducer,
   patientReducer,
   patientByDiseaseListReducer,
-  patientAndDiseaseListReducer,
   patientCreateReducer,
   patientDeleteReducer,
   patientUpdateReducer,
+  patientsAndDiseaseListReducer,
 } from './reducers/patientReducers'
 import {
   diseaseListReducer,
@@ -24,7 +24,7 @@ const reducer = combineReducers({
   patientList: patientListReducer,
   patientDetail: patientReducer,
   patientByDiseaseList: patientByDiseaseListReducer,
-  patientAndDiseaseList: patientAndDiseaseListReducer,
+  patientsAndDiseaseList: patientsAndDiseaseListReducer,
   patientCreate: patientCreateReducer,
   patientDelete: patientDeleteReducer,
   patientUpdate: patientUpdateReducer,

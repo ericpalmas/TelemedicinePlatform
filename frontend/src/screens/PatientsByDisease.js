@@ -18,6 +18,7 @@ const PatientsByDisease = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(listPatientsByDisease(match.params.id))
+    console.log(patients)
   }, [dispatch, match])
 
   return (
@@ -32,13 +33,22 @@ const PatientsByDisease = ({ history, match }) => {
         />
       </InputGroup>
 
-      <Row className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-        {patients.map((patient) => (
-          <Col sm={12} md={6} lg={4}>
-            <Patient patient={patient.patient} />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Row
+          className="mt-4"
+          style={{ float: 'left', display: 'inline-block' }}
+        >
+          {patients.map((patient) => (
+            <Col sm={12} md={6} lg={4}>
+              <Patient patient={patient.patient} />
+            </Col>
+          ))}
+        </Row>
+      )}
 
       <div className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
         <Button variant="primary" size="lg">
