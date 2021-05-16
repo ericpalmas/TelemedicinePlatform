@@ -6,6 +6,9 @@ import {
   SURVEY_SUCCESS,
   SURVEY_FAIL,
   SURVEY_SAVE_ID_REQUEST,
+  SURVEY_CREATE_REQUEST,
+  SURVEY_CREATE_SUCCESS,
+  SURVEY_CREATE_FAIL,
 } from '../constants/surveyConstants'
 
 export const surveyTemplateListReducer = (state = { surveys: [] }, action) => {
@@ -41,6 +44,29 @@ export const surveySaveIdReducer = (state = { surveyId: {} }, action) => {
         //in this line i return the initial state
         ...state,
         surveyId: action.payload,
+      }
+    default:
+      return state
+  }
+}
+
+// add new disease to database
+export const surveyCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SURVEY_CREATE_REQUEST:
+      return {
+        loading: true,
+      }
+    case SURVEY_CREATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        survey: action.payload,
+      }
+    case SURVEY_CREATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
       }
     default:
       return state

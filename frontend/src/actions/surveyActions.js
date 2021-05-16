@@ -7,6 +7,9 @@ import {
   SURVEY_SUCCESS,
   SURVEY_FAIL,
   SURVEY_SAVE_ID_REQUEST,
+  SURVEY_CREATE_REQUEST,
+  SURVEY_CREATE_SUCCESS,
+  SURVEY_CREATE_FAIL,
 } from '../constants/surveyConstants'
 
 export const listSurveyTemplates = () => async (dispatch) => {
@@ -58,4 +61,27 @@ export const saveSurveyId = (data) => (dispatch) => {
   })
 
   localStorage.setItem('surveyId', JSON.stringify(data))
+}
+
+export const createSurvey = (survey) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SURVEY_CREATE_REQUEST,
+    })
+
+    const { data } = await axios.post(`/api/surveys`, survey)
+
+    dispatch({
+      type: SURVEY_CREATE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SURVEY_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
 }

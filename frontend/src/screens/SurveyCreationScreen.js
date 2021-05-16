@@ -68,44 +68,16 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const surveyDetail = useSelector((state) => state.survey)
   const { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
 
-  //   const surveyInfoFromStorage = localStorage.getItem('surveyInfo')
-  //   ? JSON.parse(localStorage.getItem('surveyInfo'))
-  //   : null
-
-  // const initialState = {
-  //   surveyInformations: { surveyInfo: surveyInfoFromStorage },
-  // }
-
-  // const surveyInformations = useSelector((state) => state.surveyInformations)
-  // const {
-  //   loading: loadingSurvey,
-  //   error: errorSurvey,
-  //   surveyInfo,
-  // } = surveyInformations
-
-  // const userLogin = useSelector(state => state.userLogin)
-  // const { loading, error, userInfo } = userLogin
-
-  //   const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
-
-  // const initialState = {
-  //     cart: { cartItems: cartItemsFromStorage, shippingAddress: shippingAddressFromStorage },
-  //     userLogin: { userInfo: userInfoFromStorage }
-  // }
-
   const [surveyUploaded, setSurveyUploaded] = useState(false)
 
   useEffect(() => {
     if (surv !== undefined) {
       setSurveyUploaded(true)
-      console.log(surv.split('"')[1])
+      //console.log(surv.split('"')[1])
       dispatch(surveyDetails(surv.split('"')[1])).then(() => {
-        console.log(survey)
+        //console.log(survey)
       })
     }
-    // if (history.location.pathname.split('/')[2]) {
-    //   dispatch(surveyDetails(history.location.pathname.split('/')[2]))
-    // }
 
     dispatch(listPatientsAndDisease())
   }, [dispatch, match, history, surv])
@@ -219,7 +191,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         ) : (
           <>
             <Col md={9}>
-              <h3> Documento non caricato</h3>
+              <h3> Caricare un documento </h3>
             </Col>
           </>
         )}

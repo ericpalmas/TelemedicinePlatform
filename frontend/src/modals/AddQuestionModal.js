@@ -36,7 +36,7 @@ const AddQuestionModal = () => {
   const [radioOption, setRadioOption] = useState('')
   const setRadioOptionValue = (event) => {
     setRadioOption(event.target.value)
-    console.log(event.target.checked)
+    //console.log(event.target.checked)
     setItems([])
   }
 

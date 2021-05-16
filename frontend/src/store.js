@@ -21,6 +21,8 @@ import { sensorListReducer } from './reducers/sensorReducers'
 import {
   surveyTemplateListReducer,
   surveyReducer,
+  surveyCreateReducer,
+  surveySaveIdReducer,
 } from './reducers/surveyReducers'
 
 const reducer = combineReducers({
@@ -39,6 +41,7 @@ const reducer = combineReducers({
   surveyTemplateList: surveyTemplateListReducer,
   survey: surveyReducer,
   diseaseCreate: diseaseCreateReducer,
+  surveyCreate: surveyCreateReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
