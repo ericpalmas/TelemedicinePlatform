@@ -5,20 +5,32 @@ import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listPatientsByDisease } from '../actions/patientActions'
+import {
+  listPatientsByDisease,
+  listPatientsAndDisease,
+} from '../actions/patientActions'
 
 const PatientsByDisease = ({ history, match }) => {
+  const [patientAndDiseases, setPatientAndDiseases] = useState('')
+
   const dispatch = useDispatch()
 
   const patientListByDisease = useSelector(
     (state) => state.patientByDiseaseList,
   )
   const { loading, error, patients } = patientListByDisease
-  console.log(patients)
+
+  const patientList = useSelector((state) => state.patientsAndDiseaseList)
+  const {
+    loading: loadingPatientsAndDiseases,
+    error: errorPatientsAndDiseases,
+    patients: patientsAndDiseases,
+  } = patientList
 
   useEffect(() => {
-    dispatch(listPatientsByDisease(match.params.id))
-    console.log(patients)
+    dispatch(listPatientsByDisease(match.params.id)).then(() => {
+      dispatch(listPatientsAndDisease())
+    })
   }, [dispatch, match])
 
   return (
@@ -42,9 +54,16 @@ const PatientsByDisease = ({ history, match }) => {
           className="mt-4"
           style={{ float: 'left', display: 'inline-block' }}
         >
-          {patients.map((patient) => (
-            <Col sm={12} md={6} lg={4}>
-              <Patient patient={patient.patient} />
+          {patientsAndDiseases.map((patient) => (
+            <Col sm={12} key={patient._id}>
+              {patients.filter((e) => e.patient._id === patient._id).length >
+              0 ? (
+                <>
+                  <Patient key={patient._id} patient={patient} />
+                </>
+              ) : (
+                <></>
+              )}
             </Col>
           ))}
         </Row>

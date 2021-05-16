@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/diseases" component={DiseaseListScreen} exact />
 
           <Route path="/surveyCreation" component={SurveyCreationScreen} />
-          <Route path="/surveyCreation" component={Sidebar} exact />
+          <Route path="/surveyCreation" component={Sidebar} />
           <Route path="/patients/:id" component={PatientSidebar} exact />
           <Route path="/login" component={LoginScreen} />
         </Container>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import EditPatientModal from '../modals/EditPatientModal'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+
 // delete and update the page
 import {
   listPatients,

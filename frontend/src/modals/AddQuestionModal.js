@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import Modal from 'react-bootstrap/Modal'
-import { Button, Form, FormLabel } from 'react-bootstrap'
+import { Button, Form, FormLabel, Col } from 'react-bootstrap'
 
 const AddQuestionModal = () => {
   // Open and close modal
@@ -102,6 +102,58 @@ const AddQuestionModal = () => {
                       Multiple choice (more than one choice)
                     </label>
                   </div>
+
+                  <div className="form-check">
+                    <label>
+                      <input
+                        type="radio"
+                        name="react-tips"
+                        value="slider"
+                        onChange={setRadioOptionValue}
+                        className="form-check-input"
+                      />
+                      Slider
+                    </label>
+                  </div>
+
+                  <div className="form-check">
+                    <label>
+                      <input
+                        type="radio"
+                        name="react-tips"
+                        value="trueFalse"
+                        onChange={setRadioOptionValue}
+                        className="form-check-input"
+                      />
+                      True/False
+                    </label>
+                  </div>
+
+                  <div className="form-check">
+                    <label>
+                      <input
+                        type="radio"
+                        name="react-tips"
+                        value="incrementDecrement"
+                        onChange={setRadioOptionValue}
+                        className="form-check-input"
+                      />
+                      increment/decrement
+                    </label>
+                  </div>
+
+                  <div className="form-check">
+                    <label>
+                      <input
+                        type="radio"
+                        name="react-tips"
+                        value="insertTime"
+                        onChange={setRadioOptionValue}
+                        className="form-check-input"
+                      />
+                      insert time
+                    </label>
+                  </div>
                 </form>
               </div>
             </div>
@@ -194,6 +246,54 @@ const AddQuestionModal = () => {
                   type="checkbox"
                 />
               ))}
+            </>
+          ) : radioOption === 'slider' ? (
+            <>
+              <Form.Label className="mt-2">
+                <h5>Slider</h5>
+              </Form.Label>
+              <br />
+              <Form.Row>
+                <Form.Group as={Col} md="4" controlId="validationFormik104">
+                  <Form.Control
+                    type="text"
+                    placeholder="Lower value"
+                    name="state"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} md="4" controlId="validationFormik105">
+                  <Form.Control
+                    type="text"
+                    placeholder="Higher value"
+                    name="zip"
+                  />
+                </Form.Group>
+              </Form.Row>
+            </>
+          ) : radioOption === 'trueFalse' ? (
+            <>
+              <Form.Label className="mt-2">
+                <h5>Two choices</h5>
+              </Form.Label>
+              <br />
+              <Form.Row>
+                <Form.Group as={Col} md="4" controlId="validationFormik104">
+                  <Form.Control
+                    type="text"
+                    placeholder="First choice"
+                    name="state"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} md="4" controlId="validationFormik105">
+                  <Form.Control
+                    type="text"
+                    placeholder="Second choice"
+                    name="zip"
+                  />
+                </Form.Group>
+              </Form.Row>
             </>
           ) : (
             <></>

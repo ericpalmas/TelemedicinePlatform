@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 
 import { IconContext } from 'react-icons/lib'
 import AddQuestionModal from '../modals/AddQuestionModal'
+import AddSurveyModal from '../modals/AddSurveyModal'
 
 // import * as FaIcons from 'react-icons/fa'
 // import * as AiIcons from 'react-icons/ai'
@@ -12,7 +15,7 @@ import * as VscIcons from 'react-icons/vsc'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listSurveyTemplates } from '../actions/surveyActions'
+import { listSurveyTemplates, saveSurveyId } from '../actions/surveyActions'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)
@@ -63,8 +66,25 @@ const Sidebar = () => {
               <>
                 {surveys.map((survey) => (
                   <div id="dropdownLink">
-                    <IoIcons.IoIosPaper />
-                    <span id="sidebarLabel"> {survey.name}</span>
+                    {/* <LinkContainer to={'/surveyCreation/' + survey._id}>
+                      <Nav.Link> */}
+                    <Button onClick={() => dispatch(saveSurveyId(survey._id))}>
+                      <IoIcons.IoIosPaper />
+                      {survey.name}
+                      {/* <span id="sidebarLabel">{survey.name}</span> */}
+                    </Button>
+
+                    {/* <IoIcons.IoIosPaper />
+                    <span
+                      id="sidebarLabel"
+                      onClick={() => dispatch(saveSurveyId(survey._id))}
+                    >
+                      {' '}
+                      {survey.name}
+                    </span> */}
+
+                    {/* </Nav.Link>
+                    </LinkContainer> */}
                   </div>
                 ))}
               </>
@@ -76,7 +96,7 @@ const Sidebar = () => {
             <id id="sidebarLink">
               <div>
                 <IoIcons.IoIosPaper />
-                <span id="sidebarLabel"> New survey</span>
+                <AddSurveyModal />
               </div>
             </id>
 

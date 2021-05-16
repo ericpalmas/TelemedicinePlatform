@@ -10,6 +10,7 @@ import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listPatientsAndDisease } from '../actions/patientActions'
+import { surveyDetails } from '../actions/surveyActions'
 
 // Patient Table
 const columns = [
@@ -31,15 +32,6 @@ const selectRow = {
   mode: 'checkbox',
   clickToSelect: true,
 }
-
-// const patients = [
-//   { _id: 1, name: 'Luca', surname: 'Rossi' },
-//   { _id: 2, name: 'Giacomo', surname: 'Verdi' },
-//   { _id: 3, name: 'Luca', surname: 'Rossi' },
-//   { _id: 4, name: 'Giacomo', surname: 'Verdi' },
-//   { _id: 5, name: 'Luca', surname: 'Rossi' },
-//   { _id: 6, name: 'Giacomo', surname: 'Verdi' },
-// ]
 
 // Questions
 const questions = [
@@ -64,16 +56,59 @@ const deleteHandler = (id) => {
   }
 }
 
-const SurveyCreationScreen = ({ removeQuestionMode }) => {
+const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const dispatch = useDispatch()
+
+  // il problema è che surv è una stringaaaaa che contiente l'ogetto, non l'oggetto
+  var surv = localStorage.getItem('surveyId')
 
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const { loading, error, patients } = patientList
 
+  const surveyDetail = useSelector((state) => state.survey)
+  const { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
+
+  //   const surveyInfoFromStorage = localStorage.getItem('surveyInfo')
+  //   ? JSON.parse(localStorage.getItem('surveyInfo'))
+  //   : null
+
+  // const initialState = {
+  //   surveyInformations: { surveyInfo: surveyInfoFromStorage },
+  // }
+
+  // const surveyInformations = useSelector((state) => state.surveyInformations)
+  // const {
+  //   loading: loadingSurvey,
+  //   error: errorSurvey,
+  //   surveyInfo,
+  // } = surveyInformations
+
+  // const userLogin = useSelector(state => state.userLogin)
+  // const { loading, error, userInfo } = userLogin
+
+  //   const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
+
+  // const initialState = {
+  //     cart: { cartItems: cartItemsFromStorage, shippingAddress: shippingAddressFromStorage },
+  //     userLogin: { userInfo: userInfoFromStorage }
+  // }
+
+  const [surveyUploaded, setSurveyUploaded] = useState(false)
+
   useEffect(() => {
+    if (surv !== undefined) {
+      setSurveyUploaded(true)
+      console.log(surv.split('"')[1])
+      dispatch(surveyDetails(surv.split('"')[1])).then(() => {
+        console.log(survey)
+      })
+    }
+    // if (history.location.pathname.split('/')[2]) {
+    //   dispatch(surveyDetails(history.location.pathname.split('/')[2]))
+    // }
+
     dispatch(listPatientsAndDisease())
-    console.log(patients)
-  }, [dispatch])
+  }, [dispatch, match, history, surv])
 
   return (
     <div>
@@ -83,91 +118,111 @@ const SurveyCreationScreen = ({ removeQuestionMode }) => {
           width: '90rem',
         }}
       >
-        <Col
-          md={9}
-          style={{
-            borderRight: 'solid 1px grey',
-            borderLeft: 'solid 1px grey',
-          }}
-        >
-          {questions.map((question) => (
-            <Col key={question._id}>
-              <br />
-              <Card>
-                <Card.Header>
-                  Domanda {question._id}
-                  <Button
-                    style={{
-                      float: 'right',
-                      display: 'inline-block',
-                    }}
-                    // variant="danger"
-                    variant="light"
-                    className="btn-sm"
-                    onClick={() => deleteHandler(question._id)}
-                  >
-                    <TiIcons.TiDelete size={30} />
-                  </Button>
-                </Card.Header>
+        {surveyUploaded ? (
+          <>
+            {loadingSurvey ? (
+              <Loader />
+            ) : errorSurvey ? (
+              <Message variant="danger">{errorSurvey}</Message>
+            ) : (
+              <Col
+                md={9}
+                style={{
+                  borderRight: 'solid 1px grey',
+                  borderLeft: 'solid 1px grey',
+                }}
+              >
+                <h1>{survey.survey.name} Survey</h1>
 
-                <Card.Body>
-                  <blockquote className="blockquote mb-0">
-                    <Card.Title>{question.question}</Card.Title>
+                {survey.questions.map((q, index) => (
+                  <Col key={q.question._id}>
+                    <br />
+                    <Card>
+                      <Card.Header>
+                        Domanda {index + 1}
+                        <Button
+                          style={{
+                            float: 'right',
+                            display: 'inline-block',
+                          }}
+                          // variant="danger"
+                          variant="light"
+                          className="btn-sm"
+                          onClick={() => deleteHandler(q.question._id)}
+                        >
+                          <TiIcons.TiDelete size={30} />
+                        </Button>
+                      </Card.Header>
 
-                    {question.type === 'checkbox' ? (
-                      <>
-                        <Form.Check
-                          custom
-                          disabled
-                          label="Answer 1"
-                          type="checkbox"
-                        />
-                        <Form.Check
-                          custom
-                          disabled
-                          label="Answer 2"
-                          type="checkbox"
-                        />
-                        <Form.Check
-                          custom
-                          disabled
-                          label="Answer 3"
-                          type="checkbox"
-                        />
-                      </>
-                    ) : question.type === 'radio' ? (
-                      <>
-                        <Form.Check
-                          custom
-                          disabled
-                          label="Answer 1"
-                          type="radio"
-                        />
-                        <Form.Check
-                          custom
-                          disabled
-                          label="Answer 2"
-                          type="radio"
-                        />
-                        <Form.Check
-                          custom
-                          disabled
-                          label="Answer 3"
-                          type="radio"
-                        />
-                      </>
-                    ) : (
-                      <Form.Group>
-                        <Form.Control placeholder="Open question" disabled />
-                      </Form.Group>
-                    )}
-                  </blockquote>
-                </Card.Body>
-              </Card>
+                      <Card.Body>
+                        <blockquote className="blockquote mb-0">
+                          <Card.Title>{q.question.text}</Card.Title>
+
+                          {q.question.check ? (
+                            <>
+                              <Form.Check
+                                custom
+                                disabled
+                                label="Answer 1"
+                                type="checkbox"
+                              />
+                              <Form.Check
+                                custom
+                                disabled
+                                label="Answer 2"
+                                type="checkbox"
+                              />
+                              <Form.Check
+                                custom
+                                disabled
+                                label="Answer 3"
+                                type="checkbox"
+                              />
+                            </>
+                          ) : q.question.radio ? (
+                            <>
+                              <Form.Check
+                                custom
+                                disabled
+                                label="Answer 1"
+                                type="radio"
+                              />
+                              <Form.Check
+                                custom
+                                disabled
+                                label="Answer 2"
+                                type="radio"
+                              />
+                              <Form.Check
+                                custom
+                                disabled
+                                label="Answer 3"
+                                type="radio"
+                              />
+                            </>
+                          ) : (
+                            <Form.Group>
+                              <Form.Control
+                                placeholder="Open question"
+                                disabled
+                              />
+                            </Form.Group>
+                          )}
+                        </blockquote>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Col>
+            )}
+          </>
+        ) : (
+          <>
+            <Col md={9}>
+              <h3> Documento non caricato</h3>
             </Col>
-          ))}
-          <br />
-        </Col>
+          </>
+        )}
 
         <Col md={3}>
           <BootstrapTable
