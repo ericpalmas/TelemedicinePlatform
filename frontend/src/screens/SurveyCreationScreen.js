@@ -11,6 +11,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listPatientsAndDisease } from '../actions/patientActions'
 import { surveyDetails } from '../actions/surveyActions'
+import { deleteQuestion } from '../actions/questionActions'
 
 // Patient Table
 const columns = [
@@ -33,33 +34,15 @@ const selectRow = {
   clickToSelect: true,
 }
 
-// Questions
-const questions = [
-  {
-    _id: 1,
-    question:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
-    type: 'checkbox',
-  },
-  {
-    _id: 2,
-    question:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante ?',
-    type: 'open',
-  },
-  { _id: 3, question: 'Ultima domanda?', type: 'radio' },
-]
-
-const deleteHandler = (id) => {
-  if (window.confirm('Are you sure')) {
-    console.log(id)
-  }
-}
+// const deleteHandler = (id) => {
+//   if (window.confirm('Are you sure')) {
+//     console.log(id)
+//   }
+// }
 
 const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const dispatch = useDispatch()
 
-  // il problema è che surv è una stringaaaaa che contiente l'ogetto, non l'oggetto
   var surv = localStorage.getItem('surveyId')
 
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
@@ -70,10 +53,17 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
   const [surveyUploaded, setSurveyUploaded] = useState(false)
 
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure')) {
+      dispatch(deleteQuestion(id)).then(() => {
+        dispatch(surveyDetails(surv.split('"')[1]))
+      })
+    }
+  }
+
   useEffect(() => {
     if (surv !== undefined) {
       setSurveyUploaded(true)
-      //console.log(surv.split('"')[1])
       dispatch(surveyDetails(surv.split('"')[1])).then(() => {
         //console.log(survey)
       })
@@ -132,45 +122,25 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
                           {q.question.check ? (
                             <>
-                              <Form.Check
-                                custom
-                                disabled
-                                label="Answer 1"
-                                type="checkbox"
-                              />
-                              <Form.Check
-                                custom
-                                disabled
-                                label="Answer 2"
-                                type="checkbox"
-                              />
-                              <Form.Check
-                                custom
-                                disabled
-                                label="Answer 3"
-                                type="checkbox"
-                              />
+                              {q.answers.map((answer) => (
+                                <Form.Check
+                                  custom
+                                  disabled
+                                  label={answer.text}
+                                  type="checkbox"
+                                />
+                              ))}
                             </>
                           ) : q.question.radio ? (
                             <>
-                              <Form.Check
-                                custom
-                                disabled
-                                label="Answer 1"
-                                type="radio"
-                              />
-                              <Form.Check
-                                custom
-                                disabled
-                                label="Answer 2"
-                                type="radio"
-                              />
-                              <Form.Check
-                                custom
-                                disabled
-                                label="Answer 3"
-                                type="radio"
-                              />
+                              {q.answers.map((answer) => (
+                                <Form.Check
+                                  custom
+                                  disabled
+                                  label={answer.text}
+                                  type="radio"
+                                />
+                              ))}
                             </>
                           ) : (
                             <Form.Group>
@@ -191,7 +161,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         ) : (
           <>
             <Col md={9}>
-              <h3> Caricare un documento </h3>
+              <h3> Caricare un questionario </h3>
             </Col>
           </>
         )}

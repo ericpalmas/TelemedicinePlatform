@@ -18,17 +18,6 @@ import { DISEASE_CREATE_RESET } from '../constants/diseaseConstants'
 const Disease = ({ disease }) => {
   const dispatch = useDispatch()
 
-  // const diseaseDelete = useSelector((state) => state.diseaseDelete)
-  // const {
-  //   loading: loadingDelete,
-  //   error: errorDelete,
-  //   success: successDelete,
-  //   diseases: diseasesList,
-  // } = diseaseDelete
-
-  // const diseaseList = useSelector((state) => state.diseaseList)
-  // const { loading, error, diseases } = diseaseList
-
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
       dispatch(deleteDisease(id))

@@ -6,6 +6,7 @@ import {
   SURVEY_SUCCESS,
   SURVEY_FAIL,
   SURVEY_SAVE_ID_REQUEST,
+  SURVEY_SAVE_ID_RESET,
   SURVEY_CREATE_REQUEST,
   SURVEY_CREATE_SUCCESS,
   SURVEY_CREATE_FAIL,
@@ -45,6 +46,8 @@ export const surveySaveIdReducer = (state = { surveyId: {} }, action) => {
         ...state,
         surveyId: action.payload,
       }
+    case SURVEY_SAVE_ID_RESET:
+      return { question: {} }
     default:
       return state
   }

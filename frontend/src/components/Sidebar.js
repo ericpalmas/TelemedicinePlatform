@@ -13,7 +13,11 @@ import * as VscIcons from 'react-icons/vsc'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listSurveyTemplates, saveSurveyId } from '../actions/surveyActions'
+import {
+  listSurveyTemplates,
+  saveSurveyId,
+  surveyDetails,
+} from '../actions/surveyActions'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)
@@ -35,13 +39,18 @@ const Sidebar = () => {
     dispatch(listSurveyTemplates())
   }, [dispatch])
 
+  const uploadSurvey = (id) => {
+    dispatch(saveSurveyId(id)).then(() => {
+      dispatch(surveyDetails(id))
+    })
+  }
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
         <nav id="sidebarNav" sidebar={true}>
           <div id="sidebarWrap">
             <div id="navIcon" to="#"></div>
-            {/* if a menu item have a sub menu */}
             <div
               id="sidebarLink"
               onClick={showSubnav}
@@ -64,25 +73,16 @@ const Sidebar = () => {
               <>
                 {surveys.map((survey) => (
                   <div id="dropdownLink">
-                    {/* <LinkContainer to={'/surveyCreation/' + survey._id}>
-                      <Nav.Link> */}
-                    <Button onClick={() => dispatch(saveSurveyId(survey._id))}>
+                    <Nav.Link>
                       <IoIcons.IoIosPaper />
-                      {survey.name}
-                      {/* <span id="sidebarLabel">{survey.name}</span> */}
-                    </Button>
-
-                    {/* <IoIcons.IoIosPaper />
-                    <span
-                      id="sidebarLabel"
-                      onClick={() => dispatch(saveSurveyId(survey._id))}
-                    >
-                      {' '}
-                      {survey.name}
-                    </span> */}
-
-                    {/* </Nav.Link>
-                    </LinkContainer> */}
+                      <span
+                        id="sidebarLabel"
+                        style={{ color: '#fff' }}
+                        onClick={() => dispatch(saveSurveyId(survey._id))}
+                      >
+                        {survey.name}
+                      </span>
+                    </Nav.Link>
                   </div>
                 ))}
               </>

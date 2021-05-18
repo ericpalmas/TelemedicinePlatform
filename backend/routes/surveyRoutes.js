@@ -74,7 +74,6 @@ router.get(
           }
         }
 
-        console.log(result)
         res.json(result)
       }
     } else {
@@ -83,4 +82,5 @@ router.get(
     }
   }),
 )
+
 export default router

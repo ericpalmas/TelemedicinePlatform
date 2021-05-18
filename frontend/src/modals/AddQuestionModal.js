@@ -1,8 +1,15 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
 import Modal from 'react-bootstrap/Modal'
 import { Button, Form, FormLabel, Col } from 'react-bootstrap'
+import { createQuestion } from '../actions/questionActions'
+import { surveyDetails } from '../actions/surveyActions'
 
 const AddQuestionModal = () => {
+  var surv = localStorage.getItem('surveyId')
+
   // Open and close modal
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
@@ -11,6 +18,56 @@ const AddQuestionModal = () => {
   // array of possible answers
   const [items, setItems] = useState([])
   const [itemName, setItemName] = useState('')
+  const [text, setText] = useState('')
+  const [radio, setRadio] = useState(false)
+  const [check, setCheck] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  // type of question selected
+  const [radioOption, setRadioOption] = useState('')
+
+  const setRadioOptionValue = (event) => {
+    setRadioOption(event.target.value)
+    switch (event.target.value) {
+      case 'open':
+        setOpen(true)
+        setRadio(false)
+        setCheck(false)
+
+        break
+      case 'multiRadio':
+        setOpen(false)
+        setRadio(true)
+        setCheck(false)
+        break
+      case 'multiCheck':
+        setOpen(false)
+        setRadio(false)
+        setCheck(true)
+        break
+      case 'slider':
+        break
+      case 'trueFalse':
+        break
+      case 'incrementDecrement':
+        break
+      case 'insertTime':
+        break
+      default:
+      // code block
+    }
+    setItems([])
+  }
+
+  const dispatch = useDispatch()
+
+  const diseaseCreated = useSelector((state) => state.diseaseCreate)
+  const {
+    loading: loadingCreate,
+    success: successCreate,
+    error: errorCreate,
+    disease: diseaseCreate,
+  } = diseaseCreated
 
   // add a possible answer
   const addAnswer = () => {
@@ -19,7 +76,7 @@ const AddQuestionModal = () => {
         ...items,
         {
           id: items.length,
-          name: itemName,
+          text: itemName,
         },
       ])
     }
@@ -32,13 +89,26 @@ const AddQuestionModal = () => {
     setItems(values)
   }
 
-  // type of question selected
-  const [radioOption, setRadioOption] = useState('')
-  const setRadioOptionValue = (event) => {
-    setRadioOption(event.target.value)
-    //console.log(event.target.checked)
-    setItems([])
+  const submitHandler = (e) => {
+    e.preventDefault()
+    const newQuestion = {
+      text,
+      radio,
+      check,
+      open,
+      survey: surv.split('"')[1],
+      offeredAnswers: items,
+    }
+    dispatch(createQuestion(newQuestion)).then(() => {
+      dispatch(surveyDetails(surv.split('"')[1]))
+    })
   }
+
+  useEffect(() => {
+    if (successCreate) {
+      dispatch(surveyDetails(surv.split('"')[1]))
+    }
+  }, [dispatch, successCreate])
 
   return (
     <>
@@ -54,7 +124,11 @@ const AddQuestionModal = () => {
           <Form.Label className="mt-2">
             <h5>Question text</h5>
           </Form.Label>
-          <Form.Control />
+          <Form.Control
+            placeholder="Enter text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
 
           <Form.Label className="mt-4">
             <h5>Question type</h5>
@@ -198,7 +272,7 @@ const AddQuestionModal = () => {
                   className="ml-3 mr-2"
                   key={item.id}
                   custom
-                  label={item.name}
+                  label={item.text}
                   type="radio"
                 />
               ))}
@@ -242,7 +316,7 @@ const AddQuestionModal = () => {
                   className="ml-3 mr-2"
                   key={item.id}
                   custom
-                  label={item.name}
+                  label={item.text}
                   type="checkbox"
                 />
               ))}
@@ -308,9 +382,11 @@ const AddQuestionModal = () => {
               Save Changes
             </Button>
           ) : (
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
-            </Button>
+            <Form onSubmit={submitHandler}>
+              <Button variant="primary" type="submit" onClick={handleClose}>
+                Save Changes
+              </Button>
+            </Form>
           )}
         </Modal.Footer>
       </Modal>
