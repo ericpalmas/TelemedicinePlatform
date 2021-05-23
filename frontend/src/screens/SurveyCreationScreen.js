@@ -5,6 +5,7 @@ import { Row, Col, Button, Card, Form } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import * as FaIcons from 'react-icons/fa'
 import * as TiIcons from 'react-icons/ti'
+import * as MdIcons from 'react-icons/md'
 
 import Patient from '../components/Patient'
 import Message from '../components/Message'
@@ -34,12 +35,6 @@ const selectRow = {
   clickToSelect: true,
 }
 
-// const deleteHandler = (id) => {
-//   if (window.confirm('Are you sure')) {
-//     console.log(id)
-//   }
-// }
-
 const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const dispatch = useDispatch()
 
@@ -61,13 +56,27 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
     }
   }
 
-  useEffect(() => {
-    if (surv !== undefined) {
-      setSurveyUploaded(true)
-      dispatch(surveyDetails(surv.split('"')[1])).then(() => {
-        //console.log(survey)
-      })
+  const editHandler = (id) => {
+    if (window.confirm('Are you sure to edit')) {
     }
+  }
+
+  useEffect(() => {
+    // togliere il booleano survey uploaded altrimenti non posso cambiare il questionario senza ricaricare
+    // la pagina
+    if (surv !== undefined) {
+      dispatch(surveyDetails(surv.split('"')[1]))
+        .then(() => {
+          setSurveyUploaded(true)
+        })
+        .catch(() => {
+          setSurveyUploaded(false)
+        })
+    } else {
+    }
+
+    // var survee = localStorage.getItem('surveyId')
+    // dispatch(surveyDetails(survee.split('"')[1]))
 
     dispatch(listPatientsAndDisease())
   }, [dispatch, match, history, surv])
@@ -94,7 +103,11 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                   borderLeft: 'solid 1px grey',
                 }}
               >
-                <h1>{survey.survey.name} Survey</h1>
+                {survey.survey !== null ? (
+                  <h1>{survey.survey.name} Survey</h1>
+                ) : (
+                  <h2>Caricare un documento o crearne uno nuovo</h2>
+                )}
 
                 {survey.questions.map((q, index) => (
                   <Col key={q.question._id}>
@@ -112,7 +125,19 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                           className="btn-sm"
                           onClick={() => deleteHandler(q.question._id)}
                         >
-                          <TiIcons.TiDelete size={30} />
+                          <MdIcons.MdDelete size={30} />
+                        </Button>
+                        <Button
+                          style={{
+                            float: 'right',
+                            display: 'inline-block',
+                          }}
+                          // variant="danger"
+                          variant="light"
+                          className="btn-sm"
+                          onClick={() => editHandler(q.question._id)}
+                        >
+                          <MdIcons.MdEdit size={30} />
                         </Button>
                       </Card.Header>
 
@@ -142,6 +167,90 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                                 />
                               ))}
                             </>
+                          ) : q.question.slider ? (
+                            <>
+                              <Row className="justify-content-md-center">
+                                {/* Variable width content */}
+                                <Col xs md="auto">
+                                  {q.answers[0].text}
+                                </Col>
+                                <Col xs>
+                                  <Form>
+                                    <Form.Group controlId="formBasicRangeCustom">
+                                      <Form.Control type="range" custom />
+                                    </Form.Group>
+                                  </Form>
+                                </Col>
+                                <Col xs md="auto">
+                                  {q.answers[1].text}
+                                </Col>
+                              </Row>
+                            </>
+                          ) : q.question.trueFalse ? (
+                            <>
+                              <Button className="m-1">Si</Button>
+                              <Button
+                                inline
+                                className="m-1"
+                                style={{
+                                  backgroundColor: '#f7a723',
+                                }}
+                              >
+                                No
+                              </Button>
+                            </>
+                          ) : q.question.incrementDecrement ? (
+                            <>
+                              <h1>00</h1>
+                              <Button className="m-1">-</Button>
+                              <Button
+                                inline
+                                className="m-1"
+                                style={{
+                                  backgroundColor: '#f7a723',
+                                }}
+                              >
+                                +
+                              </Button>
+                            </>
+                          ) : q.question.insertTime ? (
+                            <>
+                              <Row className="justify-content-md-center">
+                                {/* Variable width content */}
+                                <Col xs md="auto">
+                                  00 :
+                                </Col>
+                                <Col xs md="auto">
+                                  00
+                                </Col>
+                              </Row>
+                              <Row className="justify-content-md-center">
+                                <Col xs md="auto">
+                                  <Button>-</Button>
+                                </Col>
+                                <Col xs md="auto">
+                                  <Button
+                                    style={{
+                                      backgroundColor: '#f7a723',
+                                    }}
+                                  >
+                                    +
+                                  </Button>
+                                </Col>
+                                <Col xs md="auto">
+                                  <Button>-</Button>
+                                </Col>
+                                <Col xs md="auto">
+                                  <Button
+                                    style={{
+                                      backgroundColor: '#f7a723',
+                                    }}
+                                  >
+                                    +
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </>
                           ) : (
                             <Form.Group>
                               <Form.Control
@@ -161,11 +270,10 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         ) : (
           <>
             <Col md={9}>
-              <h3> Caricare un questionario </h3>
+              <h3> Nessun questionario caricato </h3>
             </Col>
           </>
         )}
-
         <Col md={3}>
           <BootstrapTable
             keyField="id"

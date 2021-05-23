@@ -6,6 +6,26 @@ const questionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    slider: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    trueFalse: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    incrementDecrement: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    insertTime: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     radio: {
       type: Boolean,
       required: false,
