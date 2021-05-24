@@ -10,16 +10,34 @@ import OfferedAnswer from '../models/offeredAnswerModel.js'
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const { text, radio, check, open, survey, offeredAnswers } = req.body
+    const {
+      text,
+      radio,
+      check,
+      open,
+      slider,
+      trueFalse,
+      incrementDecrement,
+      insertTime,
+      survey,
+      offeredAnswers,
+    } = req.body
 
     const question = new Question({
       text: text,
       radio: radio,
       check: check,
       open: open,
+      slider: slider,
+      trueFalse: trueFalse,
+      incrementDecrement: incrementDecrement,
+      insertTime: insertTime,
       survey: survey,
     })
     const createdQuestion = await question.save()
+
+    console.log(createdQuestion)
+    console.log(offeredAnswers)
 
     if (createdQuestion) {
       for (var i = 0; i < offeredAnswers.length; i++) {
@@ -27,7 +45,9 @@ router.post(
           text: offeredAnswers[i].text,
           selected: false,
           question: createdQuestion._id,
+          image: offeredAnswers[i].image,
         })
+        console.log(offeredAnswer)
         await offeredAnswer.save()
       }
       res.status(201).json(createdQuestion)

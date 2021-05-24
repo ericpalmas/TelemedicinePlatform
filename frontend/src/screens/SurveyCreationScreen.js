@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Button, Card, Form } from 'react-bootstrap'
+import { Row, Col, Button, Card, Form, Figure } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import * as FaIcons from 'react-icons/fa'
 import * as TiIcons from 'react-icons/ti'
@@ -13,6 +13,8 @@ import Loader from '../components/Loader'
 import { listPatientsAndDisease } from '../actions/patientActions'
 import { surveyDetails } from '../actions/surveyActions'
 import { deleteQuestion } from '../actions/questionActions'
+
+import icons from '../icons.js'
 
 // Patient Table
 const columns = [
@@ -64,6 +66,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   useEffect(() => {
     // togliere il booleano survey uploaded altrimenti non posso cambiare il questionario senza ricaricare
     // la pagina
+    console.log(survey)
     if (surv !== undefined) {
       dispatch(surveyDetails(surv.split('"')[1]))
         .then(() => {
@@ -74,9 +77,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         })
     } else {
     }
-
-    // var survee = localStorage.getItem('surveyId')
-    // dispatch(surveyDetails(survee.split('"')[1]))
 
     dispatch(listPatientsAndDisease())
   }, [dispatch, match, history, surv])
@@ -148,23 +148,63 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                           {q.question.check ? (
                             <>
                               {q.answers.map((answer) => (
-                                <Form.Check
-                                  custom
-                                  disabled
-                                  label={answer.text}
-                                  type="checkbox"
-                                />
+                                <>
+                                  <Form.Check
+                                    key={answer._id}
+                                    custom
+                                    disabled
+                                    inline
+                                    label={answer.text}
+                                    type="checkbox"
+                                  />
+
+                                  {answer.image === undefined ||
+                                  answer.image === -1 ? (
+                                    <></>
+                                  ) : (
+                                    <Figure className="m-0">
+                                      <Figure.Image
+                                        width={30}
+                                        height={30}
+                                        src={icons[answer.image].path}
+                                        value={answer.image}
+                                      />
+                                    </Figure>
+                                  )}
+
+                                  <br></br>
+                                </>
                               ))}
                             </>
                           ) : q.question.radio ? (
                             <>
                               {q.answers.map((answer) => (
-                                <Form.Check
-                                  custom
-                                  disabled
-                                  label={answer.text}
-                                  type="radio"
-                                />
+                                <>
+                                  <Form.Check
+                                    key={answer._id}
+                                    custom
+                                    disabled
+                                    inline
+                                    label={answer.text}
+                                    type="radio"
+                                  />
+
+                                  {answer.image === null ||
+                                  answer.image === -1 ? (
+                                    <></>
+                                  ) : (
+                                    <Figure className="m-0">
+                                      <Figure.Image
+                                        width={30}
+                                        height={30}
+                                        src={icons[answer.image].path}
+                                        value={answer.image}
+                                      />
+                                    </Figure>
+                                  )}
+
+                                  <br></br>
+                                </>
                               ))}
                             </>
                           ) : q.question.slider ? (

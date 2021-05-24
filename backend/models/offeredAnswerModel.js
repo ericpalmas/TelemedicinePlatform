@@ -5,6 +5,10 @@ const offeredAnswerSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: Number,
+    required: false,
+  },
   selected: {
     type: Boolean,
     required: false,

@@ -53,6 +53,8 @@ const AddQuestionModal = () => {
   // const [selectedPath, setSelectedPath] = useState('')
   const [selectedValue, setSelectedValue] = useState(-1)
 
+  const [validated, setValidated] = useState(false)
+
   // const [imageItems, setImageItems] = useState([])
 
   const setRadioOptionValue = (event) => {
@@ -156,7 +158,13 @@ const AddQuestionModal = () => {
   }
 
   const submitHandler = (e) => {
-    e.preventDefault()
+    const form = e.currentTarget
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+    //e.preventDefault()
     const newQuestion = {
       text,
       radio,
@@ -169,6 +177,7 @@ const AddQuestionModal = () => {
       survey: surv.split('"')[1],
       offeredAnswers: items,
     }
+    console.log(newQuestion)
     dispatch(createQuestion(newQuestion)).then(() => {
       dispatch(surveyDetails(surv.split('"')[1]))
     })
@@ -375,14 +384,60 @@ const AddQuestionModal = () => {
                 +
               </Button>
 
-              {items.map((item) => (
-                <Form.Check
-                  className="ml-3 mr-2"
-                  key={item.id}
-                  custom
-                  label={item.text}
-                  type="radio"
-                />
+              {items.map((item, index) => (
+                <Form inline>
+                  <Form.Check
+                    className="ml-3 mr-2"
+                    key={item.id}
+                    custom
+                    label={item.text}
+                    type="radio"
+                  />
+                  <DropdownButton
+                    className="ml-2 mr-2 mb-1"
+                    variant="secondary"
+                    alignRight
+                    id="dropdown-menu-align-right"
+                  >
+                    <Dropdown.Item
+                      eventKey={-1}
+                      onSelect={(eventKey) => handleSelect(eventKey, index)}
+                    >
+                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                    </Dropdown.Item>
+                    {icons.map((icon) => (
+                      <Dropdown.Item
+                        eventKey={icon.value}
+                        onSelect={(eventKey) => handleSelect(eventKey, index)}
+                      >
+                        <Figure className="m-0 pb-0">
+                          <Figure.Image
+                            className="m-0 pb-0"
+                            width={30}
+                            height={30}
+                            src={icon.path}
+                            value={icon.value}
+                          />
+                        </Figure>
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+
+                  {item.image !== -1 ? (
+                    <div>
+                      <Figure className="m-0">
+                        <Figure.Image
+                          width={30}
+                          height={30}
+                          src={icons[item.image].path}
+                          value={item.image}
+                        />
+                      </Figure>
+                    </div>
+                  ) : (
+                    <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                  )}
+                </Form>
               ))}
             </>
           ) : radioOption === 'multiCheck' ? (
@@ -438,17 +493,18 @@ const AddQuestionModal = () => {
                       eventKey={-1}
                       onSelect={(eventKey) => handleSelect(eventKey, index)}
                     >
-                      no emoticon
+                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
                     </Dropdown.Item>
                     {icons.map((icon) => (
                       <Dropdown.Item
                         eventKey={icon.value}
                         onSelect={(eventKey) => handleSelect(eventKey, index)}
                       >
-                        <Figure>
+                        <Figure className="m-0 pb-0">
                           <Figure.Image
-                            width={20}
-                            height={20}
+                            className="m-0 pb-0"
+                            width={30}
+                            height={30}
                             src={icon.path}
                             value={icon.value}
                           />
@@ -469,7 +525,7 @@ const AddQuestionModal = () => {
                       </Figure>
                     </div>
                   ) : (
-                    <p>no emoticon</p>
+                    <p className="ml-1 mb-0 pb-0">no emoticon</p>
                   )}
                 </Form>
               ))}
