@@ -2,6 +2,7 @@ import express from 'express'
 import asyncHandler from 'express-async-handler'
 const router = express.Router()
 import PatientDisease from '../models/patientDiseaseModel.js'
+import Patient from '../models/patientModel.js'
 
 // @desc Fetch patients and diseases
 // @route GET /api/patientsAndDiseases
@@ -15,9 +16,15 @@ router.get(
       .populate('disease')
       .exec()
 
-    // in questo array non vengono ritornati i pazienti che non hanno problemi
+    const oggettiToArray = await PatientDisease.find({}).select('patient')
+    const listaID = oggettiToArray.map((a) => a.patient)
+
+    const patientWithoutDiseases = await Patient.find({})
+      .where('_id')
+      .nin(listaID)
 
     var patientDiseases = []
+
     if (ress) {
       for (var i = 0; i < ress.length; i++) {
         let found = patientDiseases.find((o) => o._id === ress[i].patient._id)
@@ -51,6 +58,22 @@ router.get(
           patientDiseases.push(obj)
         }
       }
+
+      if (patientWithoutDiseases) {
+        for (var i = 0; i < patientWithoutDiseases.length; i++) {
+          let obj = {
+            _id: patientWithoutDiseases[i]._id,
+            name: patientWithoutDiseases[i].name,
+            surname: patientWithoutDiseases[i].surname,
+            age: patientWithoutDiseases[i].age,
+            therapy: patientWithoutDiseases[i].therapy,
+            disease: [],
+            diseases: [],
+          }
+          patientDiseases.push(obj)
+        }
+      }
+
       res.json(patientDiseases)
     } else {
       res.status(404)

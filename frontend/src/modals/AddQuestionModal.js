@@ -42,6 +42,13 @@ const AddQuestionModal = () => {
   // type of question selected
   const [radioOption, setRadioOption] = useState('')
 
+  // for slider and true false
+  const [firstOfferedAnswer, setFirstOfferedAnswer] = useState('')
+  const [secondOfferedAnswer, setSecondOfferedAnswer] = useState('')
+
+  const [firstImageOffered, setFirstImageOffered] = useState(-1)
+  const [secondImageOffered, setSecondImageOffered] = useState(-1)
+
   const icons = [
     { path: process.env.PUBLIC_URL + '/images/verySmiley.png', value: 0 },
     { path: process.env.PUBLIC_URL + '/images/smiley.png', value: 1 },
@@ -165,22 +172,37 @@ const AddQuestionModal = () => {
     }
     setValidated(true)
     //e.preventDefault()
-    const newQuestion = {
-      text,
-      radio,
-      check,
-      open,
-      slider,
-      trueFalse,
-      incrementDecrement,
-      insertTime,
-      survey: surv.split('"')[1],
-      offeredAnswers: items,
+
+    if (validated) {
+      handleClose()
     }
-    console.log(newQuestion)
-    dispatch(createQuestion(newQuestion)).then(() => {
-      dispatch(surveyDetails(surv.split('"')[1]))
-    })
+
+    // var newQuestion = {
+    //   text,
+    //   radio,
+    //   check,
+    //   open,
+    //   slider,
+    //   trueFalse,
+    //   incrementDecrement,
+    //   insertTime,
+    //   survey: surv.split('"')[1],
+    //   offeredAnswers: items,
+    // }
+    // if (newQuestion.slider || newQuestion.trueFalse) {
+    //   newQuestion.offeredAnswers.push({
+    //     text: firstOfferedAnswer,
+    //     image: firstImageOffered,
+    //   })
+    //   newQuestion.offeredAnswers.push({
+    //     text: secondOfferedAnswer,
+    //     image: secondImageOffered,
+    //   })
+    // }
+    // console.log(newQuestion)
+    // dispatch(createQuestion(newQuestion)).then(() => {
+    //   dispatch(surveyDetails(surv.split('"')[1]))
+    // })
   }
 
   const handleSelect = (e, index) => {
@@ -229,376 +251,396 @@ const AddQuestionModal = () => {
 
   return (
     <>
-      <FormLabel variant="secondary" onClick={handleShow} className="ml-3">
-        Add question
-      </FormLabel>
+      <Form noValidate validated={validated} onSubmit={submitHandler}>
+        <FormLabel variant="secondary" onClick={handleShow} className="ml-3">
+          Add question
+        </FormLabel>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Question creation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Label className="mt-2">
-            <h5>Question text</h5>
-          </Form.Label>
-          <Form.Control
-            placeholder="Enter text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Question creation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group controlId="validationCustom01">
+              <Form.Label className="mt-2">
+                <h5>Question text</h5>
+              </Form.Label>
+              <Form.Control
+                placeholder="Enter text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
+              <Form.Control.Feedback type="invalid">
+                Insert question text
+              </Form.Control.Feedback>
+            </Form.Group>
 
-          <Form.Label className="mt-4">
-            <h5>Question type</h5>
-          </Form.Label>
+            <Form.Label className="mt-4">
+              <h5>Question type</h5>
+            </Form.Label>
 
-          <div className="container">
-            <div className="row mt-2">
-              <div className="col-sm-12">
-                <form>
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="open"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      Open question
-                    </label>
-                  </div>
+            <div className="container">
+              <div className="row mt-2">
+                <div className="col-sm-12">
+                  <form noValidate>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="open"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        Open question
+                      </label>
+                    </div>
 
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="multiRadio"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      Multiple choice (only one choice)
-                    </label>
-                  </div>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="multiRadio"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        Multiple choice (only one choice)
+                      </label>
+                    </div>
 
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="multiCheck"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      Multiple choice (more than one choice)
-                    </label>
-                  </div>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="multiCheck"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        Multiple choice (more than one choice)
+                      </label>
+                    </div>
 
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="slider"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      Slider
-                    </label>
-                  </div>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="slider"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        Slider
+                      </label>
+                    </div>
 
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="trueFalse"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      True/False
-                    </label>
-                  </div>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="trueFalse"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        True/False
+                      </label>
+                    </div>
 
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="incrementDecrement"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      increment/decrement
-                    </label>
-                  </div>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="incrementDecrement"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        increment/decrement
+                      </label>
+                    </div>
 
-                  <div className="form-check">
-                    <label>
-                      <input
-                        type="radio"
-                        name="react-tips"
-                        value="insertTime"
-                        onChange={setRadioOptionValue}
-                        className="form-check-input"
-                      />
-                      insert time
-                    </label>
-                  </div>
-                </form>
+                    <div className="form-check">
+                      <label>
+                        <input
+                          type="radio"
+                          name="react-tips"
+                          value="insertTime"
+                          onChange={setRadioOptionValue}
+                          className="form-check-input"
+                        />
+                        insert time
+                      </label>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
 
-          {radioOption === 'multiRadio' ? (
-            <>
-              <Form.Label className="mt-2">
-                <h5>Write possible answers</h5>
-              </Form.Label>
-              <br />
-              <FormLabel
-                name="item"
-                type="text"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
-              >
-                <Form.Control placeholder="Enter answer" />
-              </FormLabel>
-              <Button
-                className="ml-2 mr-2"
-                variant="light"
-                id="addRemoveButton"
-                onClick={removeAnswer}
-                inline
-              >
-                -
-              </Button>
+            {radioOption === 'multiRadio' ? (
+              <>
+                <Form.Label className="mt-2">
+                  <h5>Write possible answers</h5>
+                </Form.Label>
+                <br />
+                <FormLabel
+                  name="item"
+                  type="text"
+                  value={itemName}
+                  onChange={(e) => setItemName(e.target.value)}
+                >
+                  <Form.Control placeholder="Enter answer" />
+                </FormLabel>
+                <Button
+                  className="ml-2 mr-2"
+                  variant="light"
+                  id="addRemoveButton"
+                  onClick={removeAnswer}
+                  inline
+                >
+                  -
+                </Button>
 
-              <Button
-                className="ml-2 mr-2"
-                variant="light"
-                id="addRemoveButton"
-                onClick={addAnswer}
-                inline
-              >
-                +
-              </Button>
+                <Button
+                  className="ml-2 mr-2"
+                  variant="light"
+                  id="addRemoveButton"
+                  onClick={addAnswer}
+                  inline
+                >
+                  +
+                </Button>
 
-              {items.map((item, index) => (
-                <Form inline>
-                  <Form.Check
-                    className="ml-3 mr-2"
-                    key={item.id}
-                    custom
-                    label={item.text}
-                    type="radio"
-                  />
-                  <DropdownButton
-                    className="ml-2 mr-2 mb-1"
-                    variant="secondary"
-                    alignRight
-                    id="dropdown-menu-align-right"
-                  >
-                    <Dropdown.Item
-                      eventKey={-1}
-                      onSelect={(eventKey) => handleSelect(eventKey, index)}
+                {items.map((item, index) => (
+                  // <Form inline>
+                  <>
+                    <Form.Check
+                      className="ml-3 mr-2"
+                      key={item.id}
+                      custom
+                      label={item.text}
+                      type="radio"
+                    />
+                    <DropdownButton
+                      className="ml-2 mr-2 mb-1"
+                      variant="secondary"
+                      alignRight
+                      id="dropdown-menu-align-right"
                     >
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    </Dropdown.Item>
-                    {icons.map((icon) => (
                       <Dropdown.Item
-                        eventKey={icon.value}
+                        eventKey={-1}
                         onSelect={(eventKey) => handleSelect(eventKey, index)}
                       >
-                        <Figure className="m-0 pb-0">
+                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                      </Dropdown.Item>
+                      {icons.map((icon) => (
+                        <Dropdown.Item
+                          eventKey={icon.value}
+                          onSelect={(eventKey) => handleSelect(eventKey, index)}
+                        >
+                          <Figure className="m-0 pb-0">
+                            <Figure.Image
+                              className="m-0 pb-0"
+                              width={30}
+                              height={30}
+                              src={icon.path}
+                              value={icon.value}
+                            />
+                          </Figure>
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
+
+                    {item.image !== -1 ? (
+                      <div>
+                        <Figure className="m-0">
                           <Figure.Image
-                            className="m-0 pb-0"
                             width={30}
                             height={30}
-                            src={icon.path}
-                            value={icon.value}
+                            src={icons[item.image].path}
+                            value={item.image}
                           />
                         </Figure>
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-
-                  {item.image !== -1 ? (
-                    <div>
-                      <Figure className="m-0">
-                        <Figure.Image
-                          width={30}
-                          height={30}
-                          src={icons[item.image].path}
-                          value={item.image}
-                        />
-                      </Figure>
-                    </div>
-                  ) : (
-                    <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                  )}
-                </Form>
-              ))}
-            </>
-          ) : radioOption === 'multiCheck' ? (
-            <>
-              <Form.Label className="mt-2">
-                <h5>Write possible answers</h5>
-              </Form.Label>
-              <br />
-              <FormLabel
-                name="item"
-                type="text"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
-              >
-                <Form.Control placeholder="Enter answer" />
-              </FormLabel>
-              <Button
-                className="ml-2 mr-2"
-                variant="light"
-                id="addRemoveButton"
-                onClick={removeAnswer}
-                inline
-              >
-                -
-              </Button>
-
-              <Button
-                className="ml-2 mr-2"
-                variant="light"
-                id="addRemoveButton"
-                onClick={addAnswer}
-                inline
-              >
-                +
-              </Button>
-
-              {items.map((item, index) => (
-                <Form inline>
-                  <Form.Check
-                    key={item.id}
-                    label={item.text}
-                    custom
-                    type="checkbox"
-                  />
-
-                  <DropdownButton
-                    className="ml-2 mr-2 mb-1"
-                    variant="secondary"
-                    alignRight
-                    id="dropdown-menu-align-right"
-                  >
-                    <Dropdown.Item
-                      eventKey={-1}
-                      onSelect={(eventKey) => handleSelect(eventKey, index)}
-                    >
+                      </div>
+                    ) : (
                       <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    </Dropdown.Item>
-                    {icons.map((icon) => (
+                    )}
+                    {/* </Form> */}
+                  </>
+                ))}
+              </>
+            ) : radioOption === 'multiCheck' ? (
+              <>
+                <Form.Label className="mt-2">
+                  <h5>Write possible answers</h5>
+                </Form.Label>
+                <br />
+                <FormLabel
+                  name="item"
+                  type="text"
+                  value={itemName}
+                  onChange={(e) => setItemName(e.target.value)}
+                >
+                  <Form.Control placeholder="Enter answer" />
+                </FormLabel>
+                <Button
+                  className="ml-2 mr-2"
+                  variant="light"
+                  id="addRemoveButton"
+                  onClick={removeAnswer}
+                  inline
+                >
+                  -
+                </Button>
+
+                <Button
+                  className="ml-2 mr-2"
+                  variant="light"
+                  id="addRemoveButton"
+                  onClick={addAnswer}
+                  inline
+                >
+                  +
+                </Button>
+
+                {items.map((item, index) => (
+                  <>
+                    {/* <Form inline> */}
+                    <Form.Check
+                      key={item.id}
+                      label={item.text}
+                      custom
+                      type="checkbox"
+                    />
+
+                    <DropdownButton
+                      className="ml-2 mr-2 mb-1"
+                      variant="secondary"
+                      alignRight
+                      id="dropdown-menu-align-right"
+                    >
                       <Dropdown.Item
-                        eventKey={icon.value}
+                        eventKey={-1}
                         onSelect={(eventKey) => handleSelect(eventKey, index)}
                       >
-                        <Figure className="m-0 pb-0">
+                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                      </Dropdown.Item>
+                      {icons.map((icon) => (
+                        <Dropdown.Item
+                          eventKey={icon.value}
+                          onSelect={(eventKey) => handleSelect(eventKey, index)}
+                        >
+                          <Figure className="m-0 pb-0">
+                            <Figure.Image
+                              className="m-0 pb-0"
+                              width={30}
+                              height={30}
+                              src={icon.path}
+                              value={icon.value}
+                            />
+                          </Figure>
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
+
+                    {item.image !== -1 ? (
+                      <div>
+                        <Figure className="m-0">
                           <Figure.Image
-                            className="m-0 pb-0"
                             width={30}
                             height={30}
-                            src={icon.path}
-                            value={icon.value}
+                            src={icons[item.image].path}
+                            value={item.image}
                           />
                         </Figure>
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
+                      </div>
+                    ) : (
+                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                    )}
+                  </>
+                  // </Form>
+                ))}
+              </>
+            ) : radioOption === 'slider' ? (
+              <>
+                <Form.Label className="mt-2">
+                  <h5>Slider</h5>
+                </Form.Label>
+                <br />
+                <Form.Row>
+                  <Form.Group as={Col} md="4" controlId="validationFormik104">
+                    <Form.Control
+                      type="text"
+                      placeholder="Lower value"
+                      name="state"
+                      value={firstOfferedAnswer}
+                      onChange={(e) => setFirstOfferedAnswer(e.target.value)}
+                    />
+                  </Form.Group>
 
-                  {item.image !== -1 ? (
-                    <div>
-                      <Figure className="m-0">
-                        <Figure.Image
-                          width={30}
-                          height={30}
-                          src={icons[item.image].path}
-                          value={item.image}
-                        />
-                      </Figure>
-                    </div>
-                  ) : (
-                    <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                  )}
-                </Form>
-              ))}
-            </>
-          ) : radioOption === 'slider' ? (
-            <>
-              <Form.Label className="mt-2">
-                <h5>Slider</h5>
-              </Form.Label>
-              <br />
-              <Form.Row>
-                <Form.Group as={Col} md="4" controlId="validationFormik104">
-                  <Form.Control
-                    type="text"
-                    placeholder="Lower value"
-                    name="state"
-                  />
-                </Form.Group>
+                  <Form.Group as={Col} md="4" controlId="validationFormik105">
+                    <Form.Control
+                      type="text"
+                      placeholder="Higher value"
+                      name="zip"
+                      value={secondOfferedAnswer}
+                      onChange={(e) => setSecondOfferedAnswer(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form.Row>
+              </>
+            ) : radioOption === 'trueFalse' ? (
+              <>
+                <Form.Label className="mt-2">
+                  <h5>Two choices</h5>
+                </Form.Label>
+                <br />
+                <Form.Row>
+                  <Form.Group as={Col} md="4" controlId="validationFormik104">
+                    <Form.Control
+                      type="text"
+                      placeholder="First choice"
+                      name="state"
+                      value={firstOfferedAnswer}
+                      onChange={(e) => setFirstOfferedAnswer(e.target.value)}
+                    />
+                  </Form.Group>
 
-                <Form.Group as={Col} md="4" controlId="validationFormik105">
-                  <Form.Control
-                    type="text"
-                    placeholder="Higher value"
-                    name="zip"
-                  />
-                </Form.Group>
-              </Form.Row>
-            </>
-          ) : radioOption === 'trueFalse' ? (
-            <>
-              <Form.Label className="mt-2">
-                <h5>Two choices</h5>
-              </Form.Label>
-              <br />
-              <Form.Row>
-                <Form.Group as={Col} md="4" controlId="validationFormik104">
-                  <Form.Control
-                    type="text"
-                    placeholder="First choice"
-                    name="state"
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} md="4" controlId="validationFormik105">
-                  <Form.Control
-                    type="text"
-                    placeholder="Second choice"
-                    name="zip"
-                  />
-                </Form.Group>
-              </Form.Row>
-            </>
-          ) : (
-            <></>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          {radioOption === -1 ? (
-            <Button disabled variant="primary" onClick={handleClose}>
-              Save Changes
+                  <Form.Group as={Col} md="4" controlId="validationFormik105">
+                    <Form.Control
+                      type="text"
+                      placeholder="Second choice"
+                      name="zip"
+                      value={secondOfferedAnswer}
+                      onChange={(e) => setSecondOfferedAnswer(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form.Row>
+              </>
+            ) : (
+              <></>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
             </Button>
-          ) : (
-            <Form onSubmit={submitHandler}>
-              <Button variant="primary" type="submit" onClick={handleClose}>
+            {radioOption === -1 ? (
+              <Button disabled variant="primary" onClick={handleClose}>
                 Save Changes
               </Button>
-            </Form>
-          )}
-        </Modal.Footer>
-      </Modal>
+            ) : (
+              //<Form onSubmit={submitHandler}>
+              // <Button variant="primary" type="submit" onClick={handleClose}>
+              <Button variant="primary" type="submit">
+                Save Changes
+              </Button>
+              //</Form>
+            )}
+          </Modal.Footer>
+        </Modal>
+      </Form>
     </>
   )
 }

@@ -31,18 +31,26 @@ router.post(
       therapy: therapy,
     })
 
+    // console.log('PATIENT ROUTES')
+    // console.log(req.body)
+
     const createdPatient = await patient.save()
 
-    if (items.length !== 0) {
-      for (var i = 0; i < items.length; i++) {
-        const newDisease = new PatientDisease({
-          patient: createdPatient._id,
-          disease: items[i],
-        })
-        const assignedDiseases = await newDisease.save()
+    if (createdPatient) {
+      if (items.length !== 0) {
+        for (var i = 0; i < items.length; i++) {
+          const newDisease = new PatientDisease({
+            patient: createdPatient._id,
+            disease: items[i],
+          })
+          const assignedDiseases = await newDisease.save()
+        }
       }
+      res.status(201).json(createdPatient)
+    } else {
+      res.status(404)
+      throw new Error('Patient not created')
     }
-    res.status(201).json(createdPatient)
   }),
 )
 

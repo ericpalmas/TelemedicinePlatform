@@ -23,13 +23,15 @@ router.post(
   asyncHandler(async (req, res) => {
     const { name, description } = req.body
 
-    const disease = new Disease({
-      name: name,
-      description: description,
-    })
+    if (name !== '') {
+      const disease = new Disease({
+        name: name,
+        description: description,
+      })
 
-    const createdDisease = await disease.save()
-    res.status(201).json(createdDisease)
+      const createdDisease = await disease.save()
+      res.status(201).json(createdDisease)
+    }
   }),
 )
 

@@ -119,6 +119,8 @@ const EditPatientModal = ({ patient }) => {
             <h5>Therapy</h5>
           </Form.Label>
           <Form.Control
+            as="textarea"
+            rows={3}
             type="therapy"
             placeholder="Enter therapy"
             value={therapy}
