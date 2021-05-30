@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Modal from 'react-bootstrap/Modal'
-import { createQuestion } from '../actions/questionActions'
-import { surveyDetails } from '../actions/surveyActions'
-import Dropdown from 'react-bootstrap/Dropdown'
-import icons from '../icons.js'
 import {
   Button,
   Form,
@@ -19,8 +15,15 @@ import {
   Figure,
   DropdownButton,
 } from 'react-bootstrap'
+import * as MdIcons from 'react-icons/md'
 
-const AddQuestionModal = () => {
+// import { createQuestion } from '../actions/questionActions'
+
+import { surveyDetails } from '../actions/surveyActions'
+import Dropdown from 'react-bootstrap/Dropdown'
+import icons from '../icons.js'
+
+const EditQuestionModal = ({ question }) => {
   var surv = localStorage.getItem('surveyId')
 
   // Open and close modal
@@ -29,24 +32,38 @@ const AddQuestionModal = () => {
   const handleShow = () => setShow(true)
 
   // array of possible answers
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(question.answers)
   const [itemName, setItemName] = useState('')
-  const [text, setText] = useState('')
-  const [radio, setRadio] = useState(false)
-  const [check, setCheck] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [slider, setSlider] = useState(false)
-  const [trueFalse, setTrueFalse] = useState(false)
-  const [incrementDecrement, setIncrementDecrement] = useState(false)
-  const [insertTime, setInsertTime] = useState(false)
+  const [text, setText] = useState(question.question.text)
+
+  const [radio, setRadio] = useState(question.question.radio)
+  const [check, setCheck] = useState(question.question.check)
+  const [open, setOpen] = useState(question.question.open)
+  const [slider, setSlider] = useState(question.question.slider)
+  const [trueFalse, setTrueFalse] = useState(question.question.trueFalse)
+  const [incrementDecrement, setIncrementDecrement] = useState(
+    question.question.incrementDecrement,
+  )
+  const [insertTime, setInsertTime] = useState(question.question.insertTime)
 
   // type of question selected
   const [radioOption, setRadioOption] = useState('')
 
+  // for slider and true false
   const [firstOfferedAnswer, setFirstOfferedAnswer] = useState('')
   const [secondOfferedAnswer, setSecondOfferedAnswer] = useState('')
+
   const [firstImageOffered, setFirstImageOffered] = useState(-1)
   const [secondImageOffered, setSecondImageOffered] = useState(-1)
+
+  // const icons = [
+  //   { path: process.env.PUBLIC_URL + '/images/verySmiley.png', value: 0 },
+  //   { path: process.env.PUBLIC_URL + '/images/smiley.png', value: 1 },
+  //   { path: process.env.PUBLIC_URL + '/images/normal.png', value: 2 },
+  //   { path: process.env.PUBLIC_URL + '/images/sad.png', value: 3 },
+  //   { path: process.env.PUBLIC_URL + '/images/verySad.png', value: 4 },
+  // ]
+
   const [selectedValue, setSelectedValue] = useState(-1)
   const [validated, setValidated] = useState(false)
 
@@ -181,18 +198,53 @@ const AddQuestionModal = () => {
       })
     }
     console.log(newQuestion)
-    dispatch(createQuestion(newQuestion)).then(() => {
-      dispatch(surveyDetails(surv.split('"')[1]))
-    })
+    // dispatch(createQuestion(newQuestion)).then(() => {
+    //   dispatch(surveyDetails(surv.split('"')[1]))
+    // })
   }
 
   const handleSelect = (e, index) => {
-    var values = [...items]
-    values[index].image = parseInt(e)
-    setItems(values)
+    switch (e) {
+      case '-1':
+        var values = [...items]
+        values[index].image = -1
+        setItems(values)
+        break
+      case '0':
+        var values = [...items]
+        values[index].image = 0
+        setItems(values)
+        break
+      case '1':
+        var values = [...items]
+        values[index].image = 1
+        setItems(values)
+        break
+      case '2':
+        var values = [...items]
+        values[index].image = 2
+        setItems(values)
+        break
+      case '3':
+        var values = [...items]
+        values[index].image = 3
+        setItems(values)
+        break
+      case '4':
+        var values = [...items]
+        values[index].image = 4
+        setItems(values)
+        break
+      default:
+    }
   }
-
   useEffect(() => {
+    // if(question.question.open){
+    // } else if ()
+
+    console.log(question)
+    // setItems(question.answers)
+
     if (successCreate) {
       dispatch(surveyDetails(surv.split('"')[1]))
     }
@@ -200,9 +252,17 @@ const AddQuestionModal = () => {
 
   return (
     <>
-      <FormLabel variant="secondary" onClick={handleShow} className="ml-3">
-        Add question
-      </FormLabel>
+      <Button
+        style={{
+          float: 'right',
+          display: 'inline-block',
+        }}
+        variant="light"
+        className="btn-sm"
+        onClick={handleShow}
+      >
+        <MdIcons.MdEdit size={30} />
+      </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Form noValidate validated={validated} onSubmit={submitHandler}>
@@ -241,6 +301,7 @@ const AddQuestionModal = () => {
                           value="open"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.open}
                         />
                         Open question
                       </label>
@@ -254,6 +315,7 @@ const AddQuestionModal = () => {
                           value="multiRadio"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.radio}
                         />
                         Multiple choice (only one choice)
                       </label>
@@ -267,6 +329,7 @@ const AddQuestionModal = () => {
                           value="multiCheck"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.check}
                         />
                         Multiple choice (more than one choice)
                       </label>
@@ -280,6 +343,7 @@ const AddQuestionModal = () => {
                           value="slider"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.slider}
                         />
                         Slider
                       </label>
@@ -293,6 +357,7 @@ const AddQuestionModal = () => {
                           value="trueFalse"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.trueFalse}
                         />
                         True/False
                       </label>
@@ -306,6 +371,7 @@ const AddQuestionModal = () => {
                           value="incrementDecrement"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.incrementDecrement}
                         />
                         increment/decrement
                       </label>
@@ -319,6 +385,7 @@ const AddQuestionModal = () => {
                           value="insertTime"
                           onChange={setRadioOptionValue}
                           className="form-check-input"
+                          defaultChecked={question.question.insertTime}
                         />
                         insert time
                       </label>
@@ -369,9 +436,19 @@ const AddQuestionModal = () => {
                         className="ml-3 mr-2"
                         key={item.id}
                         custom
-                        label={item.text}
+                        value={item.value}
                         type="radio"
                       />
+
+                      <FormLabel
+                        name="item"
+                        type="text"
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
+                      >
+                        <Form.Control defaultValue={item.text} />
+                      </FormLabel>
+
                       <DropdownButton
                         className="ml-2 mr-2 mb-1"
                         variant="secondary"
@@ -422,7 +499,7 @@ const AddQuestionModal = () => {
                   </>
                 ))}
               </>
-            ) : radioOption === 'multiCheck' ? (
+            ) : question.question.check ? (
               <>
                 <Form.Label className="mt-2">
                   <h5>Write possible answers</h5>
@@ -455,8 +532,77 @@ const AddQuestionModal = () => {
                 >
                   +
                 </Button>
-
                 {items.map((item, index) => (
+                  <>
+                    <Form inline>
+                      <Form.Check key={item.id} custom type="checkbox" />
+
+                      <FormLabel
+                        name="item"
+                        type="text"
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
+                      >
+                        <Form.Control defaultValue={item.text} />
+                      </FormLabel>
+
+                      <DropdownButton
+                        className="ml-2 mr-2 mb-1"
+                        variant="secondary"
+                        alignRight
+                        id="dropdown-menu-align-right"
+                      >
+                        <Dropdown.Item
+                          eventKey={-1}
+                          onSelect={(eventKey) => handleSelect(eventKey, index)}
+                        >
+                          <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                        </Dropdown.Item>
+                        {icons.map((icon) => (
+                          <Dropdown.Item
+                            eventKey={icon.value}
+                            onSelect={(eventKey) =>
+                              handleSelect(eventKey, index)
+                            }
+                          >
+                            <Figure className="m-0 pb-0">
+                              <Figure.Image
+                                className="m-0 pb-0"
+                                width={30}
+                                height={30}
+                                src={icon.path}
+                                value={icon.value}
+                              />
+                            </Figure>
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+
+                      {item.image !== undefined ? (
+                        <>
+                          {item.image !== -1 ? (
+                            <div>
+                              <Figure className="m-0">
+                                <Figure.Image
+                                  width={30}
+                                  height={30}
+                                  src={icons[item.image].path}
+                                  value={item.image}
+                                />
+                              </Figure>
+                            </div>
+                          ) : (
+                            <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </Form>
+                  </>
+                ))}
+
+                {/* {question.answers.map((item, index) => (
                   <>
                     <Form inline>
                       <Form.Check
@@ -465,6 +611,15 @@ const AddQuestionModal = () => {
                         custom
                         type="checkbox"
                       />
+
+                      <FormLabel
+                        name="item"
+                        type="text"
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
+                      >
+                        <Form.Control defaultValue={item.text} />
+                      </FormLabel>
 
                       <DropdownButton
                         className="ml-2 mr-2 mb-1"
@@ -514,7 +669,7 @@ const AddQuestionModal = () => {
                       )}
                     </Form>
                   </>
-                ))}
+                ))} */}
               </>
             ) : radioOption === 'slider' ? (
               <>
@@ -523,7 +678,7 @@ const AddQuestionModal = () => {
                 </Form.Label>
                 <br />
                 <Form.Row>
-                  <Form inline>
+                  <Form.Group as={Col} md="4" controlId="validationFormik104">
                     <Form.Control
                       type="text"
                       placeholder="Lower value"
@@ -531,58 +686,9 @@ const AddQuestionModal = () => {
                       value={firstOfferedAnswer}
                       onChange={(e) => setFirstOfferedAnswer(e.target.value)}
                     />
+                  </Form.Group>
 
-                    <DropdownButton
-                      className="ml-2 mr-2 mb-1"
-                      variant="secondary"
-                      alignRight
-                      id="dropdown-menu-align-right"
-                    >
-                      <Dropdown.Item
-                        eventKey={-1}
-                        onSelect={(eventKey) =>
-                          setFirstImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      </Dropdown.Item>
-                      {icons.map((icon) => (
-                        <Dropdown.Item
-                          eventKey={icon.value}
-                          onSelect={(eventKey) =>
-                            setFirstImageOffered(parseInt(eventKey))
-                          }
-                        >
-                          <Figure className="m-0 pb-0">
-                            <Figure.Image
-                              className="m-0 pb-0"
-                              width={30}
-                              height={30}
-                              src={icon.path}
-                              value={icon.value}
-                            />
-                          </Figure>
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-
-                    {firstImageOffered !== -1 ? (
-                      <div>
-                        <Figure className="m-0">
-                          <Figure.Image
-                            width={30}
-                            height={30}
-                            src={icons[firstImageOffered].path}
-                            value={firstImageOffered}
-                          />
-                        </Figure>
-                      </div>
-                    ) : (
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    )}
-                  </Form>
-
-                  <Form inline>
+                  <Form.Group as={Col} md="4" controlId="validationFormik105">
                     <Form.Control
                       type="text"
                       placeholder="Higher value"
@@ -590,55 +696,7 @@ const AddQuestionModal = () => {
                       value={secondOfferedAnswer}
                       onChange={(e) => setSecondOfferedAnswer(e.target.value)}
                     />
-                    <DropdownButton
-                      className="ml-2 mr-2 mb-1"
-                      variant="secondary"
-                      alignRight
-                      id="dropdown-menu-align-right"
-                    >
-                      <Dropdown.Item
-                        eventKey={-1}
-                        onSelect={(eventKey) =>
-                          setSecondImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      </Dropdown.Item>
-                      {icons.map((icon) => (
-                        <Dropdown.Item
-                          eventKey={icon.value}
-                          onSelect={(eventKey) =>
-                            setSecondImageOffered(parseInt(eventKey))
-                          }
-                        >
-                          <Figure className="m-0 pb-0">
-                            <Figure.Image
-                              className="m-0 pb-0"
-                              width={30}
-                              height={30}
-                              src={icon.path}
-                              value={icon.value}
-                            />
-                          </Figure>
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-
-                    {secondImageOffered !== -1 ? (
-                      <div>
-                        <Figure className="m-0">
-                          <Figure.Image
-                            width={30}
-                            height={30}
-                            src={icons[secondImageOffered].path}
-                            value={secondImageOffered}
-                          />
-                        </Figure>
-                      </div>
-                    ) : (
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    )}
-                  </Form>
+                  </Form.Group>
                 </Form.Row>
               </>
             ) : radioOption === 'trueFalse' ? (
@@ -648,7 +706,7 @@ const AddQuestionModal = () => {
                 </Form.Label>
                 <br />
                 <Form.Row>
-                  <Form inline>
+                  <Form.Group as={Col} md="4" controlId="validationFormik104">
                     <Form.Control
                       type="text"
                       placeholder="First choice"
@@ -656,57 +714,9 @@ const AddQuestionModal = () => {
                       value={firstOfferedAnswer}
                       onChange={(e) => setFirstOfferedAnswer(e.target.value)}
                     />
-                    <DropdownButton
-                      className="ml-2 mr-2 mb-1"
-                      variant="secondary"
-                      alignRight
-                      id="dropdown-menu-align-right"
-                    >
-                      <Dropdown.Item
-                        eventKey={-1}
-                        onSelect={(eventKey) =>
-                          setFirstImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      </Dropdown.Item>
-                      {icons.map((icon) => (
-                        <Dropdown.Item
-                          eventKey={icon.value}
-                          onSelect={(eventKey) =>
-                            setFirstImageOffered(parseInt(eventKey))
-                          }
-                        >
-                          <Figure className="m-0 pb-0">
-                            <Figure.Image
-                              className="m-0 pb-0"
-                              width={30}
-                              height={30}
-                              src={icon.path}
-                              value={icon.value}
-                            />
-                          </Figure>
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
+                  </Form.Group>
 
-                    {firstImageOffered !== -1 ? (
-                      <div>
-                        <Figure className="m-0">
-                          <Figure.Image
-                            width={30}
-                            height={30}
-                            src={icons[firstImageOffered].path}
-                            value={firstImageOffered}
-                          />
-                        </Figure>
-                      </div>
-                    ) : (
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    )}
-                  </Form>
-
-                  <Form inline>
+                  <Form.Group as={Col} md="4" controlId="validationFormik105">
                     <Form.Control
                       type="text"
                       placeholder="Second choice"
@@ -714,109 +724,8 @@ const AddQuestionModal = () => {
                       value={secondOfferedAnswer}
                       onChange={(e) => setSecondOfferedAnswer(e.target.value)}
                     />
-                    <DropdownButton
-                      className="ml-2 mr-2 mb-1"
-                      variant="secondary"
-                      alignRight
-                      id="dropdown-menu-align-right"
-                    >
-                      <Dropdown.Item
-                        eventKey={-1}
-                        onSelect={(eventKey) =>
-                          setSecondImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      </Dropdown.Item>
-                      {icons.map((icon) => (
-                        <Dropdown.Item
-                          eventKey={icon.value}
-                          onSelect={(eventKey) =>
-                            setSecondImageOffered(parseInt(eventKey))
-                          }
-                        >
-                          <Figure className="m-0 pb-0">
-                            <Figure.Image
-                              className="m-0 pb-0"
-                              width={30}
-                              height={30}
-                              src={icon.path}
-                              value={icon.value}
-                            />
-                          </Figure>
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-
-                    {secondImageOffered !== -1 ? (
-                      <div>
-                        <Figure className="m-0">
-                          <Figure.Image
-                            width={30}
-                            height={30}
-                            src={icons[secondImageOffered].path}
-                            value={secondImageOffered}
-                          />
-                        </Figure>
-                      </div>
-                    ) : (
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    )}
-                  </Form>
+                  </Form.Group>
                 </Form.Row>
-              </>
-            ) : radioOption === 'incrementDecrement' ? (
-              <>
-                <Form inline>
-                  <DropdownButton
-                    className="ml-2 mr-2 mb-1"
-                    variant="secondary"
-                    alignRight
-                    id="dropdown-menu-align-right"
-                  >
-                    <Dropdown.Item
-                      eventKey={-1}
-                      onSelect={(eventKey) =>
-                        setFirstImageOffered(parseInt(eventKey))
-                      }
-                    >
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    </Dropdown.Item>
-                    {icons.map((icon) => (
-                      <Dropdown.Item
-                        eventKey={icon.value}
-                        onSelect={(eventKey) =>
-                          setFirstImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <Figure className="m-0 pb-0">
-                          <Figure.Image
-                            className="m-0 pb-0"
-                            width={30}
-                            height={30}
-                            src={icon.path}
-                            value={icon.value}
-                          />
-                        </Figure>
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-
-                  {firstImageOffered !== -1 ? (
-                    <div>
-                      <Figure className="m-0">
-                        <Figure.Image
-                          width={30}
-                          height={30}
-                          src={icons[firstImageOffered].path}
-                          value={firstImageOffered}
-                        />
-                      </Figure>
-                    </div>
-                  ) : (
-                    <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                  )}
-                </Form>
               </>
             ) : (
               <></>
@@ -842,4 +751,4 @@ const AddQuestionModal = () => {
   )
 }
 
-export default AddQuestionModal
+export default EditQuestionModal

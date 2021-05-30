@@ -3,6 +3,12 @@ import {
   SENSOR_LIST_REQUEST,
   SENSOR_LIST_SUCCESS,
   SENSOR_LIST_FAIL,
+  SENSOR_CREATE_REQUEST,
+  SENSOR_CREATE_SUCCESS,
+  SENSOR_CREATE_FAIL,
+  SENSOR_ENABLE_REQUEST,
+  SENSOR_ENABLE_SUCCESS,
+  SENSOR_ENABLE_FAIL,
 } from '../constants/sensorConstants'
 
 export const listSensors = () => async (dispatch) => {
@@ -18,6 +24,52 @@ export const listSensors = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SENSOR_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const createSensor = (sensor) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SENSOR_CREATE_REQUEST,
+    })
+
+    const { data } = await axios.post(`/api/sensors`, sensor)
+
+    dispatch({
+      type: SENSOR_CREATE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SENSOR_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const enableSensor = (sensor) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SENSOR_ENABLE_REQUEST,
+    })
+
+    const { data } = await axios.post(`/api/sensors/enableDisable`, sensor)
+
+    dispatch({
+      type: SENSOR_ENABLE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SENSOR_ENABLE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -17,7 +17,11 @@ import {
   diseaseDeleteReducer,
   diseaseUpdateReducer,
 } from './reducers/diseaseReducers'
-import { sensorListReducer } from './reducers/sensorReducers'
+import {
+  sensorListReducer,
+  sensorCreateReducer,
+  sensorEnableReducer,
+} from './reducers/sensorReducers'
 import {
   surveyTemplateListReducer,
   surveyReducer,
@@ -43,6 +47,8 @@ const reducer = combineReducers({
   diseaseDelete: diseaseDeleteReducer,
   diseaseUpdate: diseaseUpdateReducer,
   sensorList: sensorListReducer,
+  sensorCreate: sensorCreateReducer,
+  sensorEnable: sensorEnableReducer,
   patientDiseasesList: patientDiseasesListReducer,
   surveyTemplateList: surveyTemplateListReducer,
   survey: surveyReducer,

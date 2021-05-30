@@ -10,6 +10,8 @@ import * as MdIcons from 'react-icons/md'
 import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import EditQuestionModal from '../modals/EditQuestionModal'
+
 import { listPatientsAndDisease } from '../actions/patientActions'
 import { surveyDetails } from '../actions/surveyActions'
 import { deleteQuestion } from '../actions/questionActions'
@@ -55,11 +57,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
       dispatch(deleteQuestion(id)).then(() => {
         dispatch(surveyDetails(surv.split('"')[1]))
       })
-    }
-  }
-
-  const editHandler = (id) => {
-    if (window.confirm('Are you sure to edit')) {
     }
   }
 
@@ -127,18 +124,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                         >
                           <MdIcons.MdDelete size={30} />
                         </Button>
-                        <Button
-                          style={{
-                            float: 'right',
-                            display: 'inline-block',
-                          }}
-                          // variant="danger"
-                          variant="light"
-                          className="btn-sm"
-                          onClick={() => editHandler(q.question._id)}
-                        >
-                          <MdIcons.MdEdit size={30} />
-                        </Button>
+                        <EditQuestionModal question={q} />
                       </Card.Header>
 
                       <Card.Body>

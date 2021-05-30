@@ -27,8 +27,6 @@ const AddDiseaseModal = ({ history }) => {
   const [validated, setValidated] = useState(false)
 
   const submitHandler = (e) => {
-    //e.preventDefault()
-
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -36,9 +34,7 @@ const AddDiseaseModal = ({ history }) => {
     }
 
     setValidated(true)
-    // console.log(name)
-    // console.log(description)
-    // if (validated) {
+
     const newDisease = {
       name,
       description,
@@ -46,13 +42,9 @@ const AddDiseaseModal = ({ history }) => {
     dispatch(createDisease(newDisease)).then(() => {
       dispatch(listDiseases())
     })
-    // }
   }
 
-  useEffect(() => {
-    // if (successCreate) {
-    // }
-  }, [dispatch])
+  useEffect(() => {}, [dispatch])
 
   return (
     <>
