@@ -60,6 +60,7 @@ export const deleteQuestion = (id) => async (dispatch) => {
 
 export const updateQuestion = (question) => async (dispatch) => {
   try {
+    console.log(question)
     dispatch({
       type: QUESTION_UPDATE_REQUEST,
     })

@@ -36,9 +36,6 @@ router.post(
     })
     const createdQuestion = await question.save()
 
-    console.log(createdQuestion)
-    console.log(offeredAnswers)
-
     if (createdQuestion) {
       for (var i = 0; i < offeredAnswers.length; i++) {
         const offeredAnswer = new OfferedAnswer({
@@ -84,9 +81,25 @@ router.delete(
 router.put(
   '/:id',
   asyncHandler(async (req, res) => {
-    const { text, radio, check, open, survey } = req.body
+    const {
+      _id,
+      text,
+      radio,
+      check,
+      open,
+      slider,
+      trueFalse,
+      incrementDecrement,
+      insertTime,
+      survey,
+      offeredAnswers,
+    } = req.body
 
-    const question = await Question.findById(req.params.id)
+    console.log(req.body)
+
+    console.log(offeredAnswers)
+
+    const question = await Question.findById(_id)
 
     if (question) {
       question.text = text
@@ -94,9 +107,30 @@ router.put(
       question.check = check
       question.open = open
       question.survey = survey
+      question.slider = slider
+      question.trueFalse = trueFalse
+      question.incrementDecrement = incrementDecrement
+      question.insertTime = insertTime
 
       const updatedQuestion = await question.save()
-      res.json(updatedQuestion)
+      const deletedQuestions = await OfferedAnswer.deleteMany({
+        question: question._id,
+      })
+
+      if (updatedQuestion) {
+        console.log('AGGIORNATO ')
+        for (var i = 0; i < offeredAnswers.length; i++) {
+          const offeredAnswer = new OfferedAnswer({
+            text: offeredAnswers[i].text,
+            question: _id,
+            image: offeredAnswers[i].image,
+            selected: false,
+          })
+          await offeredAnswer.save()
+        }
+
+        res.status(201).json(updatedQuestion)
+      }
     } else {
       res.status(404)
       throw new Error('Question not found')

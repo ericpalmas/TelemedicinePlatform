@@ -16,9 +16,7 @@ import {
   DropdownButton,
 } from 'react-bootstrap'
 import * as MdIcons from 'react-icons/md'
-
-// import { createQuestion } from '../actions/questionActions'
-
+import { updateQuestion } from '../actions/questionActions'
 import { surveyDetails } from '../actions/surveyActions'
 import Dropdown from 'react-bootstrap/Dropdown'
 import icons from '../icons.js'
@@ -35,7 +33,6 @@ const EditQuestionModal = ({ question }) => {
   const [items, setItems] = useState(question.answers)
   const [itemName, setItemName] = useState('')
   const [text, setText] = useState(question.question.text)
-
   const [radio, setRadio] = useState(question.question.radio)
   const [check, setCheck] = useState(question.question.check)
   const [open, setOpen] = useState(question.question.open)
@@ -55,14 +52,6 @@ const EditQuestionModal = ({ question }) => {
 
   const [firstImageOffered, setFirstImageOffered] = useState(-1)
   const [secondImageOffered, setSecondImageOffered] = useState(-1)
-
-  // const icons = [
-  //   { path: process.env.PUBLIC_URL + '/images/verySmiley.png', value: 0 },
-  //   { path: process.env.PUBLIC_URL + '/images/smiley.png', value: 1 },
-  //   { path: process.env.PUBLIC_URL + '/images/normal.png', value: 2 },
-  //   { path: process.env.PUBLIC_URL + '/images/sad.png', value: 3 },
-  //   { path: process.env.PUBLIC_URL + '/images/verySad.png', value: 4 },
-  // ]
 
   const [selectedValue, setSelectedValue] = useState(-1)
   const [validated, setValidated] = useState(false)
@@ -148,13 +137,22 @@ const EditQuestionModal = ({ question }) => {
     disease: diseaseCreate,
   } = diseaseCreated
 
+  const questionUpdated = useSelector((state) => state.questionUpdate)
+  const {
+    loading: loadingUpdate,
+    success: successUpdate,
+    error: errorUpdate,
+    question: questionUpdate,
+  } = questionUpdated
+
   const addAnswer = () => {
     if (itemName !== '') {
       setItems([
         ...items,
         {
-          id: items.length,
+          _id: items.length,
           text: itemName,
+          selected: false,
           image: selectedValue,
         },
       ])
@@ -176,6 +174,7 @@ const EditQuestionModal = ({ question }) => {
     setValidated(true)
 
     var newQuestion = {
+      _id: question.question._id,
       text,
       radio,
       check,
@@ -197,54 +196,26 @@ const EditQuestionModal = ({ question }) => {
         image: secondImageOffered,
       })
     }
-    console.log(newQuestion)
-    // dispatch(createQuestion(newQuestion)).then(() => {
-    //   dispatch(surveyDetails(surv.split('"')[1]))
-    // })
+    dispatch(updateQuestion(newQuestion)).then(() => {
+      dispatch(surveyDetails(surv.split('"')[1]))
+    })
   }
 
   const handleSelect = (e, index) => {
-    switch (e) {
-      case '-1':
-        var values = [...items]
-        values[index].image = -1
-        setItems(values)
-        break
-      case '0':
-        var values = [...items]
-        values[index].image = 0
-        setItems(values)
-        break
-      case '1':
-        var values = [...items]
-        values[index].image = 1
-        setItems(values)
-        break
-      case '2':
-        var values = [...items]
-        values[index].image = 2
-        setItems(values)
-        break
-      case '3':
-        var values = [...items]
-        values[index].image = 3
-        setItems(values)
-        break
-      case '4':
-        var values = [...items]
-        values[index].image = 4
-        setItems(values)
-        break
-      default:
-    }
+    var values = [...items]
+    values[index].image = parseInt(e)
+    setItems(values)
   }
+
+  const handleSelectText = (e, index) => {
+    var values = [...items]
+    values[index].text = e.target.value
+    setItems(values)
+    console.log(items)
+  }
+
   useEffect(() => {
-    // if(question.question.open){
-    // } else if ()
-
     console.log(question)
-    // setItems(question.answers)
-
     if (successCreate) {
       dispatch(surveyDetails(surv.split('"')[1]))
     }
@@ -395,7 +366,7 @@ const EditQuestionModal = ({ question }) => {
               </div>
             </div>
 
-            {radioOption === 'multiRadio' ? (
+            {question.question.radio ? (
               <>
                 <Form.Label className="mt-2">
                   <h5>Write possible answers</h5>
@@ -432,116 +403,12 @@ const EditQuestionModal = ({ question }) => {
                 {items.map((item, index) => (
                   <>
                     <Form inline>
-                      <Form.Check
-                        className="ml-3 mr-2"
-                        key={item.id}
-                        custom
-                        value={item.value}
-                        type="radio"
-                      />
-
+                      <Form.Check key={item.id} custom type="radio" />
                       <FormLabel
                         name="item"
                         type="text"
-                        value={itemName}
-                        onChange={(e) => setItemName(e.target.value)}
-                      >
-                        <Form.Control defaultValue={item.text} />
-                      </FormLabel>
-
-                      <DropdownButton
-                        className="ml-2 mr-2 mb-1"
-                        variant="secondary"
-                        alignRight
-                        id="dropdown-menu-align-right"
-                      >
-                        <Dropdown.Item
-                          eventKey={-1}
-                          onSelect={(eventKey) => handleSelect(eventKey, index)}
-                        >
-                          <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                        </Dropdown.Item>
-                        {icons.map((icon) => (
-                          <Dropdown.Item
-                            eventKey={icon.value}
-                            onSelect={(eventKey) =>
-                              handleSelect(eventKey, index)
-                            }
-                          >
-                            <Figure className="m-0 pb-0">
-                              <Figure.Image
-                                className="m-0 pb-0"
-                                width={30}
-                                height={30}
-                                src={icon.path}
-                                value={icon.value}
-                              />
-                            </Figure>
-                          </Dropdown.Item>
-                        ))}
-                      </DropdownButton>
-
-                      {item.image !== -1 ? (
-                        <div>
-                          <Figure className="m-0">
-                            <Figure.Image
-                              width={30}
-                              height={30}
-                              src={icons[item.image].path}
-                              value={item.image}
-                            />
-                          </Figure>
-                        </div>
-                      ) : (
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      )}
-                    </Form>
-                  </>
-                ))}
-              </>
-            ) : question.question.check ? (
-              <>
-                <Form.Label className="mt-2">
-                  <h5>Write possible answers</h5>
-                </Form.Label>
-                <br />
-                <FormLabel
-                  name="item"
-                  type="text"
-                  value={itemName}
-                  onChange={(e) => setItemName(e.target.value)}
-                >
-                  <Form.Control placeholder="Enter answer" />
-                </FormLabel>
-                <Button
-                  className="ml-2 mr-2"
-                  variant="light"
-                  id="addRemoveButton"
-                  onClick={removeAnswer}
-                  inline
-                >
-                  -
-                </Button>
-
-                <Button
-                  className="ml-2 mr-2"
-                  variant="light"
-                  id="addRemoveButton"
-                  onClick={addAnswer}
-                  inline
-                >
-                  +
-                </Button>
-                {items.map((item, index) => (
-                  <>
-                    <Form inline>
-                      <Form.Check key={item.id} custom type="checkbox" />
-
-                      <FormLabel
-                        name="item"
-                        type="text"
-                        value={itemName}
-                        onChange={(e) => setItemName(e.target.value)}
+                        value={item.text}
+                        onChange={(e) => handleSelectText(e, index)}
                       >
                         <Form.Control defaultValue={item.text} />
                       </FormLabel>
@@ -601,22 +468,50 @@ const EditQuestionModal = ({ question }) => {
                     </Form>
                   </>
                 ))}
+              </>
+            ) : question.question.check ? (
+              <>
+                <Form.Label className="mt-2">
+                  <h5>Write possible answers</h5>
+                </Form.Label>
+                <br />
+                <FormLabel
+                  name="item"
+                  type="text"
+                  value={itemName}
+                  onChange={(e) => setItemName(e.target.value)}
+                >
+                  <Form.Control placeholder="Enter answer" />
+                </FormLabel>
+                <Button
+                  className="ml-2 mr-2"
+                  variant="light"
+                  id="addRemoveButton"
+                  onClick={removeAnswer}
+                  inline
+                >
+                  -
+                </Button>
 
-                {/* {question.answers.map((item, index) => (
+                <Button
+                  className="ml-2 mr-2"
+                  variant="light"
+                  id="addRemoveButton"
+                  onClick={addAnswer}
+                  inline
+                >
+                  +
+                </Button>
+                {items.map((item, index) => (
                   <>
                     <Form inline>
-                      <Form.Check
-                        key={item.id}
-                        label={item.text}
-                        custom
-                        type="checkbox"
-                      />
+                      <Form.Check key={item.id} custom type="checkbox" />
 
                       <FormLabel
                         name="item"
                         type="text"
                         value={itemName}
-                        onChange={(e) => setItemName(e.target.value)}
+                        onChange={(e) => handleSelectText(e, index)}
                       >
                         <Form.Control defaultValue={item.text} />
                       </FormLabel>
@@ -653,23 +548,29 @@ const EditQuestionModal = ({ question }) => {
                         ))}
                       </DropdownButton>
 
-                      {item.image !== -1 ? (
-                        <div>
-                          <Figure className="m-0">
-                            <Figure.Image
-                              width={30}
-                              height={30}
-                              src={icons[item.image].path}
-                              value={item.image}
-                            />
-                          </Figure>
-                        </div>
+                      {item.image !== undefined ? (
+                        <>
+                          {item.image !== -1 ? (
+                            <div>
+                              <Figure className="m-0">
+                                <Figure.Image
+                                  width={30}
+                                  height={30}
+                                  src={icons[item.image].path}
+                                  value={item.image}
+                                />
+                              </Figure>
+                            </div>
+                          ) : (
+                            <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                          )}
+                        </>
                       ) : (
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                        <></>
                       )}
                     </Form>
                   </>
-                ))} */}
+                ))}
               </>
             ) : radioOption === 'slider' ? (
               <>

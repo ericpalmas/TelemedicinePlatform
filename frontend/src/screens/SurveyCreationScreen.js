@@ -196,10 +196,24 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                           ) : q.question.slider ? (
                             <>
                               <Row className="justify-content-md-center">
-                                {/* Variable width content */}
+                                {q.answers[0].image === undefined ||
+                                q.answers[0].image === -1 ? (
+                                  <></>
+                                ) : (
+                                  <Figure className="m-0">
+                                    <Figure.Image
+                                      width={30}
+                                      height={30}
+                                      src={icons[q.answers[0].image].path}
+                                      value={q.answers[0].image}
+                                    />
+                                  </Figure>
+                                )}
+
                                 <Col xs md="auto">
                                   {q.answers[0].text}
                                 </Col>
+
                                 <Col xs>
                                   <Form>
                                     <Form.Group controlId="formBasicRangeCustom">
@@ -207,9 +221,24 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                                     </Form.Group>
                                   </Form>
                                 </Col>
+
                                 <Col xs md="auto">
                                   {q.answers[1].text}
                                 </Col>
+
+                                {q.answers[1].image === undefined ||
+                                q.answers[1].image === -1 ? (
+                                  <></>
+                                ) : (
+                                  <Figure className="m-0">
+                                    <Figure.Image
+                                      width={30}
+                                      height={30}
+                                      src={icons[q.answers[1].image].path}
+                                      value={q.answers[1].image}
+                                    />
+                                  </Figure>
+                                )}
                               </Row>
                             </>
                           ) : q.question.trueFalse ? (
@@ -227,6 +256,19 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                             </>
                           ) : q.question.incrementDecrement ? (
                             <>
+                              {q.answers[0].image === undefined ||
+                              q.answers[0].image === -1 ? (
+                                <></>
+                              ) : (
+                                <Figure className="m-0">
+                                  <Figure.Image
+                                    width={30}
+                                    height={30}
+                                    src={icons[q.answers[0].image].path}
+                                    value={q.answers[0].image}
+                                  />
+                                </Figure>
+                              )}
                               <h1>00</h1>
                               <Button className="m-1">-</Button>
                               <Button

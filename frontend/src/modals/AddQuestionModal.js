@@ -18,6 +18,7 @@ import {
   ButtonGroup,
   Figure,
   DropdownButton,
+  InputGroup,
 } from 'react-bootstrap'
 
 const AddQuestionModal = () => {
@@ -119,6 +120,10 @@ const AddQuestionModal = () => {
       default:
     }
     setItems([])
+    setFirstImageOffered(-1)
+    setSecondImageOffered(-1)
+    setFirstOfferedAnswer('')
+    setSecondOfferedAnswer('')
   }
 
   const dispatch = useDispatch()
@@ -170,6 +175,7 @@ const AddQuestionModal = () => {
       survey: surv.split('"')[1],
       offeredAnswers: items,
     }
+
     if (newQuestion.slider || newQuestion.trueFalse) {
       newQuestion.offeredAnswers.push({
         text: firstOfferedAnswer,
@@ -180,7 +186,6 @@ const AddQuestionModal = () => {
         image: secondImageOffered,
       })
     }
-    console.log(newQuestion)
     dispatch(createQuestion(newQuestion)).then(() => {
       dispatch(surveyDetails(surv.split('"')[1]))
     })
@@ -518,19 +523,26 @@ const AddQuestionModal = () => {
               </>
             ) : radioOption === 'slider' ? (
               <>
-                <Form.Label className="mt-2">
-                  <h5>Slider</h5>
-                </Form.Label>
-                <br />
-                <Form.Row>
+                <Form.Group controlId="validationCustom01">
+                  <Form.Label className="mt-2">
+                    <h5>Slider</h5>
+                  </Form.Label>
+                  <br />
+
                   <Form inline>
-                    <Form.Control
-                      type="text"
-                      placeholder="Lower value"
-                      name="state"
-                      value={firstOfferedAnswer}
-                      onChange={(e) => setFirstOfferedAnswer(e.target.value)}
-                    />
+                    <InputGroup hasValidation>
+                      <Form.Control
+                        type="text"
+                        placeholder="Lower value"
+                        name="state"
+                        value={firstOfferedAnswer}
+                        required
+                        onChange={(e) => setFirstOfferedAnswer(e.target.value)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Write first option
+                      </Form.Control.Feedback>
+                    </InputGroup>
 
                     <DropdownButton
                       className="ml-2 mr-2 mb-1"
@@ -580,16 +592,24 @@ const AddQuestionModal = () => {
                     ) : (
                       <p className="ml-1 mb-0 pb-0">no emoticon</p>
                     )}
+                    <br></br>
                   </Form>
 
                   <Form inline>
-                    <Form.Control
-                      type="text"
-                      placeholder="Higher value"
-                      name="zip"
-                      value={secondOfferedAnswer}
-                      onChange={(e) => setSecondOfferedAnswer(e.target.value)}
-                    />
+                    <InputGroup hasValidation>
+                      <Form.Control
+                        type="text"
+                        placeholder="Higher value"
+                        name="zip"
+                        value={secondOfferedAnswer}
+                        required
+                        onChange={(e) => setSecondOfferedAnswer(e.target.value)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Write second option
+                      </Form.Control.Feedback>
+                    </InputGroup>
+
                     <DropdownButton
                       className="ml-2 mr-2 mb-1"
                       variant="secondary"
@@ -639,132 +659,10 @@ const AddQuestionModal = () => {
                       <p className="ml-1 mb-0 pb-0">no emoticon</p>
                     )}
                   </Form>
-                </Form.Row>
+                </Form.Group>
               </>
             ) : radioOption === 'trueFalse' ? (
-              <>
-                <Form.Label className="mt-2">
-                  <h5>Two choices</h5>
-                </Form.Label>
-                <br />
-                <Form.Row>
-                  <Form inline>
-                    <Form.Control
-                      type="text"
-                      placeholder="First choice"
-                      name="state"
-                      value={firstOfferedAnswer}
-                      onChange={(e) => setFirstOfferedAnswer(e.target.value)}
-                    />
-                    <DropdownButton
-                      className="ml-2 mr-2 mb-1"
-                      variant="secondary"
-                      alignRight
-                      id="dropdown-menu-align-right"
-                    >
-                      <Dropdown.Item
-                        eventKey={-1}
-                        onSelect={(eventKey) =>
-                          setFirstImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      </Dropdown.Item>
-                      {icons.map((icon) => (
-                        <Dropdown.Item
-                          eventKey={icon.value}
-                          onSelect={(eventKey) =>
-                            setFirstImageOffered(parseInt(eventKey))
-                          }
-                        >
-                          <Figure className="m-0 pb-0">
-                            <Figure.Image
-                              className="m-0 pb-0"
-                              width={30}
-                              height={30}
-                              src={icon.path}
-                              value={icon.value}
-                            />
-                          </Figure>
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-
-                    {firstImageOffered !== -1 ? (
-                      <div>
-                        <Figure className="m-0">
-                          <Figure.Image
-                            width={30}
-                            height={30}
-                            src={icons[firstImageOffered].path}
-                            value={firstImageOffered}
-                          />
-                        </Figure>
-                      </div>
-                    ) : (
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    )}
-                  </Form>
-
-                  <Form inline>
-                    <Form.Control
-                      type="text"
-                      placeholder="Second choice"
-                      name="zip"
-                      value={secondOfferedAnswer}
-                      onChange={(e) => setSecondOfferedAnswer(e.target.value)}
-                    />
-                    <DropdownButton
-                      className="ml-2 mr-2 mb-1"
-                      variant="secondary"
-                      alignRight
-                      id="dropdown-menu-align-right"
-                    >
-                      <Dropdown.Item
-                        eventKey={-1}
-                        onSelect={(eventKey) =>
-                          setSecondImageOffered(parseInt(eventKey))
-                        }
-                      >
-                        <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                      </Dropdown.Item>
-                      {icons.map((icon) => (
-                        <Dropdown.Item
-                          eventKey={icon.value}
-                          onSelect={(eventKey) =>
-                            setSecondImageOffered(parseInt(eventKey))
-                          }
-                        >
-                          <Figure className="m-0 pb-0">
-                            <Figure.Image
-                              className="m-0 pb-0"
-                              width={30}
-                              height={30}
-                              src={icon.path}
-                              value={icon.value}
-                            />
-                          </Figure>
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-
-                    {secondImageOffered !== -1 ? (
-                      <div>
-                        <Figure className="m-0">
-                          <Figure.Image
-                            width={30}
-                            height={30}
-                            src={icons[secondImageOffered].path}
-                            value={secondImageOffered}
-                          />
-                        </Figure>
-                      </div>
-                    ) : (
-                      <p className="ml-1 mb-0 pb-0">no emoticon</p>
-                    )}
-                  </Form>
-                </Form.Row>
-              </>
+              <></>
             ) : radioOption === 'incrementDecrement' ? (
               <>
                 <Form inline>
