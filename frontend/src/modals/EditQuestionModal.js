@@ -14,6 +14,7 @@ import {
   ButtonGroup,
   Figure,
   DropdownButton,
+  InputGroup,
 } from 'react-bootstrap'
 import * as MdIcons from 'react-icons/md'
 import { updateQuestion } from '../actions/questionActions'
@@ -49,6 +50,9 @@ const EditQuestionModal = ({ question }) => {
   // for slider and true false
   const [firstOfferedAnswer, setFirstOfferedAnswer] = useState('')
   const [secondOfferedAnswer, setSecondOfferedAnswer] = useState('')
+
+  // const [firstImageOffered, setFirstImageOffered] = useState(-1)
+  // const [secondImageOffered, setSecondImageOffered] = useState(-1)
 
   const [firstImageOffered, setFirstImageOffered] = useState(-1)
   const [secondImageOffered, setSecondImageOffered] = useState(-1)
@@ -186,16 +190,7 @@ const EditQuestionModal = ({ question }) => {
       survey: surv.split('"')[1],
       offeredAnswers: items,
     }
-    if (newQuestion.slider || newQuestion.trueFalse) {
-      newQuestion.offeredAnswers.push({
-        text: firstOfferedAnswer,
-        image: firstImageOffered,
-      })
-      newQuestion.offeredAnswers.push({
-        text: secondOfferedAnswer,
-        image: secondImageOffered,
-      })
-    }
+
     dispatch(updateQuestion(newQuestion)).then(() => {
       dispatch(surveyDetails(surv.split('"')[1]))
     })
@@ -572,33 +567,80 @@ const EditQuestionModal = ({ question }) => {
                   </>
                 ))}
               </>
-            ) : radioOption === 'slider' ? (
+            ) : question.question.slider ? (
               <>
                 <Form.Label className="mt-2">
                   <h5>Slider</h5>
                 </Form.Label>
                 <br />
-                <Form.Row>
-                  <Form.Group as={Col} md="4" controlId="validationFormik104">
-                    <Form.Control
-                      type="text"
-                      placeholder="Lower value"
-                      name="state"
-                      value={firstOfferedAnswer}
-                      onChange={(e) => setFirstOfferedAnswer(e.target.value)}
-                    />
-                  </Form.Group>
 
-                  <Form.Group as={Col} md="4" controlId="validationFormik105">
-                    <Form.Control
-                      type="text"
-                      placeholder="Higher value"
-                      name="zip"
-                      value={secondOfferedAnswer}
-                      onChange={(e) => setSecondOfferedAnswer(e.target.value)}
-                    />
-                  </Form.Group>
-                </Form.Row>
+                {items.map((item, index) => (
+                  <>
+                    <Form inline>
+                      <FormLabel
+                        name="item"
+                        type="text"
+                        value={itemName}
+                        onChange={(e) => handleSelectText(e, index)}
+                      >
+                        <Form.Control defaultValue={item.text} />
+                      </FormLabel>
+
+                      <DropdownButton
+                        className="ml-2 mr-2 mb-1"
+                        variant="secondary"
+                        alignRight
+                        id="dropdown-menu-align-right"
+                      >
+                        <Dropdown.Item
+                          eventKey={-1}
+                          onSelect={(eventKey) => handleSelect(eventKey, index)}
+                        >
+                          <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                        </Dropdown.Item>
+                        {icons.map((icon) => (
+                          <Dropdown.Item
+                            eventKey={icon.value}
+                            onSelect={(eventKey) =>
+                              handleSelect(eventKey, index)
+                            }
+                          >
+                            <Figure className="m-0 pb-0">
+                              <Figure.Image
+                                className="m-0 pb-0"
+                                width={30}
+                                height={30}
+                                src={icon.path}
+                                value={icon.value}
+                              />
+                            </Figure>
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+
+                      {item.image !== undefined ? (
+                        <>
+                          {item.image !== -1 ? (
+                            <div>
+                              <Figure className="m-0">
+                                <Figure.Image
+                                  width={30}
+                                  height={30}
+                                  src={icons[item.image].path}
+                                  value={item.image}
+                                />
+                              </Figure>
+                            </div>
+                          ) : (
+                            <p className="ml-1 mb-0 pb-0">no emoticon</p>
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </Form>
+                  </>
+                ))}
               </>
             ) : radioOption === 'trueFalse' ? (
               <>

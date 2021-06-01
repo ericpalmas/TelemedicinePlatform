@@ -118,7 +118,6 @@ router.put(
       })
 
       if (updatedQuestion) {
-        console.log('AGGIORNATO ')
         for (var i = 0; i < offeredAnswers.length; i++) {
           const offeredAnswer = new OfferedAnswer({
             text: offeredAnswers[i].text,
