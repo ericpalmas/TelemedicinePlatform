@@ -10,6 +10,9 @@ import {
   SURVEY_CREATE_REQUEST,
   SURVEY_CREATE_SUCCESS,
   SURVEY_CREATE_FAIL,
+  SURVEY_CURRENT_REQUEST,
+  SURVEY_CURRENT_SUCCESS,
+  SURVEY_CURRENT_FAIL,
 } from '../constants/surveyConstants'
 
 export const listSurveyTemplates = () => async (dispatch) => {
@@ -54,14 +57,14 @@ export const surveyDetails = (id) => async (dispatch) => {
   }
 }
 
-export const saveSurveyId = (data) => (dispatch) => {
-  dispatch({
-    type: SURVEY_SAVE_ID_REQUEST,
-    payload: data,
-  })
+// export const saveSurveyId = (data) => (dispatch) => {
+//   dispatch({
+//     type: SURVEY_SAVE_ID_REQUEST,
+//     payload: data,
+//   })
 
-  localStorage.setItem('surveyId', JSON.stringify(data))
-}
+//   localStorage.setItem('surveyId', JSON.stringify(data))
+// }
 
 export const createSurvey = (survey) => async (dispatch) => {
   try {
@@ -78,6 +81,36 @@ export const createSurvey = (survey) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SURVEY_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const currentSurvey = (surveyId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SURVEY_CURRENT_REQUEST,
+    })
+
+    dispatch({
+      type: SURVEY_CURRENT_SUCCESS,
+      payload: surveyId,
+    })
+
+    //saveSurveyId(surveyId)
+
+    dispatch({
+      type: SURVEY_SAVE_ID_REQUEST,
+      payload: surveyId,
+    })
+
+    localStorage.setItem('surveyId', JSON.stringify(surveyId))
+  } catch (error) {
+    dispatch({
+      type: SURVEY_CURRENT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

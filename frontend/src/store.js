@@ -27,6 +27,7 @@ import {
   surveyReducer,
   surveyCreateReducer,
   surveySaveIdReducer,
+  currentSurveyReducer,
 } from './reducers/surveyReducers'
 
 import {
@@ -57,6 +58,7 @@ const reducer = combineReducers({
   questionCreate: questionCreateReducer,
   questionDelete: questionDeleteReducer,
   questionUpdate: questionUpdateReducer,
+  currentSurvey: currentSurveyReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')

@@ -15,8 +15,9 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   listSurveyTemplates,
-  saveSurveyId,
+  //saveSurveyId,
   surveyDetails,
+  currentSurvey,
 } from '../actions/surveyActions'
 
 const Sidebar = () => {
@@ -39,11 +40,11 @@ const Sidebar = () => {
     dispatch(listSurveyTemplates())
   }, [dispatch])
 
-  const uploadSurvey = (id) => {
-    dispatch(saveSurveyId(id)).then(() => {
-      dispatch(surveyDetails(id))
-    })
-  }
+  // const uploadSurvey = (id) => {
+  //   dispatch(saveSurveyId(id)).then(() => {
+  //     dispatch(surveyDetails(id))
+  //   })
+  // }
 
   return (
     <>
@@ -78,7 +79,7 @@ const Sidebar = () => {
                       <span
                         id="sidebarLabel"
                         style={{ color: '#fff' }}
-                        onClick={() => dispatch(saveSurveyId(survey._id))}
+                        onClick={() => dispatch(currentSurvey(survey._id))}
                       >
                         {survey.name}
                       </span>

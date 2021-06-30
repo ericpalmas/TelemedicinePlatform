@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Button, Card, Form, Figure } from 'react-bootstrap'
@@ -47,23 +47,42 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const { loading, error, patients } = patientList
 
-  const surveyDetail = useSelector((state) => state.survey)
-  const { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
+  var surveyDetail = useSelector((state) => state.survey)
+  var { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
+
+  const currentSurvey = useSelector((state) => state.currentSurvey)
+  const {
+    loading: loadingCurrentSurvey,
+    error: errorCurrentSurvey,
+    survey: currentId,
+  } = currentSurvey
 
   const [surveyUploaded, setSurveyUploaded] = useState(false)
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
       dispatch(deleteQuestion(id)).then(() => {
-        dispatch(surveyDetails(surv.split('"')[1]))
+        //dispatch(surveyDetails(surv.split('"')[1]))
+        dispatch(surveyDetails(currentId))
       })
     }
   }
 
+  const updateCUrrentSurvey = useCallback(() => {
+    if (!loadingSurvey) {
+      dispatch(surveyDetails(currentId))
+        .then(() => {
+          setSurveyUploaded(true)
+        })
+        .catch(() => {
+          setSurveyUploaded(false)
+        })
+    }
+  }, [currentId])
+
   useEffect(() => {
-    // togliere il booleano survey uploaded altrimenti non posso cambiare il questionario senza ricaricare
-    // la pagina
-    console.log(survey)
+    updateCUrrentSurvey()
+
     if (surv !== undefined) {
       dispatch(surveyDetails(surv.split('"')[1]))
         .then(() => {
@@ -72,11 +91,10 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         .catch(() => {
           setSurveyUploaded(false)
         })
-    } else {
     }
 
     dispatch(listPatientsAndDisease())
-  }, [dispatch, match, history, surv])
+  }, [dispatch, match, history, updateCUrrentSurvey, surv])
 
   return (
     <div>
