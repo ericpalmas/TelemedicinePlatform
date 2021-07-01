@@ -62,8 +62,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
       dispatch(deleteQuestion(id)).then(() => {
-        //dispatch(surveyDetails(surv.split('"')[1]))
-        dispatch(surveyDetails(currentId))
+        dispatch(surveyDetails(surv.split('"')[1]))
       })
     }
   }

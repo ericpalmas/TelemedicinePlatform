@@ -186,6 +186,14 @@ const AddQuestionModal = () => {
         image: secondImageOffered,
       })
     }
+
+    if (newQuestion.incrementDecrement) {
+      newQuestion.offeredAnswers.push({
+        text: firstOfferedAnswer,
+        image: firstImageOffered,
+      })
+    }
+
     dispatch(createQuestion(newQuestion)).then(() => {
       dispatch(surveyDetails(surv.split('"')[1]))
     })
