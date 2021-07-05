@@ -30,6 +30,9 @@ const PatientListScreen = () => {
     patients: patientAndDiseases,
   } = patientAndDiseasesList
 
+  const userLogin = useSelector((state) => state.doctorLogin)
+  const { userInfo } = userLogin
+
   useEffect(() => {
     dispatch(listPatientsAndDisease())
     dispatch(listPatients())

@@ -26,7 +26,7 @@ import {
 export const patientListReducer = (state = { patients: [] }, action) => {
   switch (action.type) {
     case PATIENT_LIST_REQUEST:
-      return { loading: true, patients: [] }
+      return { ...state, loading: true, patients: [] }
     case PATIENT_LIST_SUCCESS:
       return { loading: false, patients: action.payload }
     case PATIENT_LIST_FAIL:

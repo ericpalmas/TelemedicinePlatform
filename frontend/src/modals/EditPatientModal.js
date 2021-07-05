@@ -30,6 +30,9 @@ const EditPatientModal = ({ patient }) => {
   const diseaseList = useSelector((state) => state.diseaseList)
   const { loading, error, diseases } = diseaseList
 
+  const userLogin = useSelector((state) => state.doctorLogin)
+  const { userInfo } = userLogin
+
   const submitHandler = (e) => {
     e.preventDefault()
     const newPatient = {
@@ -47,6 +50,7 @@ const EditPatientModal = ({ patient }) => {
   }
 
   useEffect(() => {
+    console.log(items)
     let isMounted = true
     dispatch(listDiseases()).then(() => {
       if (isMounted) {

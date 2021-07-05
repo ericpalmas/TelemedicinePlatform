@@ -70,7 +70,6 @@ export const createDisease = (disease) => async (dispatch) => {
     })
 
     const { data } = await axios.post(`/api/diseases`, disease)
-
     dispatch({
       type: DISEASE_CREATE_SUCCESS,
       payload: data,

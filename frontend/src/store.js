@@ -36,6 +36,8 @@ import {
   questionUpdateReducer,
 } from './reducers/questionReducers'
 
+import { doctorLoginReducer } from './reducers/doctorReducers'
+
 const reducer = combineReducers({
   patientList: patientListReducer,
   patientDetail: patientReducer,
@@ -59,14 +61,20 @@ const reducer = combineReducers({
   questionDelete: questionDeleteReducer,
   questionUpdate: questionUpdateReducer,
   currentSurvey: currentSurveyReducer,
+  doctorLogin: doctorLoginReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
   ? JSON.parse(localStorage.getItem('surveyId'))
   : {}
 
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null
+
 const initialState = {
   surveyInfo: { surveyId: surveyInfoFromStorage },
+  doctorLogin: { userInfo: userInfoFromStorage },
 }
 
 const middleware = [thunk]

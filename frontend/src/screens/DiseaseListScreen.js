@@ -20,7 +20,11 @@ const DiseaseListScreen = () => {
   const dispatch = useDispatch()
 
   const diseaseList = useSelector((state) => state.diseaseList)
-  const { loading, error, diseases } = diseaseList
+  const {
+    loading: loadingDiseaseList,
+    error: errorDiseaseList,
+    diseases,
+  } = diseaseList
 
   const diseaseDelete = useSelector((state) => state.diseaseDelete)
   const {
@@ -29,8 +33,15 @@ const DiseaseListScreen = () => {
     success: successDelete,
   } = diseaseDelete
 
+  const userLogin = useSelector((state) => state.doctorLogin)
+  const { userInfo } = userLogin
+
   useEffect(() => {
+    let isMounted = true
     dispatch(listDiseases())
+    return () => {
+      isMounted = false
+    }
   }, [dispatch])
 
   const deleteHandler = (id) => {
@@ -61,10 +72,10 @@ const DiseaseListScreen = () => {
 
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant="danger">{errorDelete}</Message>}
-      {loading ? (
+      {loadingDiseaseList ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
+      ) : errorDiseaseList ? (
+        <Message variant="danger">{errorDiseaseList}</Message>
       ) : (
         <>
           <Row

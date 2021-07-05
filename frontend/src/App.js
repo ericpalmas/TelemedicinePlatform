@@ -26,9 +26,7 @@ const App = () => {
             component={PatientsByDisease}
           />
           <Route path="/patients/:id" component={PatientScreen} exact />
-
           <Route path="/diseases" component={DiseaseListScreen} exact />
-
           <Route path="/surveyCreation" component={SurveyCreationScreen} />
           <Route path="/surveyCreation" component={Sidebar} />
           <Route path="/patients/:id" component={PatientSidebar} exact />
