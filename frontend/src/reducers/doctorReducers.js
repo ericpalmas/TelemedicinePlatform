@@ -14,6 +14,17 @@ import {
   DOCTOR_UPDATE_PROFILE_SUCCESS,
   DOCTOR_UPDATE_PROFILE_FAIL,
   DOCTOR_UPDATE_PROFILE_RESET,
+  DOCTOR_LIST_REQUEST,
+  DOCTOR_LIST_SUCCESS,
+  DOCTOR_LIST_FAIL,
+  DOCTOR_LIST_RESET,
+  DOCTOR_DELETE_REQUEST,
+  DOCTOR_DELETE_SUCCESS,
+  DOCTOR_DELETE_FAIL,
+  DOCTOR_UPDATE_REQUEST,
+  DOCTOR_UPDATE_SUCCESS,
+  DOCTOR_UPDATE_FAIL,
+  DOCTOR_UPDATE_RESET,
 } from '../constants/doctorConstants'
 
 export const doctorLoginReducer = (state = {}, action) => {
@@ -75,6 +86,51 @@ export const doctorUpdateProfileReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case DOCTOR_UPDATE_PROFILE_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const doctorListReducer = (state = { users: [] }, action) => {
+  switch (action.type) {
+    case DOCTOR_LIST_REQUEST:
+      return { loading: true }
+    case DOCTOR_LIST_SUCCESS:
+      return { loading: false, users: action.payload }
+    case DOCTOR_LIST_FAIL:
+      return { loading: false, error: action.payload }
+    case DOCTOR_LIST_RESET:
+      return { users: [] }
+    default:
+      return state
+  }
+}
+
+export const doctorDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DOCTOR_DELETE_REQUEST:
+      return { loading: true }
+    case DOCTOR_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case DOCTOR_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const doctorUpdateReducer = (state = { user: {} }, action) => {
+  switch (action.type) {
+    case DOCTOR_UPDATE_REQUEST:
+      return { loading: true }
+    case DOCTOR_UPDATE_SUCCESS:
+      return { loading: false, success: true }
+    case DOCTOR_UPDATE_FAIL:
+      return { loading: false, error: action.payload }
+    case DOCTOR_UPDATE_RESET:
+      return {
+        user: {},
+      }
     default:
       return state
   }

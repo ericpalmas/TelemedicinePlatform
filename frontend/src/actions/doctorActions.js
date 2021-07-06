@@ -15,6 +15,17 @@ import {
   DOCTOR_UPDATE_PROFILE_SUCCESS,
   DOCTOR_UPDATE_PROFILE_FAIL,
   DOCTOR_UPDATE_PROFILE_RESET,
+  DOCTOR_LIST_REQUEST,
+  DOCTOR_LIST_SUCCESS,
+  DOCTOR_LIST_FAIL,
+  DOCTOR_LIST_RESET,
+  DOCTOR_DELETE_REQUEST,
+  DOCTOR_DELETE_SUCCESS,
+  DOCTOR_DELETE_FAIL,
+  DOCTOR_UPDATE_REQUEST,
+  DOCTOR_UPDATE_SUCCESS,
+  DOCTOR_UPDATE_FAIL,
+  DOCTOR_UPDATE_RESET,
 } from '../constants/doctorConstants'
 
 export const login = (email, password) => async (dispatch) => {
@@ -57,9 +68,8 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   dispatch({ type: DOCTOR_LOGOUT })
-  // dispatch({ type: USER_DETAILS_RESET })
-  // dispatch({ type: ORDER_LIST_MY_RESET })
-  // dispatch({ type: USER_LIST_RESET })
+  dispatch({ type: DOCTOR_DETAILS_RESET })
+  dispatch({ type: DOCTOR_LIST_RESET })
 }
 
 export const register = (name, surname, email, password) => async (
@@ -176,6 +186,118 @@ export const updateDoctorProfile = (user) => async (dispatch, getState) => {
     }
     dispatch({
       type: DOCTOR_UPDATE_PROFILE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+/////////////////////
+
+export const listDoctors = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DOCTOR_LIST_REQUEST,
+    })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/doctors`, config)
+
+    dispatch({
+      type: DOCTOR_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: DOCTOR_LIST_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const deleteDoctor = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DOCTOR_DELETE_REQUEST,
+    })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.delete(`/api/doctors/${id}`, config)
+
+    dispatch({ type: DOCTOR_DELETE_SUCCESS })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: DOCTOR_DELETE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const updateDoctor = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DOCTOR_UPDATE_REQUEST,
+    })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/doctors/${user._id}`, user, config)
+
+    dispatch({ type: DOCTOR_UPDATE_SUCCESS })
+
+    dispatch({ type: DOCTOR_DETAILS_SUCCESS, payload: data })
+
+    dispatch({ type: DOCTOR_DETAILS_RESET })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: DOCTOR_UPDATE_FAIL,
       payload: message,
     })
   }

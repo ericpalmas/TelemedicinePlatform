@@ -41,6 +41,9 @@ import {
   doctorRegisterReducer,
   doctorDetailsReducer,
   doctorUpdateProfileReducer,
+  doctorListReducer,
+  doctorDeleteReducer,
+  doctorUpdateReducer,
 } from './reducers/doctorReducers'
 
 const reducer = combineReducers({
@@ -70,6 +73,9 @@ const reducer = combineReducers({
   doctorRegister: doctorRegisterReducer,
   doctorDetails: doctorDetailsReducer,
   doctorUpdateProfile: doctorUpdateProfileReducer,
+  doctorList: doctorListReducer,
+  doctorDelete: doctorDeleteReducer,
+  doctorUpdate: doctorUpdateReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
