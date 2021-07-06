@@ -12,6 +12,8 @@ import PatientScreen from './screens/PatientScreen'
 import PatientsByDisease from './screens/PatientsByDisease'
 import Sidebar from './components/Sidebar'
 import PatientSidebar from './components/PatientSidebar'
+import RegisterScreen from './screens/RegisterScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 const App = () => {
   return (
@@ -31,6 +33,8 @@ const App = () => {
           <Route path="/surveyCreation" component={Sidebar} />
           <Route path="/patients/:id" component={PatientSidebar} exact />
           <Route path="/login" component={LoginScreen} />
+          <Route path="/register" component={RegisterScreen} />
+          <Route path="/profile" component={ProfileScreen} />
         </Container>
       </main>
       <Footer />

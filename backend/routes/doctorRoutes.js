@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 const router = express.Router()
 import Doctor from '../models/doctorModel.js'
-import { protect } from '../middleware/authMiddleware.js'
+import { protect, admin } from '../middleware/authMiddleware.js'
 
 // @desc Fetch all patients
 // @route GET /api/patients
@@ -31,6 +31,7 @@ router.post(
       res.json({
         _id: doctor._id,
         name: doctor.name,
+        surname: doctor.surname,
         email: doctor.email,
         token: generateToken(doctor._id),
         isAdmin: doctor.isAdmin,
@@ -38,6 +39,44 @@ router.post(
     } else {
       res.status(401)
       throw new Error('Invalid email or password')
+    }
+  }),
+)
+
+// @desc   Register a new doctor
+// @route  POST /api/doctors
+// @access Public
+router.post(
+  '/',
+  asyncHandler(async (req, res) => {
+    const { name, surname, email, password } = req.body
+
+    const userExists = await Doctor.findOne({ email })
+
+    if (userExists) {
+      res.status(400)
+      throw new Error('User already exists')
+    }
+
+    const user = await Doctor.create({
+      name,
+      surname,
+      email,
+      password,
+    })
+
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        //token: generateToken(user._id),
+      })
+    } else {
+      res.status(400)
+      throw new Error('Invalid user data')
     }
   }),
 )
@@ -54,9 +93,62 @@ router.route('/profile').get(
       res.json({
         _id: doctor._id,
         name: doctor.name,
+        surname: doctor.surname,
         email: doctor.email,
         isAdmin: doctor.isAdmin,
       })
+    } else {
+      res.status(404)
+      throw new Error('User not found')
+    }
+  }),
+)
+
+// @desc    Update doctor profile
+// @route   PUT /api/doctors/profile
+// @access  Private
+router.route('/profile').put(
+  protect,
+  asyncHandler(async (req, res) => {
+    const user = await Doctor.findById(req.user._id)
+
+    if (user) {
+      user.name = req.body.name || user.name
+      user.surname = req.body.surname || user.surname
+      user.email = req.body.email || user.email
+
+      if (req.body.password) {
+        user.password = req.body.password || user.password
+      }
+
+      const updateUser = await user.save()
+
+      res.json({
+        _id: updateUser._id,
+        name: updateUser.name,
+        surname: updateUser.surname,
+        email: updateUser.email,
+        isAdmin: updateUser.isAdmin,
+        token: generateToken(updateUser._id),
+      })
+    } else {
+      res.status(404)
+      throw new Error('User not found')
+    }
+  }),
+)
+
+// @desc    Delete doctor
+// @route   DELETE /api/doctors/:id
+// @access  Private/Admin
+router.route('/:id').delete(
+  protect,
+  admin,
+  asyncHandler(async (req, res) => {
+    const user = await Doctor.findById(req.params.id)
+    if (user) {
+      await user.remove()
+      res.json({ message: 'User removed' })
     } else {
       res.status(404)
       throw new Error('User not found')
