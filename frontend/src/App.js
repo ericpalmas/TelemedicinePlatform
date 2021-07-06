@@ -15,6 +15,8 @@ import PatientSidebar from './components/PatientSidebar'
 import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import DoctorListScreen from './screens/DoctorListScreen'
+import DoctorEditScreen from './screens/DoctorEditScreen'
+import AddDoctorScreen from './screens/AddDoctorScreen'
 
 const App = () => {
   return (
@@ -37,6 +39,8 @@ const App = () => {
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />
           <Route path="/admin/doctorlist" component={DoctorListScreen} />
+          <Route path="/admin/doctor/:id/edit" component={DoctorEditScreen} />
+          <Route path="/admin/addDoctor" component={AddDoctorScreen} />
         </Container>
       </main>
       <Footer />

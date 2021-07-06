@@ -46,8 +46,9 @@ router.post(
 // @desc   Register a new doctor
 // @route  POST /api/doctors
 // @access Public
-router.post(
-  '/',
+router.route('/').post(
+  protect,
+  admin,
   asyncHandler(async (req, res) => {
     const { name, surname, email, password } = req.body
 
@@ -72,7 +73,6 @@ router.post(
         surname: user.surname,
         email: user.email,
         isAdmin: user.isAdmin,
-        //token: generateToken(user._id),
       })
     } else {
       res.status(400)
@@ -168,44 +168,52 @@ router.route('/').get(
   }),
 )
 
-// @desc    Get user by ID
-// @route   GET /api/users/:id
+// @desc    Get doctor by ID
+// @route   GET /api/doctors/:id
 // @access  Private/Admin
-// const getUserById = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id).select('-password')
-//   if (user) {
-//       res.json(user)
-//   } else {
-//       res.status(404)
-//       throw new Error('User not found')
-//   }
-// })
+router.route('/:id').get(
+  protect,
+  admin,
+  asyncHandler(async (req, res) => {
+    const user = await Doctor.findById(req.params.id).select('-password')
+    if (user) {
+      res.json(user)
+    } else {
+      res.status(404)
+      throw new Error('User not found')
+    }
+  }),
+)
 
-// @desc    Update user
-// @route   PUT /api/users/:id
+// @desc    Update doctor
+// @route   PUT /api/doctors/:id
 // @access  Private/Admin
-// const updateUser = asyncHandler(async (req, res) => {
+router.route('/:id').put(
+  protect,
+  admin,
+  asyncHandler(async (req, res) => {
+    const user = await Doctor.findById(req.params.id)
 
-//   const user = await User.findById(req.params.id)
+    if (user) {
+      user.name = req.body.name || user.name
+      user.surname = req.body.surname || user.surname
+      user.email = req.body.email || user.email
+      user.isAdmin = req.body.isAdmin
 
-//   if (user) {
-//       user.name = req.body.name || user.name
-//       user.email = req.body.email || user.email
-//       user.isAdmin = req.body.isAdmin
+      const updateUser = await user.save()
 
-//       const updateUser = await user.save()
-
-//       res.json({
-//           _id: updateUser._id,
-//           name: updateUser.name,
-//           email: updateUser.email,
-//           isAdmin: updateUser.isAdmin,
-//       })
-
-//   } else {
-//       res.status(404)
-//       throw new Error('User not found')
-//   }
-// })
+      res.json({
+        _id: updateUser._id,
+        name: updateUser.name,
+        surname: updateUser.surname,
+        email: updateUser.email,
+        isAdmin: updateUser.isAdmin,
+      })
+    } else {
+      res.status(404)
+      throw new Error('User not found')
+    }
+  }),
+)
 
 export default router

@@ -74,15 +74,20 @@ export const logout = () => (dispatch) => {
 
 export const register = (name, surname, email, password) => async (
   dispatch,
+  getState,
 ) => {
   try {
     dispatch({
       type: DOCTOR_REGISTER_REQUEST,
     })
 
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
       },
     }
 
@@ -190,8 +195,6 @@ export const updateDoctorProfile = (user) => async (dispatch, getState) => {
     })
   }
 }
-
-/////////////////////
 
 export const listDoctors = () => async (dispatch, getState) => {
   try {

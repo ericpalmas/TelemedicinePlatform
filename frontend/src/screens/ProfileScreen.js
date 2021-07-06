@@ -35,9 +35,11 @@ const ProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      if (!user || !user.name || success) {
+      if (!user || !user.name || !user.surname || success) {
         dispatch({ type: DOCTOR_UPDATE_PROFILE_RESET })
         dispatch(getDoctorDetails('profile'))
+
+        // altre informazioni che voglio visualizzare sulla destra
         //dispatch(listMyOrders())
       } else {
         setName(user.name)

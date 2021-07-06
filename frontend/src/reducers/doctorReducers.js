@@ -6,6 +6,7 @@ import {
   DOCTOR_REGISTER_REQUEST,
   DOCTOR_REGISTER_SUCCESS,
   DOCTOR_REGISTER_FAIL,
+  DOCTOR_REGISTER_RESET,
   DOCTOR_DETAILS_REQUEST,
   DOCTOR_DETAILS_SUCCESS,
   DOCTOR_DETAILS_FAIL,
@@ -50,10 +51,12 @@ export const doctorRegisterReducer = (state = {}, action) => {
     case DOCTOR_REGISTER_REQUEST:
       return { loading: true }
     case DOCTOR_REGISTER_SUCCESS:
-      return { loading: false, userInfo: action.payload }
+      return { loading: false, success: true, userInfo: action.payload }
     case DOCTOR_REGISTER_FAIL:
       return { loading: false, error: action.payload }
     case DOCTOR_LOGOUT:
+      return {}
+    case DOCTOR_REGISTER_RESET:
       return {}
     default:
       return state

@@ -54,16 +54,13 @@ const DoctorListScreen = ({ history }) => {
             </Col>
           </Row>
           <Row className="align-items-center">
-            <Col className="mb-4 mt-4 mr-0 pr-0">
-              <Button
-                variant="primary"
-                size="lg"
-                style={{ float: 'right' }}
-                //onClick={handleShow}
-              >
-                <i className="fas fa-plus mr-2"></i>
-                New doctor
-              </Button>
+            <Col className="mb-4 mt-4 pl-0 ml-0 mr-0 pr-0">
+              <LinkContainer to={`/admin/addDoctor`} style={{ float: 'right' }}>
+                <Button variant="primary" size="lg" style={{ float: 'right' }}>
+                  <i className="fas fa-plus mr-2"></i>
+                  New doctor
+                </Button>
+              </LinkContainer>
             </Col>
 
             <Table striped bordered hover responsive className="table-lg">

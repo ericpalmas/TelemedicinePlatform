@@ -46,21 +46,7 @@ const Header = () => {
               </LinkContainer>
             </Nav>
 
-            {/* <Nav className="ml-auto">
-              <LinkContainer to="/login">
-                <Nav.Link>
-                  <i className="fas fa-user"></i> Sign In
-                </Nav.Link>
-              </LinkContainer>
-            </Nav> */}
-
-            {/* <Route render={({ history }) => <SearchBox history={history} />} /> */}
             <Nav className="ml-auto">
-              {/* <LinkContainer to="/cart">
-                <Nav.Link href="/cart">
-                  <i className="fas fa-shopping-cart"></i> Cart
-                </Nav.Link>
-              </LinkContainer> */}
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">
@@ -82,11 +68,14 @@ const Header = () => {
                   <LinkContainer to="/admin/doctorlist">
                     <NavDropdown.Item>Doctors</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/productList">
+                  <LinkContainer to="/admin/patientList">
                     <NavDropdown.Item>Patients</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/orderList">
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  <LinkContainer to="/admin/diseaseList">
+                    <NavDropdown.Item>Diseases</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/surveyList">
+                    <NavDropdown.Item>Surveys</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
               )}
