@@ -7,6 +7,11 @@ const surveyResponseSchema = mongoose.Schema(
       required: true,
       ref: 'Patient',
     },
+    doctor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Doctor',
+    },
     survey: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

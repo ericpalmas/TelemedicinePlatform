@@ -2,8 +2,10 @@ import express from 'express'
 import asyncHandler from 'express-async-handler'
 const router = express.Router()
 import Survey from '../models/surveyModel.js'
+import SurveyResponse from '../models/surveyResponseModel.js'
 import Question from '../models/questionModel.js'
 import OfferedAnswer from '../models/offeredAnswerModel.js'
+import { protect, admin } from '../middleware/authMiddleware.js'
 
 // @desc Fetch all surveys
 // @route GET /api/surveys
@@ -79,6 +81,34 @@ router.get(
     } else {
       res.status(404)
       throw new Error('Survey not found')
+    }
+  }),
+)
+
+// @desc   Assign survey to patient
+// @route  POST /api/surveys/assignment
+// @access Private
+router.route('/assignment').post(
+  protect,
+  asyncHandler(async (req, res) => {
+    const { assignments } = req.body
+    if (assignments) {
+      const currentDate = new Date()
+      for (var i = 0; i < assignments.length; i++) {
+        const surveyResponse = new SurveyResponse({
+          patient: assignments[i].patientId,
+          doctor: assignments[i].doctorId,
+          survey: assignments[i].surveyId,
+          createdAt: currentDate,
+          updatedAt: currentDate,
+        })
+
+        await surveyResponse.save()
+      }
+      res.status(201).json(surveyResponse)
+    } else {
+      res.status(404)
+      throw new Error('nothing passed')
     }
   }),
 )

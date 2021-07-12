@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Button,
+  InputGroup,
+  FormControl,
+  Accordion,
+  Card,
+} from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
 import Message from '../components/Message'
@@ -46,13 +54,27 @@ const PatientScreen = ({ history, match }) => {
               <h2 className="mt-4 mb-4">Diseases</h2>
 
               {patientDiseases.map((disease) => (
-                <p>{disease.disease.name}</p>
+                <p key={disease._id}>{disease.disease.name}</p>
               ))}
               {patient.pathology}
-              <h2 className="mt-4 mb-4">Treatment</h2>
+
+              <Row>
+                <Col>
+                  <h2 className="mt-4 mb-4">Treatment</h2>
+                </Col>
+                <Col>
+                  <Button
+                    variant="light"
+                    style={{ float: 'left', verticalAlign: 'middle' }}
+                  >
+                    <i className="fas fa-edit"></i>
+                  </Button>
+                </Col>
+              </Row>
               {patient.therapy}
             </Col>
           </Row>
+
           <Row className="mt-4 mb-4">
             <Col md={6} className="mt-4 mb-4">
               <h2>Patient Data</h2>
@@ -77,6 +99,99 @@ const PatientScreen = ({ history, match }) => {
                 <YAxis />
               </LineChart>
             </Col>
+          </Row>
+
+          {/* risposte ai questionari  */}
+          <Row className="mt-4 mb-4">
+            <h2>Patient survey responses</h2>
+            <br></br>
+          </Row>
+
+          <Row>
+            <Accordion defaultActiveKey="0">
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    Parkinson Survey - data
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>1. Come ti chiami?</h4>
+                    Luca
+                  </Card.Body>
+                </Accordion.Collapse>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>2. Quanti anni hai?</h4>
+                    25
+                  </Card.Body>
+                </Accordion.Collapse>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>3. Quante volte hai dormito?</h4>4
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          </Row>
+
+          <Row>
+            <Accordion defaultActiveKey="0">
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    Parkinson Survey - data
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>1. Come ti chiami?</h4>
+                    Luca
+                  </Card.Body>
+                </Accordion.Collapse>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>2. Quanti anni hai?</h4>
+                    25
+                  </Card.Body>
+                </Accordion.Collapse>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>3. Quante volte hai dormito?</h4>4
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          </Row>
+
+          <Row>
+            <Accordion defaultActiveKey="0">
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    Parkinson Survey - data
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>1. Come ti chiami?</h4>
+                    Luca
+                  </Card.Body>
+                </Accordion.Collapse>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>2. Quanti anni hai?</h4>
+                    25
+                  </Card.Body>
+                </Accordion.Collapse>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <h4>3. Quante volte hai dormito?</h4>4
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
           </Row>
         </>
       )}

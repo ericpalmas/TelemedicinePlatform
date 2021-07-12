@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Button, Card, Form, Figure } from 'react-bootstrap'
+import { Row, Col, Button, Card, Form, Figure, Table } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import * as FaIcons from 'react-icons/fa'
 import * as TiIcons from 'react-icons/ti'
@@ -13,7 +13,7 @@ import Loader from '../components/Loader'
 import EditQuestionModal from '../modals/EditQuestionModal'
 
 import { listPatientsAndDisease } from '../actions/patientActions'
-import { surveyDetails } from '../actions/surveyActions'
+import { surveyDetails, assignSurveys } from '../actions/surveyActions'
 import { deleteQuestion } from '../actions/questionActions'
 
 import icons from '../icons.js'
@@ -59,11 +59,46 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
   const [surveyUploaded, setSurveyUploaded] = useState(false)
 
+  const userLogin = useSelector((state) => state.doctorLogin)
+  const { loading: loginLoading, error: loginError, userInfo } = userLogin
+
+  const [assignments, setAssignments] = React.useState(
+    Array(patients.length).fill(false),
+  )
+
+  const handleSelectAssignments = (e, index) => {
+    var values = [...assignments]
+    values[index] = e.target.checked
+    setAssignments(values)
+  }
+
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
       dispatch(deleteQuestion(id)).then(() => {
         dispatch(surveyDetails(surv.split('"')[1]))
       })
+    }
+  }
+
+  const submitSurvey = () => {
+    var selectedPatients = []
+    for (var i = 0; i < assignments.length; i++) {
+      if (assignments[i])
+        selectedPatients.push({
+          name: patients[i].name,
+          patientId: patients[i]._id,
+          doctorId: userInfo._id,
+          surveyId: surv.split('"')[1],
+        })
+    }
+    if (
+      window.confirm(
+        `Are you sure to send surveys to ${selectedPatients.map(
+          (e) => ' ' + e.name,
+        )}`,
+      )
+    ) {
+      dispatch(assignSurveys(selectedPatients))
     }
   }
 
@@ -118,7 +153,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                 }}
               >
                 {survey.survey !== null ? (
-                  <h1>{survey.survey.name} Survey</h1>
+                  <h1 className="pl-3">{survey.survey.name} Survey</h1>
                 ) : (
                   <h2>Caricare un documento o crearne uno nuovo</h2>
                 )}
@@ -360,12 +395,43 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
           </>
         )}
         <Col md={3}>
-          <BootstrapTable
-            keyField="id"
-            data={patients}
-            columns={columns}
-            selectRow={selectRow}
-          />
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th></th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Diseases</th>
+              </tr>
+            </thead>
+            <tbody>
+              {patients.map((patient, index) => (
+                <tr>
+                  <td>
+                    <Form.Group controlId="isadmin">
+                      <Form.Check
+                        type="checkbox"
+                        // da sistemare
+                        // checked={isAdmin}
+                        // onChange={(e) => setIsAdmin(e.target.checked)}
+
+                        checked={assignments[index]}
+                        onChange={(e) => handleSelectAssignments(e, index)}
+                      ></Form.Check>
+                    </Form.Group>
+                  </td>
+                  <td>{patient.name}</td>
+                  <td>{patient.surname}</td>
+                  <td>{patient.disease}</td>
+                  <td>{patient._id}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Button onClick={submitSurvey}>Save</Button>
+          {/* <Button variant="primary" type="submit">
+            Save Changes
+          </Button> */}
         </Col>
       </Row>
     </div>

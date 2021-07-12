@@ -21,6 +21,7 @@ import {
   sensorListReducer,
   sensorCreateReducer,
   sensorEnableReducer,
+  enabledSensorListReducer,
 } from './reducers/sensorReducers'
 import {
   surveyTemplateListReducer,
@@ -28,6 +29,8 @@ import {
   surveyCreateReducer,
   surveySaveIdReducer,
   currentSurveyReducer,
+  surveyPatientAssignmentReducer,
+  surveyResponsesByDoctorReducer,
 } from './reducers/surveyReducers'
 
 import {
@@ -76,6 +79,9 @@ const reducer = combineReducers({
   doctorList: doctorListReducer,
   doctorDelete: doctorDeleteReducer,
   doctorUpdate: doctorUpdateReducer,
+  surveyPatientAssignment: surveyPatientAssignmentReducer,
+  surveyResponsesByDoctor: surveyResponsesByDoctorReducer,
+  enabledSensorList: enabledSensorListReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')

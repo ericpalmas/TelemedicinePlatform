@@ -13,6 +13,12 @@ import {
   SURVEY_CURRENT_REQUEST,
   SURVEY_CURRENT_SUCCESS,
   SURVEY_CURRENT_FAIL,
+  SURVEY_PATIENT_ASSIGNMENT_REQUEST,
+  SURVEY_PATIENT_ASSIGNMENT_SUCCESS,
+  SURVEY_PATIENT_ASSIGNMENT_FAIL,
+  SURVEY_ASSIGNED_BY_DOCTOR_REQUEST,
+  SURVEY_ASSIGNED_BY_DOCTOR_SUCCESS,
+  SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
 } from '../constants/surveyConstants'
 
 export const listSurveyTemplates = () => async (dispatch) => {
@@ -100,8 +106,6 @@ export const currentSurvey = (surveyId) => async (dispatch) => {
       payload: surveyId,
     })
 
-    //saveSurveyId(surveyId)
-
     dispatch({
       type: SURVEY_SAVE_ID_REQUEST,
       payload: surveyId,
@@ -111,6 +115,84 @@ export const currentSurvey = (surveyId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SURVEY_CURRENT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const assignSurveys = (assignments) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: SURVEY_PATIENT_ASSIGNMENT_REQUEST,
+    })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.post(
+      '/api/surveys/assignment',
+      { assignments },
+      config,
+    )
+
+    dispatch({
+      type: SURVEY_PATIENT_ASSIGNMENT_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SURVEY_PATIENT_ASSIGNMENT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const listSurveyRersponses = (doctorId) => async (
+  dispatch,
+  getState,
+) => {
+  try {
+    dispatch({ type: SURVEY_ASSIGNED_BY_DOCTOR_REQUEST })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    console.log(doctorId)
+    console.log(userInfo)
+
+    const { data } = await axios.get(
+      '/api/surveyResponses/byDoctorId',
+      config,
+      { doctorId },
+    )
+
+    dispatch({
+      type: SURVEY_ASSIGNED_BY_DOCTOR_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

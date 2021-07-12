@@ -9,6 +9,9 @@ import {
   SENSOR_ENABLE_REQUEST,
   SENSOR_ENABLE_SUCCESS,
   SENSOR_ENABLE_FAIL,
+  SENSOR_LIST_ENABLED_REQUEST,
+  SENSOR_LIST_ENABLED_SUCCESS,
+  SENSOR_LIST_ENABLED_FAIL,
 } from '../constants/sensorConstants'
 
 export const listSensors = () => async (dispatch) => {
@@ -61,7 +64,7 @@ export const enableSensor = (sensor) => async (dispatch) => {
       type: SENSOR_ENABLE_REQUEST,
     })
 
-    const { data } = await axios.post(`/api/sensors/enableDisable`, sensor)
+    const { data } = await axios.put(`/api/sensors/enableDisable`, sensor)
 
     dispatch({
       type: SENSOR_ENABLE_SUCCESS,
@@ -77,3 +80,74 @@ export const enableSensor = (sensor) => async (dispatch) => {
     })
   }
 }
+
+export const listEnabledSensors = (patientId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: SENSOR_LIST_ENABLED_REQUEST })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get('/api/sensors/enabledSensors', config, {
+      patientId,
+    })
+
+    dispatch({
+      type: SENSOR_LIST_ENABLED_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SENSOR_LIST_ENABLED_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+// export const listSurveyRersponses = (doctorId) => async (
+//   dispatch,
+//   getState,
+// ) => {
+//   try {
+//     dispatch({ type: SURVEY_ASSIGNED_BY_DOCTOR_REQUEST })
+
+//     const {
+//       doctorLogin: { userInfo },
+//     } = getState()
+
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
+
+//     const { data } = await axios.get(
+//       '/api/surveyResponses/byDoctorId',
+//       config,
+//       { doctorId },
+//     )
+
+//     dispatch({
+//       type: SURVEY_ASSIGNED_BY_DOCTOR_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     dispatch({
+//       type: SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
+//       payload:
+//         error.response && error.response.data.message
+//           ? error.response.data.message
+//           : error.message,
+//     })
+//   }
+// }

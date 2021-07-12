@@ -8,6 +8,9 @@ import {
   SENSOR_ENABLE_REQUEST,
   SENSOR_ENABLE_SUCCESS,
   SENSOR_ENABLE_FAIL,
+  SENSOR_LIST_ENABLED_REQUEST,
+  SENSOR_LIST_ENABLED_SUCCESS,
+  SENSOR_LIST_ENABLED_FAIL,
 } from '../constants/sensorConstants'
 
 export const sensorListReducer = (state = { sensors: [] }, action) => {
@@ -64,6 +67,22 @@ export const sensorEnableReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       }
+    default:
+      return state
+  }
+}
+
+export const enabledSensorListReducer = (
+  state = { sensorsEnabled: [] },
+  action,
+) => {
+  switch (action.type) {
+    case SENSOR_LIST_ENABLED_REQUEST:
+      return { loading: true, sensorsEnabled: [] }
+    case SENSOR_LIST_ENABLED_SUCCESS:
+      return { loading: false, sensorsEnabled: action.payload }
+    case SENSOR_LIST_ENABLED_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }

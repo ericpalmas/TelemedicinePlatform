@@ -11,6 +11,7 @@ import surveyRoutes from './routes/surveyRoutes.js'
 import patientsAndDiseasesRoutes from './routes/patientsAndDiseasesRoutes.js'
 import questionsRoutes from './routes/questionsRoutes.js'
 import doctorRoutes from './routes/doctorRoutes.js'
+import surveyResponseRoutes from './routes/surveyResponseRoutes.js'
 
 dotenv.config()
 
@@ -28,6 +29,7 @@ app.use('/api/surveys', surveyRoutes)
 app.use('/api/patientsAndDiseases', patientsAndDiseasesRoutes)
 app.use('/api/questions', questionsRoutes)
 app.use('/api/doctors', doctorRoutes)
+app.use('/api/surveyResponses', surveyResponseRoutes)
 app.use(notFound)
 app.use(errorHandler)
 

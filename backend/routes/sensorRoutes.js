@@ -2,6 +2,7 @@ import express from 'express'
 import asyncHandler from 'express-async-handler'
 const router = express.Router()
 import Sensor from '../models/sensorModel.js'
+import { protect, admin } from '../middleware/authMiddleware.js'
 
 // @desc Fetch all sensors
 // @route GET /api/sensors
@@ -76,6 +77,22 @@ router.put(
       res.status(404)
       throw new Error('Disease not found')
     }
+  }),
+)
+
+// @desc   Get doctor profile
+// @route  GET /api/doctors/profile
+// @access Private
+router.route('/enabledSensors').get(
+  protect,
+  asyncHandler(async (req, res) => {
+    const enabledSensors = await Sensor.find({
+      $or: [
+        { patient: { $exists: true, $ne: null } },
+        { patient: req.user._id },
+      ],
+    })
+    res.json(enabledSensors)
   }),
 )
 

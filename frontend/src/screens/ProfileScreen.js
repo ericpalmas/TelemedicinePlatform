@@ -7,7 +7,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getDoctorDetails, updateDoctorProfile } from '../actions/doctorActions'
 import { DOCTOR_UPDATE_PROFILE_RESET } from '../constants/doctorConstants'
-//import { listMyOrders } from '../actions/orderActions'
+import { listSurveyRersponses } from '../actions/surveyActions'
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState('')
@@ -28,10 +28,17 @@ const ProfileScreen = ({ location, history }) => {
   const userUpdateProfile = useSelector((state) => state.doctorUpdateProfile)
   const { success } = userUpdateProfile
 
-  //   const orderListMy = useSelector((state) => state.orderListMy)
-  //   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
+  const surveysResponsesList = useSelector(
+    (state) => state.surveyResponsesByDoctor,
+  )
+  const {
+    loading: loadingResponses,
+    error: errorResponses,
+    surveysResponses,
+  } = surveysResponsesList
 
   useEffect(() => {
+    console.log()
     if (!userInfo) {
       history.push('/login')
     } else {
@@ -40,7 +47,7 @@ const ProfileScreen = ({ location, history }) => {
         dispatch(getDoctorDetails('profile'))
 
         // altre informazioni che voglio visualizzare sulla destra
-        //dispatch(listMyOrders())
+        dispatch(listSurveyRersponses(userInfo._id))
       } else {
         setName(user.name)
         setSurname(user.surname)
@@ -131,55 +138,51 @@ const ProfileScreen = ({ location, history }) => {
 
       {/* In questa tabella vengono visualizzate le operazioni effettuate dal dottore, i questionari assegnati a chi */}
 
-      {/* <Col md={9}>
-            <h2>My Orders</h2>
-            {loadingOrders ? (
-                <Loader />
-            ) : errorOrders ? (
-                <Message variant='danger'>{errorOrders}</Message>
-            ) : (
-                        <Table striped bordered hover responsive className='table-sm'>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>DATE</th>
-                                    <th>TOTAL</th>
-                                    <th>PAID</th>
-                                    <th>DELIVERED</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders.map((order) => (
-                                    <tr key={order._id}>
-                                        <td>{order._id}</td>
-                                        <td>{order.createdAt.substring(0, 10)}</td>
-                                        <td>{order.totalPrice}</td>
-                                        <td>
-                                            {order.isPaid ? (
-                                                order.paidAt.substring(0, 10)
-                                            ) : (
-                                                    <i className='fas fa-times' style={{ color: 'red' }}></i>
-                                                )}
-                                        </td>
-                                        <td>
-                                            {order.isDelivered ? (
-                                                order.deliveredAt.substring(0, 10)
-                                            ) : (
-                                                    <i className='fas fa-times' style={{ color: 'red' }}></i>
-                                                )}
-                                        </td>
-                                        <td>
-                                            <LinkContainer to={`/order/${order._id}`}>
-                                                <Button className='btn-sm' variant='light'>Details</Button>
-                                            </LinkContainer>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </Table>
+      <Col md={9}>
+        <h2>Surveys sended</h2>
+        {loadingResponses ? (
+          <Loader />
+        ) : errorResponses ? (
+          <Message variant="danger">{errorResponses}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-lg">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>SURVEY</th>
+                <th>CREATION DATE</th>
+                <th>UPDATE DATE</th>
+                <th>TO</th>
+                <th>RESPONSE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {surveysResponses.map((response) => (
+                <tr key={response._id}>
+                  <td>{response._id}</td>
+                  <td>{response.survey.name}</td>
+                  <td>{response.createdAt.substring(0, 10)}</td>
+                  <td>{response.updatedAt.substring(0, 10)}</td>
+
+                  <td>
+                    {response.patient.name} {response.patient.surname}
+                  </td>
+                  <td>
+                    {response.response ? (
+                      <i
+                        className="fas fa-check"
+                        style={{ color: 'green' }}
+                      ></i>
+                    ) : (
+                      <i className="fas fa-times" style={{ color: 'red' }}></i>
                     )}
-        </Col> */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </Col>
     </Row>
   )
 }
