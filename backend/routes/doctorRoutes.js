@@ -3,6 +3,8 @@ import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 const router = express.Router()
 import Doctor from '../models/doctorModel.js'
+import DoctorPatient from '../models/doctorPatientModel.js'
+
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 // @desc Fetch all patients
@@ -213,6 +215,19 @@ router.route('/:id').put(
       res.status(404)
       throw new Error('User not found')
     }
+  }),
+)
+
+// @desc    Get doctor patients
+// @route   GET /api/doctors/patients/:id
+// @access  Private/Admin
+router.route('/patients/:id').get(
+  protect,
+  asyncHandler(async (req, res) => {
+    const users = await DoctorPatient.find({ doctor: req.params.id })
+      .populate('patient')
+      .select('patient')
+    res.json(users)
   }),
 )
 

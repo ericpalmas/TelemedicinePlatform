@@ -19,6 +19,9 @@ import {
   SURVEY_ASSIGNED_BY_DOCTOR_REQUEST,
   SURVEY_ASSIGNED_BY_DOCTOR_SUCCESS,
   SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
+  SURVEY_ASSIGNED_SUCCESS,
+  SURVEY_ASSIGNED_REQUEST,
+  SURVEY_ASSIGNED_FAIL,
 } from '../constants/surveyConstants'
 
 export const listSurveyTemplates = () => async (dispatch) => {
@@ -160,7 +163,7 @@ export const assignSurveys = (assignments) => async (dispatch, getState) => {
   }
 }
 
-export const listSurveyRersponses = (doctorId) => async (
+export const listSurveyResponsesByDoctor = (doctorId) => async (
   dispatch,
   getState,
 ) => {
@@ -177,9 +180,6 @@ export const listSurveyRersponses = (doctorId) => async (
       },
     }
 
-    console.log(doctorId)
-    console.log(userInfo)
-
     const { data } = await axios.get(
       '/api/surveyResponses/byDoctorId',
       config,
@@ -193,6 +193,40 @@ export const listSurveyRersponses = (doctorId) => async (
   } catch (error) {
     dispatch({
       type: SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const listSurveyResponses = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: SURVEY_ASSIGNED_REQUEST })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      '/api/surveyResponses/surveyAssignments',
+      config,
+    )
+
+    dispatch({
+      type: SURVEY_ASSIGNED_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SURVEY_ASSIGNED_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

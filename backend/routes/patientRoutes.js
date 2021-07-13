@@ -3,6 +3,9 @@ import asyncHandler from 'express-async-handler'
 const router = express.Router()
 import Patient from '../models/patientModel.js'
 import PatientDisease from '../models/patientDiseaseModel.js'
+import { protect, admin } from '../middleware/authMiddleware.js'
+import DoctorPatient from '../models/doctorPatientModel.js'
+import SurveyResponse from '../models/surveyResponseModel.js'
 
 // @desc Fetch all patients
 // @route GET /api/patients
@@ -22,7 +25,7 @@ router.get(
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const { name, surname, age, therapy, items } = req.body
+    const { doctorId, name, surname, age, therapy, items } = req.body
 
     const patient = new Patient({
       name: name,
@@ -31,12 +34,18 @@ router.post(
       therapy: therapy,
     })
 
-    // console.log('PATIENT ROUTES')
-    // console.log(req.body)
-
     const createdPatient = await patient.save()
 
     if (createdPatient) {
+      const currentDate = new Date()
+      const doctorPatient = new DoctorPatient({
+        doctor: doctorId,
+        patient: createdPatient._id,
+        createdAt: currentDate,
+        updatedAt: currentDate,
+      })
+      const newDoctorPatient = await doctorPatient.save()
+
       if (items.length !== 0) {
         for (var i = 0; i < items.length; i++) {
           const newDisease = new PatientDisease({
@@ -66,6 +75,8 @@ router.delete(
     if (patient) {
       await patient.remove()
       await PatientDisease.deleteMany({ patient: req.params.id })
+      await DoctorPatient.deleteMany({ patient: req.params.id })
+      await SurveyResponse.deleteMany({ patient: req.params.id })
 
       res.json({ message: 'Patient removed' })
     } else {

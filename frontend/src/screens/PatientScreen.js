@@ -48,30 +48,21 @@ const PatientScreen = ({ history, match }) => {
           <Row className="mt-4 mb-4">
             <Col md={6} className="mb-4">
               <h2 className="mt-4 mb-4">Patient Profile</h2>
-              <h4>
+              <p>
                 {patient.name} {patient.surname}
-              </h4>
-              <h2 className="mt-4 mb-4">Diseases</h2>
+              </p>
 
+              <h2 className="mt-4 mb-4">Diseases</h2>
               {patientDiseases.map((disease) => (
                 <p key={disease._id}>{disease.disease.name}</p>
               ))}
-              {patient.pathology}
-
+              <p>{patient.pathology}</p>
               <Row>
                 <Col>
                   <h2 className="mt-4 mb-4">Treatment</h2>
                 </Col>
-                <Col>
-                  <Button
-                    variant="light"
-                    style={{ float: 'left', verticalAlign: 'middle' }}
-                  >
-                    <i className="fas fa-edit"></i>
-                  </Button>
-                </Col>
               </Row>
-              {patient.therapy}
+              <p>{patient.therapy}</p>
             </Col>
           </Row>
 
@@ -108,7 +99,14 @@ const PatientScreen = ({ history, match }) => {
           </Row>
 
           <Row>
-            <Accordion defaultActiveKey="0">
+            <Accordion
+              defaultActiveKey="0"
+              style={{
+                overflow: 'hidden',
+                position: 'relative',
+                width: '60%',
+              }}
+            >
               <Card>
                 <Card.Header>
                   <Accordion.Toggle as={Button} variant="link" eventKey="1">
@@ -137,7 +135,14 @@ const PatientScreen = ({ history, match }) => {
           </Row>
 
           <Row>
-            <Accordion defaultActiveKey="0">
+            <Accordion
+              defaultActiveKey="0"
+              style={{
+                overflow: 'hidden',
+                position: 'relative',
+                width: '60%',
+              }}
+            >
               <Card>
                 <Card.Header>
                   <Accordion.Toggle as={Button} variant="link" eventKey="1">
@@ -166,7 +171,14 @@ const PatientScreen = ({ history, match }) => {
           </Row>
 
           <Row>
-            <Accordion defaultActiveKey="0">
+            <Accordion
+              defaultActiveKey="0"
+              style={{
+                overflow: 'hidden',
+                position: 'relative',
+                width: '60%',
+              }}
+            >
               <Card>
                 <Card.Header>
                   <Accordion.Toggle as={Button} variant="link" eventKey="1">

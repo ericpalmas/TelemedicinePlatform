@@ -14,7 +14,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listDoctors, deleteDoctor } from '../actions/doctorActions'
 
-const DoctorListScreen = ({ history }) => {
+const AdminDoctorListScreen = ({ history }) => {
   const dispatch = useDispatch()
 
   const userList = useSelector((state) => state.doctorList)
@@ -121,4 +121,4 @@ const DoctorListScreen = ({ history }) => {
   )
 }
 
-export default DoctorListScreen
+export default AdminDoctorListScreen

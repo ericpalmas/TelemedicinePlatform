@@ -42,13 +42,11 @@ const DiseaseListScreen = () => {
     return () => {
       isMounted = false
     }
-  }, [dispatch])
+  }, [dispatch, successDelete])
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
-      dispatch(deleteDisease(id)).then(() => {
-        dispatch(listDiseases())
-      })
+      dispatch(deleteDisease(id))
     }
   }
 

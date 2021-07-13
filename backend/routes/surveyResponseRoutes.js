@@ -14,7 +14,8 @@ router.route('/surveyAssignments').get(
   protect,
   asyncHandler(async (req, res) => {
     const assignedSurveys = await SurveyResponse.find({})
-    console.log(assignedSurveys)
+      .populate('patient')
+      .populate('survey')
     res.json(assignedSurveys)
   }),
 )

@@ -26,6 +26,9 @@ import {
   DOCTOR_UPDATE_SUCCESS,
   DOCTOR_UPDATE_FAIL,
   DOCTOR_UPDATE_RESET,
+  DOCTOR_PATIENT_LIST_REQUEST,
+  DOCTOR_PATIENT_LIST_SUCCESS,
+  DOCTOR_PATIENT_LIST_FAIL,
 } from '../constants/doctorConstants'
 
 export const doctorLoginReducer = (state = {}, action) => {
@@ -134,6 +137,22 @@ export const doctorUpdateReducer = (state = { user: {} }, action) => {
       return {
         user: {},
       }
+    default:
+      return state
+  }
+}
+
+export const doctorPatientListReducer = (
+  state = { doctorPatients: [] },
+  action,
+) => {
+  switch (action.type) {
+    case DOCTOR_PATIENT_LIST_REQUEST:
+      return { loading: true }
+    case DOCTOR_PATIENT_LIST_SUCCESS:
+      return { loading: false, doctorPatients: action.payload }
+    case DOCTOR_PATIENT_LIST_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }

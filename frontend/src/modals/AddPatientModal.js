@@ -33,6 +33,17 @@ const AddPatientModal = () => {
   const diseaseList = useSelector((state) => state.diseaseList)
   const { loading, error, diseases } = diseaseList
 
+  const patientCreated = useSelector((state) => state.patientCreate)
+  const {
+    loading: loadingCreate,
+    success: successCreate,
+    error: errorCreate,
+    patient: patientCreate,
+  } = patientCreated
+
+  const userLogin = useSelector((state) => state.doctorLogin)
+  const { userInfo } = userLogin
+
   const submitHandler = (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
@@ -43,40 +54,42 @@ const AddPatientModal = () => {
     setValidated(true)
 
     const newPatient = {
+      doctorId: userInfo._id,
       name,
       surname,
-      // age: birthDate,
       age,
       therapy,
       items,
     }
 
-    console.log(newPatient)
-
-    dispatch(createPatient(newPatient)).then(() => {
-      setItems([])
-      dispatch(listPatients())
-      dispatch(listPatientsAndDisease())
-    })
+    dispatch(createPatient(newPatient))
   }
 
   useEffect(() => {
     let isMounted = true
     dispatch(listDiseases()).then(() => {
       if (isMounted) {
-        setDefaultDisease(diseases[0])
+        if (diseases && diseases.length > 0) {
+          setDefaultDisease(diseases[0])
+        }
+
         setName('')
         setSurname('')
         setAge('')
         setTherapy('')
         setItems([])
-        console.log(diseases)
       }
     })
     return () => {
       isMounted = false
     }
   }, [dispatch, show])
+
+  useEffect(() => {
+    setItems([])
+    dispatch(listPatients())
+    dispatch(listPatientsAndDisease())
+  }, [dispatch, successCreate])
 
   function hasDuplicates(array) {
     return new Set(array).size !== array.length
@@ -86,23 +99,18 @@ const AddPatientModal = () => {
     const values = [...items]
     values.push(defaultDisease._id)
     setItems(values)
-    //console.log(items)
   }
 
   const handleRemoveLastFields = () => {
     const values = [...items]
     values.splice(items.length - 1, 1)
     setItems(values)
-    //console.log(items)
   }
 
   const handleInputChange = (index, event) => {
-    console.log(index)
-    //event.preventDefault()
     const values = [...items]
     values[index] = event.target.value
     setItems(values)
-    console.log(items)
   }
 
   return (

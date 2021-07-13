@@ -103,9 +103,9 @@ router.route('/assignment').post(
           updatedAt: currentDate,
         })
 
-        await surveyResponse.save()
+        const result = await surveyResponse.save()
       }
-      res.status(201).json(surveyResponse)
+      res.status(201).json(result)
     } else {
       res.status(404)
       throw new Error('nothing passed')

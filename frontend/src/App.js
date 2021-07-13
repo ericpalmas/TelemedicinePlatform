@@ -14,9 +14,13 @@ import Sidebar from './components/Sidebar'
 import PatientSidebar from './components/PatientSidebar'
 import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
-import DoctorListScreen from './screens/DoctorListScreen'
 import DoctorEditScreen from './screens/DoctorEditScreen'
 import AddDoctorScreen from './screens/AddDoctorScreen'
+
+import AdminDoctorListScreen from './screens/AdminDoctorListScreen'
+import AdminPatientListScreen from './screens/AdminPatientListScreen'
+import AdminDiseaseListScreen from './screens/AdminDiseaseListScreen'
+import AdminSurveyListScreen from './screens/AdminSurveyListScreen'
 
 const App = () => {
   return (
@@ -38,9 +42,12 @@ const App = () => {
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />
-          <Route path="/admin/doctorlist" component={DoctorListScreen} />
+          <Route path="/admin/doctorlist" component={AdminDoctorListScreen} />
           <Route path="/admin/doctor/:id/edit" component={DoctorEditScreen} />
           <Route path="/admin/addDoctor" component={AddDoctorScreen} />
+          <Route path="/admin/patientList" component={AdminPatientListScreen} />
+          <Route path="/admin/diseaseList" component={AdminDiseaseListScreen} />
+          <Route path="/admin/surveyList" component={AdminSurveyListScreen} />
         </Container>
       </main>
       <Footer />

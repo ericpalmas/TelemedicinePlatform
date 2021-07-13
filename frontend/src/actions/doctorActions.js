@@ -26,6 +26,9 @@ import {
   DOCTOR_UPDATE_SUCCESS,
   DOCTOR_UPDATE_FAIL,
   DOCTOR_UPDATE_RESET,
+  DOCTOR_PATIENT_LIST_REQUEST,
+  DOCTOR_PATIENT_LIST_SUCCESS,
+  DOCTOR_PATIENT_LIST_FAIL,
 } from '../constants/doctorConstants'
 
 export const login = (email, password) => async (dispatch) => {
@@ -301,6 +304,44 @@ export const updateDoctor = (user) => async (dispatch, getState) => {
     }
     dispatch({
       type: DOCTOR_UPDATE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const listDoctorPatients = (id) => async (dispatch, getState) => {
+  console.log(id)
+  try {
+    dispatch({
+      type: DOCTOR_PATIENT_LIST_REQUEST,
+    })
+
+    const {
+      doctorLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/doctors/patients/${id}`, config)
+
+    dispatch({
+      type: DOCTOR_PATIENT_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: DOCTOR_PATIENT_LIST_FAIL,
       payload: message,
     })
   }

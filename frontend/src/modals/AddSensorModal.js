@@ -47,18 +47,16 @@ const AddSensorModal = () => {
       description,
     }
 
-    dispatch(createSensor(newSensor)).then(() => {
-      dispatch(listSensors())
-    })
+    dispatch(createSensor(newSensor))
   }
 
-  useEffect(() => {}, [dispatch])
+  useEffect(() => {}, [dispatch, successEnable])
 
   return (
     <>
-      <FormLabel variant="primary" onClick={handleShow} className="ml-3">
+      <Button variant="link" onClick={handleShow} style={{ color: '#fff' }}>
         New sensor
-      </FormLabel>
+      </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Form noValidate validated={validated} onSubmit={submitHandler}>

@@ -21,6 +21,9 @@ import {
   PATIENT_UPDATE_SUCCESS,
   PATIENT_UPDATE_FAIL,
   PATIENT_UPDATE_RESET,
+  PATIENT_CREATE_ASSIGNED_REQUEST,
+  PATIENT_CREATE_ASSIGNED_SUCCESS,
+  PATIENT_CREATE_ASSIGNED_FAIL,
 } from '../constants/patientConstants'
 
 export const patientListReducer = (state = { patients: [] }, action) => {
@@ -133,3 +136,26 @@ export const patientUpdateReducer = (state = { patient: {} }, action) => {
       return state
   }
 }
+
+// add new patient to database
+// export const patientAssignedCreateReducer = (state = {}, action) => {
+//   switch (action.type) {
+//     case PATIENT_CREATE_ASSIGNED_REQUEST:
+//       return {
+//         loading: true,
+//       }
+//     case PATIENT_CREATE_ASSIGNED_SUCCESS:
+//       return {
+//         loading: false,
+//         success: true,
+//         patient: action.payload,
+//       }
+//     case PATIENT_CREATE_ASSIGNED_FAIL:
+//       return {
+//         loading: false,
+//         error: action.payload,
+//       }
+//     default:
+//       return state
+//   }
+// }

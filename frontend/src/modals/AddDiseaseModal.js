@@ -39,12 +39,12 @@ const AddDiseaseModal = ({ history }) => {
       name,
       description,
     }
-    dispatch(createDisease(newDisease)).then(() => {
-      dispatch(listDiseases())
-    })
+    dispatch(createDisease(newDisease))
   }
 
-  useEffect(() => {}, [dispatch])
+  useEffect(() => {
+    dispatch(listDiseases())
+  }, [dispatch, successCreate])
 
   return (
     <>
@@ -59,7 +59,6 @@ const AddDiseaseModal = ({ history }) => {
       </Button>
 
       {errorCreate && <Message variant="danger">{errorCreate}</Message>}
-      {/* {loadingCreate && <Loader />} */}
       <Modal show={show} onHide={handleClose}>
         <Form noValidate validated={validated} onSubmit={submitHandler}>
           <Modal.Header closeButton>

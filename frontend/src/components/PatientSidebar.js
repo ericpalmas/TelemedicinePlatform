@@ -41,6 +41,13 @@ const PatientSidebar = ({ match }) => {
   const sensorList = useSelector((state) => state.sensorList)
   const { loading, error, sensors } = sensorList
 
+  const sensorEnabled = useSelector((state) => state.sensorEnable)
+  const {
+    loading: loadingSensorEnabled,
+    success: successSensorEnabled,
+    error: errorSensorEnabled,
+  } = sensorEnabled
+
   const enabledSensorList = useSelector((state) => state.enabledSensorList)
   const {
     loading: loadingEnabledSensors,
@@ -52,7 +59,7 @@ const PatientSidebar = ({ match }) => {
 
   useEffect(() => {
     dispatch(listEnabledSensors(match.params.id))
-  }, [dispatch, match])
+  }, [dispatch, match, successSensorEnabled])
 
   useEffect(() => {
     dispatch(listSensors())
@@ -140,13 +147,6 @@ const PatientSidebar = ({ match }) => {
               </Accordion.Toggle>
             </Card.Header>
           </Card>
-
-          <id id="sidebarLink">
-            <div>
-              <IoIcons.IoIosPaper />
-              <AddSensorModal />
-            </div>
-          </id>
         </Accordion>
       </nav>
     </>

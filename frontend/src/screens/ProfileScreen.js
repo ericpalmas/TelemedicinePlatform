@@ -7,7 +7,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getDoctorDetails, updateDoctorProfile } from '../actions/doctorActions'
 import { DOCTOR_UPDATE_PROFILE_RESET } from '../constants/doctorConstants'
-import { listSurveyRersponses } from '../actions/surveyActions'
+import { listSurveyResponsesByDoctor } from '../actions/surveyActions'
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState('')
@@ -37,24 +37,38 @@ const ProfileScreen = ({ location, history }) => {
     surveysResponses,
   } = surveysResponsesList
 
+  const surveyPatientAssignment = useSelector(
+    (state) => state.surveyPatientAssignment,
+  )
+  const {
+    loading: loadingSurveyPatientAssignment,
+    error: errorSurveyPatientAssignment,
+    success: successSurveyPatientAssignment,
+    assignments,
+  } = surveyPatientAssignment
+
   useEffect(() => {
-    console.log()
     if (!userInfo) {
       history.push('/login')
     } else {
       if (!user || !user.name || !user.surname || success) {
         dispatch({ type: DOCTOR_UPDATE_PROFILE_RESET })
         dispatch(getDoctorDetails('profile'))
-
-        // altre informazioni che voglio visualizzare sulla destra
-        dispatch(listSurveyRersponses(userInfo._id))
+        dispatch(listSurveyResponsesByDoctor(userInfo._id))
       } else {
         setName(user.name)
         setSurname(user.surname)
         setEmail(user.email)
       }
     }
-  }, [dispatch, history, userInfo, user, success])
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    user,
+    success,
+    successSurveyPatientAssignment,
+  ])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -160,13 +174,22 @@ const ProfileScreen = ({ location, history }) => {
               {surveysResponses.map((response) => (
                 <tr key={response._id}>
                   <td>{response._id}</td>
-                  <td>{response.survey.name}</td>
+
+                  {response.survey ? (
+                    <td>{response.survey.name}</td>
+                  ) : (
+                    <td></td>
+                  )}
                   <td>{response.createdAt.substring(0, 10)}</td>
                   <td>{response.updatedAt.substring(0, 10)}</td>
+                  {response.patient ? (
+                    <td>
+                      {response.patient.name} {response.patient.surname}
+                    </td>
+                  ) : (
+                    <td></td>
+                  )}
 
-                  <td>
-                    {response.patient.name} {response.patient.surname}
-                  </td>
                   <td>
                     {response.response ? (
                       <i

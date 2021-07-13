@@ -103,7 +103,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   }
 
   const updateCUrrentSurvey = useCallback(() => {
-    if (!loadingSurvey) {
+    if (!loadingSurvey && currentId) {
       dispatch(surveyDetails(currentId))
         .then(() => {
           setSurveyUploaded(true)
@@ -423,15 +423,11 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                   <td>{patient.name}</td>
                   <td>{patient.surname}</td>
                   <td>{patient.disease}</td>
-                  <td>{patient._id}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
           <Button onClick={submitSurvey}>Save</Button>
-          {/* <Button variant="primary" type="submit">
-            Save Changes
-          </Button> */}
         </Col>
       </Row>
     </div>

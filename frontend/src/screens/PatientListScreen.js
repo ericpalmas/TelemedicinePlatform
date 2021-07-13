@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AddPatientModal from '../modals/AddPatientModal'
 
@@ -14,12 +14,13 @@ import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listPatients, listPatientsAndDisease } from '../actions/patientActions'
+import { listDoctorPatients } from '../actions/doctorActions'
 
 const PatientListScreen = () => {
   const dispatch = useDispatch()
 
-  const patientList = useSelector((state) => state.patientList)
-  const { loading, error, patients } = patientList
+  const doctorPatientList = useSelector((state) => state.doctorPatientList)
+  const { loading, error, doctorPatients } = doctorPatientList
 
   const patientAndDiseasesList = useSelector(
     (state) => state.patientsAndDiseaseList,
@@ -33,10 +34,26 @@ const PatientListScreen = () => {
   const userLogin = useSelector((state) => state.doctorLogin)
   const { userInfo } = userLogin
 
+  const [patientElaborated, setPatientElaborated] = useState([])
+
   useEffect(() => {
     dispatch(listPatientsAndDisease())
-    dispatch(listPatients())
   }, [dispatch])
+
+  useEffect(() => {
+    dispatch(listDoctorPatients(userInfo._id))
+  }, [dispatch])
+
+  useEffect(() => {
+    setPatientElaborated([])
+    if (!loading && !loadingPatientAndDiseases) {
+      patientAndDiseases.forEach((patient) => {
+        if (doctorPatients.find((x) => x.patient._id === patient._id)) {
+          setPatientElaborated((state) => [...state, patient])
+        }
+      })
+    }
+  }, [patientAndDiseases, doctorPatients, patientElaborated.length])
 
   return (
     <>
@@ -65,7 +82,7 @@ const PatientListScreen = () => {
           className="mt-4"
           style={{ float: 'left', display: 'inline-block' }}
         >
-          {patientAndDiseases.map((patient) => (
+          {patientElaborated.map((patient) => (
             <Col sm={12} key={patient._id}>
               <Patient key={patient._id} patient={patient} />
             </Col>

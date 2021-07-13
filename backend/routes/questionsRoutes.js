@@ -44,7 +44,6 @@ router.post(
           question: createdQuestion._id,
           image: offeredAnswers[i].image,
         })
-        console.log(offeredAnswer)
         await offeredAnswer.save()
       }
       res.status(201).json(createdQuestion)
@@ -94,10 +93,6 @@ router.put(
       survey,
       offeredAnswers,
     } = req.body
-
-    console.log(req.body)
-
-    console.log(offeredAnswers)
 
     const question = await Question.findById(_id)
 
