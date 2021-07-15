@@ -310,7 +310,6 @@ export const updateDoctor = (user) => async (dispatch, getState) => {
 }
 
 export const listDoctorPatients = (id) => async (dispatch, getState) => {
-  console.log(id)
   try {
     dispatch({
       type: DOCTOR_PATIENT_LIST_REQUEST,

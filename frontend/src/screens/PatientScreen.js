@@ -15,6 +15,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { patientDetails } from '../actions/patientActions'
 import { listPatientDiseases } from '../actions/diseaseActions'
+import { listSurveyResponses } from '../actions/responsesActions'
 
 import { columns, selectRow, data, dati } from '../sensorTableData.js'
 
@@ -32,9 +33,22 @@ const PatientScreen = ({ history, match }) => {
     patientDiseases,
   } = patientDiseasesList
 
+  const patientResponsesList = useSelector((state) => state.surveyResponses)
+  const {
+    loading: loadingResponses,
+    error: errorResponses,
+    responses,
+  } = patientResponsesList
+
   useEffect(() => {
     dispatch(patientDetails(match.params.id))
     dispatch(listPatientDiseases(match.params.id))
+  }, [dispatch, match])
+
+  useEffect(() => {
+    dispatch(listSurveyResponses(match.params.id)).then(() => {
+      console.log(responses)
+    })
   }, [dispatch, match])
 
   return (
@@ -91,6 +105,14 @@ const PatientScreen = ({ history, match }) => {
               </LineChart>
             </Col>
           </Row>
+
+          {loadingResponses ? (
+            <Loader />
+          ) : errorResponses ? (
+            <Message variant="danger">{errorResponses}</Message>
+          ) : (
+            <>{responses ? <Row>Prova</Row> : <></>}</>
+          )}
 
           {/* risposte ai questionari  */}
           <Row className="mt-4 mb-4">

@@ -47,6 +47,8 @@ const ProfileScreen = ({ location, history }) => {
     assignments,
   } = surveyPatientAssignment
 
+  //surveyResponses
+
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
