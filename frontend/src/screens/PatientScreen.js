@@ -33,12 +33,12 @@ const PatientScreen = ({ history, match }) => {
     patientDiseases,
   } = patientDiseasesList
 
-  const patientResponsesList = useSelector((state) => state.surveyResponses)
+  const responsesList = useSelector((state) => state.responsesList)
   const {
     loading: loadingResponses,
     error: errorResponses,
     responses,
-  } = patientResponsesList
+  } = responsesList
 
   useEffect(() => {
     dispatch(patientDetails(match.params.id))
@@ -46,9 +46,8 @@ const PatientScreen = ({ history, match }) => {
   }, [dispatch, match])
 
   useEffect(() => {
-    dispatch(listSurveyResponses(match.params.id)).then(() => {
-      console.log(responses)
-    })
+    dispatch(listSurveyResponses(match.params.id))
+    console.log(responses)
   }, [dispatch, match])
 
   return (
@@ -82,7 +81,7 @@ const PatientScreen = ({ history, match }) => {
 
           <Row className="mt-4 mb-4">
             <Col md={6} className="mt-4 mb-4">
-              <h2>Patient Data</h2>
+              <h2 className="mb-4">Patient Data</h2>
               <BootstrapTable
                 keyField="id"
                 data={dati}
@@ -91,7 +90,7 @@ const PatientScreen = ({ history, match }) => {
               />
             </Col>
             <Col md={6} className="mt-4 mb-4">
-              <h2>Grafico</h2>
+              <h2 className="mb-4">Grafico</h2>
               <LineChart
                 width={600}
                 height={300}
@@ -106,127 +105,78 @@ const PatientScreen = ({ history, match }) => {
             </Col>
           </Row>
 
-          {loadingResponses ? (
-            <Loader />
-          ) : errorResponses ? (
-            <Message variant="danger">{errorResponses}</Message>
-          ) : (
-            <>{responses ? <Row>Prova</Row> : <></>}</>
-          )}
-
           {/* risposte ai questionari  */}
           <Row className="mt-4 mb-4">
             <h2>Patient survey responses</h2>
             <br></br>
           </Row>
 
-          <Row>
-            <Accordion
-              defaultActiveKey="0"
-              style={{
-                overflow: 'hidden',
-                position: 'relative',
-                width: '60%',
-              }}
-            >
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                    Parkinson Survey - data
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>1. Come ti chiami?</h4>
-                    Luca
-                  </Card.Body>
-                </Accordion.Collapse>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>2. Quanti anni hai?</h4>
-                    25
-                  </Card.Body>
-                </Accordion.Collapse>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>3. Quante volte hai dormito?</h4>4
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            </Accordion>
-          </Row>
-
-          <Row>
-            <Accordion
-              defaultActiveKey="0"
-              style={{
-                overflow: 'hidden',
-                position: 'relative',
-                width: '60%',
-              }}
-            >
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                    Parkinson Survey - data
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>1. Come ti chiami?</h4>
-                    Luca
-                  </Card.Body>
-                </Accordion.Collapse>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>2. Quanti anni hai?</h4>
-                    25
-                  </Card.Body>
-                </Accordion.Collapse>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>3. Quante volte hai dormito?</h4>4
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            </Accordion>
-          </Row>
-
-          <Row>
-            <Accordion
-              defaultActiveKey="0"
-              style={{
-                overflow: 'hidden',
-                position: 'relative',
-                width: '60%',
-              }}
-            >
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                    Parkinson Survey - data
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>1. Come ti chiami?</h4>
-                    Luca
-                  </Card.Body>
-                </Accordion.Collapse>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>2. Quanti anni hai?</h4>
-                    25
-                  </Card.Body>
-                </Accordion.Collapse>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h4>3. Quante volte hai dormito?</h4>4
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            </Accordion>
-          </Row>
+          {loadingResponses ? (
+            <Loader />
+          ) : errorResponses ? (
+            <Message variant="danger">{errorResponses}</Message>
+          ) : (
+            <>
+              {responses ? (
+                <>
+                  {responses.map((response) => (
+                    <>
+                      <Row>
+                        <Accordion
+                          defaultActiveKey="0"
+                          style={{
+                            overflow: 'hidden',
+                            position: 'relative',
+                            width: '60%',
+                          }}
+                        >
+                          <Card>
+                            <Card.Header>
+                              <Accordion.Toggle
+                                as={Button}
+                                variant="link"
+                                eventKey="1"
+                              >
+                                {response.survey.map((surv) => (
+                                  <>
+                                    <p>
+                                      {surv.name} - &nbsp;
+                                      {surv.updateAt ? (
+                                        <>{surv.updateAt.substring(0, 10)}</>
+                                      ) : (
+                                        <>{surv.createdAt.substring(0, 10)}</>
+                                      )}
+                                    </p>
+                                  </>
+                                ))}
+                              </Accordion.Toggle>
+                            </Card.Header>
+                            {response.surveyResponses.map((survey) => (
+                              <>
+                                {survey.question.map((question) => (
+                                  <>
+                                    {/* <h4>{question.text}</h4> */}
+                                    <Accordion.Collapse eventKey="1">
+                                      <Card.Body>
+                                        <h4>{question.text}</h4>
+                                        <p>{survey.answer}</p>
+                                      </Card.Body>
+                                    </Accordion.Collapse>
+                                  </>
+                                ))}
+                              </>
+                            ))}
+                          </Card>
+                        </Accordion>
+                      </Row>
+                    </>
+                  ))}
+                </>
+              ) : (
+                <></>
+              )}
+            </>
+          )}
         </>
       )}
     </>
