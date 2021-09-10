@@ -51,6 +51,15 @@ const questionSchema = mongoose.Schema(
       required: false,
       ref: 'Response',
     },
+    previousQuestion: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: 'Question',
+    },
+    expectedPreviousAnswer: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

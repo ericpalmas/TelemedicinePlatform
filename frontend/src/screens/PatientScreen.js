@@ -79,6 +79,8 @@ const PatientScreen = ({ history, match }) => {
             </Col>
           </Row>
 
+          {/* abilitare questa parte quando i sensori andranno */}
+          {/* 
           <Row className="mt-4 mb-4">
             <Col md={6} className="mt-4 mb-4">
               <h2 className="mb-4">Patient Data</h2>
@@ -103,7 +105,7 @@ const PatientScreen = ({ history, match }) => {
                 <YAxis />
               </LineChart>
             </Col>
-          </Row>
+          </Row> */}
 
           {/* risposte ai questionari  */}
           <Row className="mt-4 mb-4">
@@ -140,12 +142,13 @@ const PatientScreen = ({ history, match }) => {
                                 {response.survey.map((surv) => (
                                   <>
                                     <p>
-                                      {surv.name} - &nbsp;
-                                      {surv.updateAt ? (
+                                      {surv.name} - &nbsp; INSERIRE DATA
+                                      RISPOSTA QUESTIONARIO
+                                      {/* {surv.updateAt ? (
                                         <>{surv.updateAt.substring(0, 10)}</>
                                       ) : (
-                                        <>{surv.createdAt.substring(0, 10)}</>
-                                      )}
+                                        <>{surv.updateAt.substring(0, 10)}</>
+                                      )} */}
                                     </p>
                                   </>
                                 ))}
@@ -155,11 +158,42 @@ const PatientScreen = ({ history, match }) => {
                               <>
                                 {survey.question.map((question) => (
                                   <>
-                                    {/* <h4>{question.text}</h4> */}
                                     <Accordion.Collapse eventKey="1">
                                       <Card.Body>
                                         <h4>{question.text}</h4>
-                                        <p>{survey.answer}</p>
+
+                                        {question.slider ? (
+                                          <p> {survey.answer.answer}</p>
+                                        ) : question.trueFalse ? (
+                                          <p>
+                                            {' '}
+                                            {survey.answer.answer
+                                              ? 'true'
+                                              : 'false'}
+                                          </p>
+                                        ) : question.incrementDecrement ? (
+                                          <p> {survey.answer.answer}</p>
+                                        ) : question.insertTime ? (
+                                          <p> {survey.answer.answer}</p>
+                                        ) : question.radio ? (
+                                          <p> {survey.answer.answer}</p>
+                                        ) : question.check ? (
+                                          <>
+                                            {survey.answer.answers.map(
+                                              (val, index) => (
+                                                <p>
+                                                  {' '}
+                                                  {index + 1}) &nbsp;{' '}
+                                                  {val.answer}{' '}
+                                                </p>
+                                              ),
+                                            )}
+                                          </>
+                                        ) : question.open ? (
+                                          <p> {survey.answer.answer}</p>
+                                        ) : (
+                                          <> </>
+                                        )}
                                       </Card.Body>
                                     </Accordion.Collapse>
                                   </>

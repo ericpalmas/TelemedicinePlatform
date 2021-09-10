@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Button, Card, Form, Figure, Table } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Button,
+  Card,
+  Form,
+  Figure,
+  Table,
+  InputGroup,
+} from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import * as FaIcons from 'react-icons/fa'
 import * as TiIcons from 'react-icons/ti'
@@ -58,6 +67,9 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   } = currentSurvey
 
   const [surveyUploaded, setSurveyUploaded] = useState(false)
+  const [items, setItems] = useState([])
+  const [hour, setHour] = useState(0)
+  const [minutes, setMinutes] = useState(0)
 
   const userLogin = useSelector((state) => state.doctorLogin)
   const { loading: loginLoading, error: loginError, userInfo } = userLogin
@@ -113,6 +125,80 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         })
     }
   }, [currentId])
+
+  const addAnswer = () => {
+    //if (hour !== '' && minutes !== '') {
+    setItems([
+      ...items,
+      {
+        hour: 0,
+        minutes: 0,
+      },
+    ])
+    //}
+  }
+
+  const removeAnswer = () => {
+    const values = [...items]
+    values.splice(values.length - 1, 1)
+    setItems(values)
+  }
+
+  const incrementHour = (index) => {
+    console.log(index)
+    var values = [...items]
+    if (values[index].hour === 23) {
+      values[index].hour = 0
+      setItems(values)
+      console.log(items)
+    } else {
+      values[index].hour = values[index].hour + 1
+      setItems(values)
+      console.log(items)
+    }
+  }
+
+  const decrementHour = (index) => {
+    console.log(index)
+    var values = [...items]
+    if (values[index].hour === 0) {
+      values[index].hour = 23
+      setItems(values)
+      console.log(items)
+    } else {
+      values[index].hour = values[index].hour - 1
+      setItems(values)
+      console.log(items)
+    }
+  }
+
+  const decrementMinutes = (index) => {
+    console.log(index)
+    var values = [...items]
+    if (values[index].minutes === 0) {
+      values[index].minutes = 59
+      setItems(values)
+      console.log(items)
+    } else {
+      values[index].minutes = values[index].minutes - 1
+      setItems(values)
+      console.log(items)
+    }
+  }
+
+  const incrementMinutes = (index) => {
+    console.log(index)
+    var values = [...items]
+    if (values[index].minutes === 59) {
+      values[index].minutes = 0
+      setItems(values)
+      console.log(items)
+    } else {
+      values[index].minutes = values[index].minutes + 1
+      setItems(values)
+      console.log(items)
+    }
+  }
 
   useEffect(() => {
     updateCUrrentSurvey()
@@ -395,6 +481,9 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
           </>
         )}
         <Col md={3}>
+          <br />
+          <h4> Patient list </h4>
+          <br />
           <Table striped bordered hover>
             <thead>
               <tr>
@@ -427,6 +516,105 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
               ))}
             </tbody>
           </Table>
+          <br />
+          <br />
+          <h4> Aggiungi fascia oraria </h4>
+          <Button
+            className="ml-2 mr-2"
+            variant="light"
+            id="addRemoveButton"
+            onClick={removeAnswer}
+            inline
+          >
+            -
+          </Button>
+
+          <Button
+            className="ml-2 mr-2"
+            variant="light"
+            id="addRemoveButton"
+            onClick={addAnswer}
+            inline
+          >
+            +
+          </Button>
+          <br />
+          <br />
+          {items.length === 0 ? (
+            <p>nessuna fascia oraria inserita </p>
+          ) : (
+            <>
+              {items.map((item, index) => (
+                <>
+                  <Form inline>
+                    <InputGroup hasValidation>
+                      <Form.Control
+                        type="text"
+                        name="state"
+                        value={item.hour}
+                        required
+                        style={{ width: '4rem', alignItems: 'flex-start' }}
+                        //onChange={(e) => setHour(e.target.value)}
+                      />
+                      <Button
+                        className="ml-0 mr-0"
+                        variant="light"
+                        id="addRemoveButton"
+                        onClick={() => incrementHour(index)}
+                        inline
+                      >
+                        +
+                      </Button>
+                      <Button
+                        className="ml-0 mr-0"
+                        variant="light"
+                        id="addRemoveButton"
+                        onClick={() => decrementHour(index)}
+                        inline
+                      >
+                        -
+                      </Button>
+
+                      <Form.Control
+                        type="text"
+                        name="state"
+                        style={{ width: '4rem' }}
+                        value={item.minutes}
+                        required
+                      />
+                      <Button
+                        className="ml-0 mr-0"
+                        variant="light"
+                        id="addRemoveButton"
+                        onClick={() => incrementMinutes(index)}
+                        inline
+                      >
+                        +
+                      </Button>
+                      <Button
+                        className="ml-0 mr-0"
+                        variant="light"
+                        id="addRemoveButton"
+                        onClick={() => decrementMinutes(index)}
+                        inline
+                      >
+                        -
+                      </Button>
+                      <br />
+                      <br />
+                      <Form.Control.Feedback type="invalid">
+                        Write first option
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form>
+                </>
+              ))}
+            </>
+          )}
+
+          <br />
+          <br />
+
           <Button onClick={submitSurvey}>Save</Button>
         </Col>
       </Row>

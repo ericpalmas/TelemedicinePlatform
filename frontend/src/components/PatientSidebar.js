@@ -6,9 +6,10 @@ import AddSensorModal from '../modals/AddSensorModal'
 
 // import * as FaIcons from 'react-icons/fa'
 // import * as AiIcons from 'react-icons/ai'
+// import * as VscIcons from 'react-icons/vsc'
+
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
-// import * as VscIcons from 'react-icons/vsc'
 import * as TiIcons from 'react-icons/ti'
 import {
   Form,

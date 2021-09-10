@@ -131,25 +131,37 @@ const importData = async () => {
         question: createdQuestions[0]._id,
         patient: createdPatients[0]._id,
         surveyResponse: createdSurveyResponse[0]._id,
-        answer: 'Risposta 1',
+        answer: {
+          type: 'Slider',
+          answer: 3,
+        },
       },
       {
         question: createdQuestions[1]._id,
         patient: createdPatients[0]._id,
         surveyResponse: createdSurveyResponse[0]._id,
-        answer: 'Risposta 2',
+        answer: {
+          type: 'TrueFalse',
+          answer: true,
+        },
       },
       {
         question: createdQuestions[0]._id,
         patient: createdPatients[0]._id,
         surveyResponse: createdSurveyResponse[1]._id,
-        answer: 'Risposta 3',
+        answer: {
+          type: 'InsertTime',
+          answer: '2:0',
+        },
       },
       {
         question: createdQuestions[1]._id,
         patient: createdPatients[0]._id,
         surveyResponse: createdSurveyResponse[1]._id,
-        answer: 'Risposta 4',
+        answer: {
+          type: 'Open',
+          answer: 'yyyyy',
+        },
       },
     ]
     const createdResponse = await Response.insertMany(responses)

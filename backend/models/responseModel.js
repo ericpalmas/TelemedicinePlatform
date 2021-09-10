@@ -2,9 +2,10 @@ import mongoose from 'mongoose'
 
 const responseSchema = mongoose.Schema({
   answer: {
-    type: String,
+    type: Object,
     required: true,
   },
+  // answer: [{}],
   patient: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

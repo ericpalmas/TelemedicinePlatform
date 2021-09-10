@@ -86,7 +86,7 @@ export const currentSurveyReducer = (state = {}, action) => {
   }
 }
 
-// add new disease to database
+// add new survey to database
 export const surveyCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case SURVEY_CREATE_REQUEST:

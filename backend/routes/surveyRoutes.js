@@ -99,6 +99,7 @@ router.route('/assignment').post(
           patient: assignments[i].patientId,
           doctor: assignments[i].doctorId,
           survey: assignments[i].surveyId,
+          completed: false,
           createdAt: currentDate,
           updatedAt: currentDate,
         })

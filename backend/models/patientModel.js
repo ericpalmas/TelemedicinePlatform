@@ -17,6 +17,10 @@ const patientSchema = mongoose.Schema({
     type: String,
     required: false,
   },
+  patientMedications: {
+    type: String,
+    required: false,
+  },
 })
 
 const Patient = mongoose.model('Patient', patientSchema)

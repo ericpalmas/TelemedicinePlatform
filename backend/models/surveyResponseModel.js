@@ -17,10 +17,10 @@ const surveyResponseSchema = mongoose.Schema(
       required: true,
       ref: 'Survey',
     },
-    surveyResponse: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: false,
-      ref: 'SurveyResponse',
+    completed: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
   {
