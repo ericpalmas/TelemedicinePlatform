@@ -14,20 +14,7 @@ router.get(
     const surveyTimeSlots = await TimeSlot.find({
       survey: req.params.id,
     })
-
-    var result = []
-    if (surveyTimeSlots) {
-      for (var i = 0; i < surveyTimeSlots.length; i++) {
-        result.push({
-          startHour: surveyTimeSlots[i].startTime.split(':')[0],
-          startMinutes: surveyTimeSlots[i].startTime.split(':')[1],
-          endHour: surveyTimeSlots[i].endTime.split(':')[0],
-          endMinutes: surveyTimeSlots[i].endTime.split(':')[1],
-        })
-      }
-    }
-
-    res.json(result)
+    res.json(surveyTimeSlots)
   }),
 )
 
@@ -37,16 +24,33 @@ router.get(
 router.put(
   '/',
   asyncHandler(async (req, res) => {
-    const { survey, startTime, endTime } = req.body
+    const { survey, items } = req.body
 
-    const timeSlot = new TimeSlot({
-      survey,
-      startTime,
-      endTime,
-    })
+    console.log(req.body)
+    const deletedTimeSlots = await TimeSlot.deleteMany({ survey: survey })
 
-    const timeSlotAdded = await timeSlot.save()
-    res.status(201).json(timeSlotAdded)
+    if (deletedTimeSlots) {
+      for (var i = 0; i < items.length; i++) {
+        const timeSlot = new TimeSlot({
+          survey,
+          startHour: items[i].startHour,
+          startMinutes: items[i].startMinutes,
+          endHour: items[i].endHour,
+          endMinutes: items[i].endMinutes,
+        })
+        console.log(timeSlot)
+        const res = await timeSlot.save()
+        console.log(res)
+      }
+      res.status(201)
+    }
+
+    // console.log(survey)
+    // console.log(surveyTimeSlots)
+    // console.log(req.body)
+
+    //const timeSlotAdded = await timeSlot.save()
+    //res.status(201).json(timeSlotAdded)
   }),
 )
 

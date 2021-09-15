@@ -6,12 +6,20 @@ const timeSlotSchema = mongoose.Schema({
     required: true,
     ref: 'Survey',
   },
-  startTime: {
-    type: String,
+  startHour: {
+    type: Number,
     required: true,
   },
-  endTime: {
-    type: String,
+  startMinutes: {
+    type: Number,
+    required: true,
+  },
+  endHour: {
+    type: Number,
+    required: true,
+  },
+  endMinutes: {
+    type: Number,
     required: true,
   },
 })

@@ -13,9 +13,8 @@ const AddSurveyTIme = () => {
   const handleShow = () => setShow(true)
   const [validated, setValidated] = useState(false)
   const [items, setItems] = useState([])
-  const [itemsFetched, setItemsFetched] = useState(false)
 
-  var currentSurveyId = localStorage.getItem('surveyId')
+  var currentSurveyId = localStorage.getItem('surveyId').split('"')[1]
 
   const surveyTimeSlotsList = useSelector((state) => state.surveyTimeSlotList)
   const { loading, error, surveyTimeSlots } = surveyTimeSlotsList
@@ -30,17 +29,18 @@ const AddSurveyTIme = () => {
 
   const updateItems = useCallback(() => {
     setItems(surveyTimeSlots)
-  }, [dispatch, currentSurveyId, surveyTimeSlots])
+  }, [dispatch, currentSurveyId, surveyTimeSlots.length || 0, loading])
 
   useEffect(() => {
     updateItems()
-    dispatch(surveyTimeSlotList(currentSurveyId.split('"')[1]))
-  }, [dispatch, successUpdate, currentSurveyId, updateItems])
+    dispatch(surveyTimeSlotList(currentSurveyId))
+  }, [dispatch, currentSurveyId, successUpdate, updateItems])
 
   const addAnswer = () => {
     setItems([
       ...items,
       {
+        survey: currentSurveyId,
         startHour: 0,
         startMinutes: 0,
         endHour: 0,
@@ -170,17 +170,19 @@ const AddSurveyTIme = () => {
   }
 
   const submitHandler = (e) => {
+    console.log(items)
     // const form = e.currentTarget
     // if (form.checkValidity() === false) {
     //   e.preventDefault()
     //   e.stopPropagation()
     // }
     // setValidated(true)
-    // const newSensor = {
-    //   name,
-    //   description,
-    // }
-    //dispatch(createSensor(newSensor))
+
+    const result = {
+      survey: currentSurveyId,
+      items,
+    }
+    dispatch(updateTimeSlots(result))
   }
 
   return (
@@ -243,7 +245,7 @@ const AddSurveyTIme = () => {
                 <Message variant="danger">{error}</Message>
               ) : (
                 <>
-                  {items !== undefined ? (
+                  {Array.isArray(items) ? (
                     items.map((item, index) => (
                       <>
                         <Form inline>
