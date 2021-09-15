@@ -206,11 +206,9 @@ const EditQuestionModal = ({ question }) => {
     var values = [...items]
     values[index].text = e.target.value
     setItems(values)
-    console.log(items)
   }
 
   useEffect(() => {
-    console.log(question)
     if (successCreate) {
       dispatch(surveyDetails(surv.split('"')[1]))
     }

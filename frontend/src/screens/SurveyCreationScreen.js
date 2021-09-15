@@ -126,80 +126,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
     }
   }, [currentId])
 
-  const addAnswer = () => {
-    //if (hour !== '' && minutes !== '') {
-    setItems([
-      ...items,
-      {
-        hour: 0,
-        minutes: 0,
-      },
-    ])
-    //}
-  }
-
-  const removeAnswer = () => {
-    const values = [...items]
-    values.splice(values.length - 1, 1)
-    setItems(values)
-  }
-
-  const incrementHour = (index) => {
-    console.log(index)
-    var values = [...items]
-    if (values[index].hour === 23) {
-      values[index].hour = 0
-      setItems(values)
-      console.log(items)
-    } else {
-      values[index].hour = values[index].hour + 1
-      setItems(values)
-      console.log(items)
-    }
-  }
-
-  const decrementHour = (index) => {
-    console.log(index)
-    var values = [...items]
-    if (values[index].hour === 0) {
-      values[index].hour = 23
-      setItems(values)
-      console.log(items)
-    } else {
-      values[index].hour = values[index].hour - 1
-      setItems(values)
-      console.log(items)
-    }
-  }
-
-  const decrementMinutes = (index) => {
-    console.log(index)
-    var values = [...items]
-    if (values[index].minutes === 0) {
-      values[index].minutes = 59
-      setItems(values)
-      console.log(items)
-    } else {
-      values[index].minutes = values[index].minutes - 1
-      setItems(values)
-      console.log(items)
-    }
-  }
-
-  const incrementMinutes = (index) => {
-    console.log(index)
-    var values = [...items]
-    if (values[index].minutes === 59) {
-      values[index].minutes = 0
-      setItems(values)
-      console.log(items)
-    } else {
-      values[index].minutes = values[index].minutes + 1
-      setItems(values)
-      console.log(items)
-    }
-  }
-
   useEffect(() => {
     updateCUrrentSurvey()
 
@@ -215,6 +141,8 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
     dispatch(listPatientsAndDisease())
   }, [dispatch, match, history, updateCUrrentSurvey, surv])
+
+  useEffect(() => {}, [dispatch, match, history, updateCUrrentSurvey, surv])
 
   return (
     <div>
@@ -516,7 +444,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
               ))}
             </tbody>
           </Table>
-          <br />
+          {/* <br />
           <br />
           <h4> Aggiungi fascia oraria </h4>
           <Button
@@ -610,7 +538,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                 </>
               ))}
             </>
-          )}
+          )} */}
 
           <br />
           <br />

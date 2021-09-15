@@ -5,6 +5,7 @@ import Survey from '../models/surveyModel.js'
 import SurveyResponse from '../models/surveyResponseModel.js'
 import Question from '../models/questionModel.js'
 import OfferedAnswer from '../models/offeredAnswerModel.js'
+import TimeSlot from '../models/timeSlotModel.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 // @desc Fetch all surveys
@@ -39,6 +40,19 @@ router.post(
   }),
 )
 
+// @desc Fetch all sensors
+// @route GET /api/sensors
+// @access Public
+// router.get(
+//   '/:id',
+//   asyncHandler(async (req, res) => {
+//     const surveyTimeSlots = await TimeSlot.find({
+//       survey: req.params.id,
+//     })
+//     res.json(surveyTimeSlots)
+//   }),
+// )
+
 // @desc Fetch single survey
 // @route GET /api/surveys/:id
 // @access Public
@@ -53,6 +67,10 @@ router.get(
     var ress = await Question.find({
       survey: { _id: req.params.id },
     }).populate('survey')
+
+    result.timeSlots = await TimeSlot.find({
+      survey: req.params.id,
+    })
 
     for (var i = 0; i < ress.length; i++) {
       var question = {}

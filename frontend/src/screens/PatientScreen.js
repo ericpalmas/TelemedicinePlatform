@@ -47,7 +47,6 @@ const PatientScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(listSurveyResponses(match.params.id))
-    console.log(responses)
   }, [dispatch, match])
 
   return (

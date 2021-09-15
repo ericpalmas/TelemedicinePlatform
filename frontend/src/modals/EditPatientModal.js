@@ -50,7 +50,6 @@ const EditPatientModal = ({ patient }) => {
   }
 
   useEffect(() => {
-    console.log(items)
     let isMounted = true
     dispatch(listDiseases()).then(() => {
       if (isMounted) {

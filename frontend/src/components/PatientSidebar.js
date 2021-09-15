@@ -11,6 +11,7 @@ import AddSensorModal from '../modals/AddSensorModal'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as TiIcons from 'react-icons/ti'
+
 import {
   Form,
   Row,

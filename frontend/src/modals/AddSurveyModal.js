@@ -37,7 +37,6 @@ const AddSurveyModal = () => {
       name,
       description,
     }
-    console.log(newSurvey)
     dispatch(createSurvey(newSurvey)).then(() => {
       dispatch(listSurveyTemplates())
     })

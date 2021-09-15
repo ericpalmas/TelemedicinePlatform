@@ -10,6 +10,7 @@ import AddSurveyModal from '../modals/AddSurveyModal'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
+import * as BiIcons from 'react-icons/bi'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -19,6 +20,7 @@ import {
   surveyDetails,
   currentSurvey,
 } from '../actions/surveyActions'
+import AddSurveyTIme from '../modals/AddSurveyTIme'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)
@@ -102,6 +104,11 @@ const Sidebar = () => {
             <div id="sidebarLink">
               <IoIcons.IoMdAddCircle />
               <AddQuestionModal />
+            </div>
+
+            <div id="sidebarLink">
+              <BiIcons.BiTime />
+              <AddSurveyTIme />
             </div>
 
             {/* Normal menu item */}

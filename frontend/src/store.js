@@ -51,6 +51,11 @@ import {
   doctorPatientListReducer,
 } from './reducers/doctorReducers'
 
+import {
+  surveyTimeSlotListReducer,
+  updateTimeSlotReducer,
+} from './reducers/timeSlotReducers'
+
 import { responsesListReducer } from './reducers/responsesReducers'
 
 const reducer = combineReducers({
@@ -89,6 +94,8 @@ const reducer = combineReducers({
   doctorPatientList: doctorPatientListReducer,
   surveyResponses: surveyResponsesReducer,
   responsesList: responsesListReducer,
+  surveyTimeSlotList: surveyTimeSlotListReducer,
+  updateTimeSlot: updateTimeSlotReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
