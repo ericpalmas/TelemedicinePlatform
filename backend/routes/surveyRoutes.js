@@ -4,7 +4,9 @@ const router = express.Router()
 import Survey from '../models/surveyModel.js'
 import SurveyResponse from '../models/surveyResponseModel.js'
 import Question from '../models/questionModel.js'
+import PatientDisease from '../models/patientDiseaseModel.js'
 import OfferedAnswer from '../models/offeredAnswerModel.js'
+import Patient from '../models/patientModel.js'
 import TimeSlot from '../models/timeSlotModel.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -128,6 +130,63 @@ router.route('/assignment').post(
     } else {
       res.status(404)
       throw new Error('nothing passed')
+    }
+  }),
+)
+
+// @desc Fetch single survey
+// @route GET /api/surveys/:id
+// @access Public
+router.get(
+  '/assignedSurveys/patients/:id',
+  asyncHandler(async (req, res) => {
+    // var patientIds = []
+    // const patientWithSurveyAssigned = await SurveyResponse.find({
+    //   survey: req.params.id,
+    // }).distinct('patient')
+
+    // for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
+    //   patientIds.push(patientWithSurveyAssigned[i] + '')
+    // }
+
+    // var result = []
+    // var patients = await Patient.find()
+
+    // for (var i = 0; i < patients.length; i++) {
+    //   if (patientIds.includes(patients[i]._id + '')) {
+    //     result.push({
+    //       _id: patients[i]._id,
+    //       assigned: true,
+    //     })
+    //   } else {
+    //     result.push({
+    //       _id: patients[i]._id,
+    //       assigned: false,
+    //     })
+    //   }
+    // }
+
+    // if (result) {
+    //   res.json(result)
+    // } else {
+    //   res.status(404)
+    //   throw new Error('Survey not found')
+    // }
+
+    var patientIds = []
+    const patientWithSurveyAssigned = await SurveyResponse.find({
+      survey: req.params.id,
+    }).distinct('patient')
+
+    for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
+      patientIds.push(patientWithSurveyAssigned[i] + '')
+    }
+
+    if (patientIds) {
+      res.json(patientIds)
+    } else {
+      res.status(404)
+      throw new Error('Survey not found')
     }
   }),
 )

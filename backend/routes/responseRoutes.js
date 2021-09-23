@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler'
 const router = express.Router()
 import Response from '../models/responseModel.js'
 import Question from '../models/questionModel.js'
+import SurveyResponse from '../models/surveyResponseModel.js'
 import Survey from '../models/surveyModel.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 import mongoose from 'mongoose'
@@ -27,6 +28,7 @@ router.route('/:id').get(
         {
           $addFields: {
             question_id: { $toObjectId: '$question' },
+            //surveyResponse_id: { $toObjectId: '$surveyResponse' },
           },
         },
 
@@ -38,7 +40,14 @@ router.route('/:id').get(
             as: 'question',
           },
         },
-
+        {
+          $lookup: {
+            from: SurveyResponse.collection.name,
+            localField: 'surveyResponse',
+            foreignField: '_id',
+            as: 'surveyResponse',
+          },
+        },
         {
           $addFields: {
             survey_id: {
@@ -68,8 +77,6 @@ router.route('/:id').get(
             },
 
             survey: { $first: '$survey' },
-
-            //survey: {'$survey'},
           },
         },
       ],

@@ -47,6 +47,8 @@ const PatientScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(listSurveyResponses(match.params.id))
+
+    console.log(responses)
   }, [dispatch, match])
 
   return (
@@ -140,17 +142,22 @@ const PatientScreen = ({ history, match }) => {
                               >
                                 {response.survey.map((surv) => (
                                   <>
-                                    <p>
-                                      {surv.name} - &nbsp; INSERIRE DATA
-                                      RISPOSTA QUESTIONARIO
-                                      {/* {surv.updateAt ? (
-                                        <>{surv.updateAt.substring(0, 10)}</>
-                                      ) : (
-                                        <>{surv.updateAt.substring(0, 10)}</>
-                                      )} */}
-                                    </p>
+                                    <h4>
+                                      {surv.name} - &nbsp;
+                                      {response._id[0].updatedAt.substring(
+                                        12,
+                                        16,
+                                      )}{' '}
+                                      - &nbsp;
+                                      {response._id[0].updatedAt.substring(
+                                        0,
+                                        10,
+                                      )}
+                                    </h4>
                                   </>
                                 ))}
+
+                                <h4></h4>
                               </Accordion.Toggle>
                             </Card.Header>
                             {response.surveyResponses.map((survey) => (

@@ -13,7 +13,10 @@ import {
 import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listPatients, listPatientsAndDisease } from '../actions/patientActions'
+import {
+  listPatients,
+  listPatientsAndDiseases,
+} from '../actions/patientActions'
 import { listDoctorPatients } from '../actions/doctorActions'
 
 const PatientListScreen = () => {
@@ -23,7 +26,7 @@ const PatientListScreen = () => {
   const { loading, error, doctorPatients } = doctorPatientList
 
   const patientAndDiseasesList = useSelector(
-    (state) => state.patientsAndDiseaseList,
+    (state) => state.patientsAndDiseasesList,
   )
   const {
     loading: loadingPatientAndDiseases,
@@ -37,7 +40,7 @@ const PatientListScreen = () => {
   const [patientElaborated, setPatientElaborated] = useState([])
 
   useEffect(() => {
-    dispatch(listPatientsAndDisease())
+    dispatch(listPatientsAndDiseases())
   }, [dispatch])
 
   useEffect(() => {

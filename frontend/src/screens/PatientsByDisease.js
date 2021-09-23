@@ -7,7 +7,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   listPatientsByDisease,
-  listPatientsAndDisease,
+  listPatientsAndDiseases,
 } from '../actions/patientActions'
 
 const PatientsByDisease = ({ history, match }) => {
@@ -20,7 +20,7 @@ const PatientsByDisease = ({ history, match }) => {
   )
   const { loading, error, patients } = patientListByDisease
 
-  const patientList = useSelector((state) => state.patientsAndDiseaseList)
+  const patientList = useSelector((state) => state.patientsAndDiseasesList)
   const {
     loading: loadingPatientsAndDiseases,
     error: errorPatientsAndDiseases,
@@ -28,10 +28,15 @@ const PatientsByDisease = ({ history, match }) => {
   } = patientList
 
   useEffect(() => {
-    dispatch(listPatientsByDisease(match.params.id)).then(() => {
-      dispatch(listPatientsAndDisease())
-    })
+    dispatch(listPatientsByDisease(match.params.id))
+    // .then(() => {
+    //   dispatch(listPatientsAndDiseases())
+    // })
   }, [dispatch, match])
+
+  useEffect(() => {
+    dispatch(listPatientsAndDiseases())
+  }, [dispatch])
 
   return (
     <>

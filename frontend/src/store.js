@@ -9,6 +9,7 @@ import {
   patientDeleteReducer,
   patientUpdateReducer,
   patientsAndDiseaseListReducer,
+  patientsAndDiseasesListReducer,
 } from './reducers/patientReducers'
 import {
   diseaseListReducer,
@@ -32,6 +33,7 @@ import {
   surveyPatientAssignmentReducer,
   surveyResponsesByDoctorReducer,
   surveyResponsesReducer,
+  surveyAssignedWithPatientReducer,
 } from './reducers/surveyReducers'
 
 import {
@@ -63,6 +65,7 @@ const reducer = combineReducers({
   patientDetail: patientReducer,
   patientByDiseaseList: patientByDiseaseListReducer,
   patientsAndDiseaseList: patientsAndDiseaseListReducer,
+  patientsAndDiseasesList: patientsAndDiseasesListReducer,
   patientCreate: patientCreateReducer,
   patientDelete: patientDeleteReducer,
   patientUpdate: patientUpdateReducer,
@@ -96,6 +99,7 @@ const reducer = combineReducers({
   responsesList: responsesListReducer,
   surveyTimeSlotList: surveyTimeSlotListReducer,
   updateTimeSlot: updateTimeSlotReducer,
+  surveyAssignedWithPatient: surveyAssignedWithPatientReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')

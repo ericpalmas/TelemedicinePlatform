@@ -24,6 +24,9 @@ import {
   PATIENT_CREATE_ASSIGNED_REQUEST,
   PATIENT_CREATE_ASSIGNED_SUCCESS,
   PATIENT_CREATE_ASSIGNED_FAIL,
+  PATIENT_AND_DISEASES_LIST_REQUEST,
+  PATIENT_AND_DISEASES_LIST_SUCCESS,
+  PATIENT_AND_DISEASES_LIST_FAIL,
 } from '../constants/patientConstants'
 
 export const patientListReducer = (state = { patients: [] }, action) => {
@@ -80,6 +83,23 @@ export const patientsAndDiseaseListReducer = (
     case PATIENT_AND_DISEASE_LIST_SUCCESS:
       return { loading: false, patients: action.payload }
     case PATIENT_AND_DISEASE_LIST_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+// get the list of patient and the relative diseases
+export const patientsAndDiseasesListReducer = (
+  state = { patients: [] },
+  action,
+) => {
+  switch (action.type) {
+    case PATIENT_AND_DISEASES_LIST_REQUEST:
+      return { loading: true, patients: [] }
+    case PATIENT_AND_DISEASES_LIST_SUCCESS:
+      return { loading: false, patients: action.payload }
+    case PATIENT_AND_DISEASES_LIST_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

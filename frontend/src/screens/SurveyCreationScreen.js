@@ -22,10 +22,16 @@ import Loader from '../components/Loader'
 import EditQuestionModal from '../modals/EditQuestionModal'
 
 import { listPatientsAndDisease } from '../actions/patientActions'
-import { surveyDetails, assignSurveys } from '../actions/surveyActions'
+import {
+  surveyDetails,
+  assignSurveys,
+  listSurveyAssignedWithPatients,
+} from '../actions/surveyActions'
 import { deleteQuestion } from '../actions/questionActions'
 
 import icons from '../icons.js'
+import { surveyAssignedWithPatientReducer } from '../reducers/surveyReducers'
+import { set } from 'mongoose'
 
 // Patient Table
 const columns = [
@@ -56,6 +62,15 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const { loading, error, patients } = patientList
 
+  // const surveyAssignedWithPatient = useSelector(
+  //   (state) => state.surveyAssignedWithPatient,
+  // )
+  // const {
+  //   loading: loadingAssignements,
+  //   error: errorAssignements,
+  //   patientsAssignements,
+  // } = surveyAssignedWithPatient
+
   var surveyDetail = useSelector((state) => state.survey)
   var { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
 
@@ -66,7 +81,19 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
     survey: currentId,
   } = currentSurvey
 
+  const assignSurveysToPatient = useSelector(
+    (state) => state.surveyPatientAssignment,
+  )
+  const {
+    loading: loadingAssignemtsToPatient,
+    error: errorAssignemtsToPatient,
+    assignments: assignmentsToPatients,
+    success,
+  } = assignSurveysToPatient
+
   const [surveyUploaded, setSurveyUploaded] = useState(false)
+  const [assignementUploaded, setAssignementSurveyUploaded] = useState(false)
+
   const [items, setItems] = useState([])
   const [hour, setHour] = useState(0)
   const [minutes, setMinutes] = useState(0)
@@ -74,9 +101,13 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const userLogin = useSelector((state) => state.doctorLogin)
   const { loading: loginLoading, error: loginError, userInfo } = userLogin
 
-  const [assignments, setAssignments] = React.useState(
-    Array(patients.length).fill(false),
-  )
+  // const [assignments, setAssignments] = React.useState(
+  //   Array(patients.length).fill(false),
+  // )
+
+  // (Array.from([1, 2, 3], x => x + x))
+
+  //const [assignments, setAssignments] = useState([])
 
   const handleSelectAssignments = (e, index) => {
     var values = [...assignments]
@@ -128,7 +159,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
   useEffect(() => {
     updateCUrrentSurvey()
-
     if (surv !== undefined) {
       dispatch(surveyDetails(surv.split('"')[1]))
         .then(() => {
@@ -138,11 +168,19 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
           setSurveyUploaded(false)
         })
     }
-
-    dispatch(listPatientsAndDisease())
   }, [dispatch, match, history, updateCUrrentSurvey, surv])
 
-  useEffect(() => {}, [dispatch, match, history, updateCUrrentSurvey, surv])
+  const [assignments, setAssignments] = useState([])
+
+  useEffect(() => {
+    if (surv !== undefined) dispatch(listPatientsAndDisease(surv.split('"')[1]))
+  }, [dispatch, surv])
+
+  useEffect(() => {
+    var values = [...assignments]
+    values = Array.from(patients, (x) => x.assigned)
+    setAssignments(values)
+  }, [patients])
 
   return (
     <div>
@@ -421,6 +459,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                 <th>Diseases</th>
               </tr>
             </thead>
+            {/* fare in modo che vengano checkati i pazienti  */}
             <tbody>
               {patients.map((patient, index) => (
                 <tr>
@@ -434,6 +473,8 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
                         checked={assignments[index]}
                         onChange={(e) => handleSelectAssignments(e, index)}
+
+                        //checked={patient.assigned}
                       ></Form.Check>
                     </Form.Group>
                   </td>
@@ -444,101 +485,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
               ))}
             </tbody>
           </Table>
-          {/* <br />
-          <br />
-          <h4> Aggiungi fascia oraria </h4>
-          <Button
-            className="ml-2 mr-2"
-            variant="light"
-            id="addRemoveButton"
-            onClick={removeAnswer}
-            inline
-          >
-            -
-          </Button>
-
-          <Button
-            className="ml-2 mr-2"
-            variant="light"
-            id="addRemoveButton"
-            onClick={addAnswer}
-            inline
-          >
-            +
-          </Button>
-          <br />
-          <br />
-          {items.length === 0 ? (
-            <p>nessuna fascia oraria inserita </p>
-          ) : (
-            <>
-              {items.map((item, index) => (
-                <>
-                  <Form inline>
-                    <InputGroup hasValidation>
-                      <Form.Control
-                        type="text"
-                        name="state"
-                        value={item.hour}
-                        required
-                        style={{ width: '4rem', alignItems: 'flex-start' }}
-                        //onChange={(e) => setHour(e.target.value)}
-                      />
-                      <Button
-                        className="ml-0 mr-0"
-                        variant="light"
-                        id="addRemoveButton"
-                        onClick={() => incrementHour(index)}
-                        inline
-                      >
-                        +
-                      </Button>
-                      <Button
-                        className="ml-0 mr-0"
-                        variant="light"
-                        id="addRemoveButton"
-                        onClick={() => decrementHour(index)}
-                        inline
-                      >
-                        -
-                      </Button>
-
-                      <Form.Control
-                        type="text"
-                        name="state"
-                        style={{ width: '4rem' }}
-                        value={item.minutes}
-                        required
-                      />
-                      <Button
-                        className="ml-0 mr-0"
-                        variant="light"
-                        id="addRemoveButton"
-                        onClick={() => incrementMinutes(index)}
-                        inline
-                      >
-                        +
-                      </Button>
-                      <Button
-                        className="ml-0 mr-0"
-                        variant="light"
-                        id="addRemoveButton"
-                        onClick={() => decrementMinutes(index)}
-                        inline
-                      >
-                        -
-                      </Button>
-                      <br />
-                      <br />
-                      <Form.Control.Feedback type="invalid">
-                        Write first option
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form>
-                </>
-              ))}
-            </>
-          )} */}
 
           <br />
           <br />

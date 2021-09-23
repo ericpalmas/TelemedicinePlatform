@@ -21,9 +21,9 @@ import {
   PATIENT_UPDATE_REQUEST,
   PATIENT_UPDATE_SUCCESS,
   PATIENT_UPDATE_FAIL,
-  PATIENT_CREATE_ASSIGNED_REQUEST,
-  PATIENT_CREATE_ASSIGNED_SUCCESS,
-  PATIENT_CREATE_ASSIGNED_FAIL,
+  PATIENT_AND_DISEASES_LIST_REQUEST,
+  PATIENT_AND_DISEASES_LIST_SUCCESS,
+  PATIENT_AND_DISEASES_LIST_FAIL,
 } from '../constants/patientConstants'
 
 export const listPatients = () => async (dispatch) => {
@@ -89,11 +89,32 @@ export const listPatientsByDisease = (id) => async (dispatch) => {
   }
 }
 
-export const listPatientsAndDisease = () => async (dispatch) => {
+export const listPatientsAndDiseases = () => async (dispatch) => {
+  try {
+    dispatch({ type: PATIENT_AND_DISEASES_LIST_REQUEST })
+
+    const { data } = await axios.get('/api/patientsAndDiseases')
+
+    dispatch({
+      type: PATIENT_AND_DISEASES_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PATIENT_AND_DISEASES_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const listPatientsAndDisease = (id) => async (dispatch) => {
   try {
     dispatch({ type: PATIENT_AND_DISEASE_LIST_REQUEST })
 
-    const { data } = await axios.get('/api/patientsAndDiseases')
+    const { data } = await axios.get(`/api/patientsAndDiseases/${id}`)
 
     dispatch({
       type: PATIENT_AND_DISEASE_LIST_SUCCESS,
@@ -181,26 +202,3 @@ export const updatePatient = (patient) => async (dispatch) => {
     })
   }
 }
-
-// export const createAssignedPatient = (patient) => async (dispatch) => {
-//   try {
-//     dispatch({
-//       type: PATIENT_CREATE_ASSIGNED_REQUEST,
-//     })
-
-//     const { data } = await axios.post(`/api/patients/assignedToDoctor`, patient)
-
-//     dispatch({
-//       type: PATIENT_CREATE_ASSIGNED_SUCCESS,
-//       payload: data,
-//     })
-//   } catch (error) {
-//     dispatch({
-//       type: PATIENT_CREATE_ASSIGNED_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     })
-//   }
-// }

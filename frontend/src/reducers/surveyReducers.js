@@ -22,6 +22,9 @@ import {
   SURVEY_ASSIGNED_REQUEST,
   SURVEY_ASSIGNED_SUCCESS,
   SURVEY_ASSIGNED_FAIL,
+  SURVEY_ASSIGNED_WITH_PATIENT_REQUEST,
+  SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS,
+  SURVEY_ASSIGNED_WITH_PATIENT_FAIL,
 } from '../constants/surveyConstants'
 
 export const surveyTemplateListReducer = (state = { surveys: [] }, action) => {
@@ -157,6 +160,22 @@ export const surveyResponsesReducer = (
     case SURVEY_ASSIGNED_SUCCESS:
       return { loading: false, surveysResponses: action.payload }
     case SURVEY_ASSIGNED_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const surveyAssignedWithPatientReducer = (
+  state = { surveyAssignments: [] },
+  action,
+) => {
+  switch (action.type) {
+    case SURVEY_ASSIGNED_WITH_PATIENT_REQUEST:
+      return { loading: true, surveyAssignments: [] }
+    case SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS:
+      return { loading: false, surveyAssignments: action.payload }
+    case SURVEY_ASSIGNED_WITH_PATIENT_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state
