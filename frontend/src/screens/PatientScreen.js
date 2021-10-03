@@ -124,91 +124,104 @@ const PatientScreen = ({ history, match }) => {
                 <>
                   {responses.map((response) => (
                     <>
-                      <Row>
-                        <Accordion
-                          defaultActiveKey="0"
-                          style={{
-                            overflow: 'hidden',
-                            position: 'relative',
-                            width: '60%',
-                          }}
-                        >
-                          <Card>
-                            <Card.Header>
-                              <Accordion.Toggle
-                                as={Button}
-                                variant="link"
-                                eventKey="1"
-                              >
-                                {response.survey.map((surv) => (
-                                  <>
-                                    <h4>
-                                      {surv.name} - &nbsp;
-                                      {response._id[0].updatedAt.substring(
-                                        12,
-                                        16,
-                                      )}{' '}
-                                      - &nbsp;
-                                      {response._id[0].updatedAt.substring(
-                                        0,
-                                        10,
-                                      )}
-                                    </h4>
-                                  </>
-                                ))}
-
-                                <h4></h4>
-                              </Accordion.Toggle>
-                            </Card.Header>
-                            {response.surveyResponses.map((survey) => (
-                              <>
-                                {survey.question.map((question) => (
-                                  <>
-                                    <Accordion.Collapse eventKey="1">
-                                      <Card.Body>
-                                        <h4>{question.text}</h4>
-
-                                        {question.slider ? (
-                                          <p> {survey.answer.answer}</p>
-                                        ) : question.trueFalse ? (
-                                          <p>
-                                            {' '}
-                                            {survey.answer.answer
-                                              ? 'true'
-                                              : 'false'}
-                                          </p>
-                                        ) : question.incrementDecrement ? (
-                                          <p> {survey.answer.answer}</p>
-                                        ) : question.insertTime ? (
-                                          <p> {survey.answer.answer}</p>
-                                        ) : question.radio ? (
-                                          <p> {survey.answer.answer}</p>
-                                        ) : question.check ? (
-                                          <>
-                                            {survey.answer.answers.map(
-                                              (val, index) => (
-                                                <p>
-                                                  {' '}
-                                                  {index + 1}) &nbsp;{' '}
-                                                  {val.answer}{' '}
-                                                </p>
-                                              ),
-                                            )}
-                                          </>
-                                        ) : question.open ? (
-                                          <p> {survey.answer.answer}</p>
+                      {response._id[0] ? (
+                        <>
+                          <Row>
+                            <Accordion
+                              defaultActiveKey="0"
+                              style={{
+                                overflow: 'hidden',
+                                position: 'relative',
+                                width: '60%',
+                              }}
+                            >
+                              <Card>
+                                <Card.Header>
+                                  <Accordion.Toggle
+                                    as={Button}
+                                    variant="link"
+                                    eventKey="1"
+                                  >
+                                    {response.survey.map((surv) => (
+                                      <>
+                                        {surv ? surv.name : <></>}
+                                        {surv ? <> - &nbsp;</> : <></>}
+                                        {response._id[0] ? (
+                                          response._id[0].updatedAt.substring(
+                                            12,
+                                            16,
+                                          )
                                         ) : (
-                                          <> </>
+                                          <></>
                                         )}
-                                      </Card.Body>
-                                    </Accordion.Collapse>
+                                        {surv ? <> - &nbsp;</> : <></>}
+                                        {response._id[0] ? (
+                                          response._id[0].updatedAt.substring(
+                                            0,
+                                            10,
+                                          )
+                                        ) : (
+                                          <></>
+                                        )}
+                                      </>
+                                    ))}
+
+                                    <h4></h4>
+                                  </Accordion.Toggle>
+                                </Card.Header>
+                                {response.surveyResponses.map((survey) => (
+                                  <>
+                                    {survey.question.map((question) => (
+                                      <>
+                                        <Accordion.Collapse eventKey="1">
+                                          <Card.Body>
+                                            <h4>{question.text}</h4>
+
+                                            {question.slider ? (
+                                              <p> {survey.answer.answer}</p>
+                                            ) : question.trueFalse ? (
+                                              <p>
+                                                {' '}
+                                                {survey.answer.answer
+                                                  ? 'true'
+                                                  : 'false'}
+                                              </p>
+                                            ) : question.incrementDecrement ? (
+                                              <p> {survey.answer.answer}</p>
+                                            ) : question.insertTime ? (
+                                              <p> {survey.answer.answer}</p>
+                                            ) : question.radio ? (
+                                              <p> {survey.answer.answer}</p>
+                                            ) : question.check ? (
+                                              <>
+                                                {survey.answer.answers.map(
+                                                  (val, index) => (
+                                                    <p>
+                                                      {' '}
+                                                      {index + 1}) &nbsp;{' '}
+                                                      {val.answer}{' '}
+                                                    </p>
+                                                  ),
+                                                )}
+                                              </>
+                                            ) : question.open ? (
+                                              <p> {survey.answer.answer}</p>
+                                            ) : (
+                                              <> </>
+                                            )}
+                                          </Card.Body>
+                                        </Accordion.Collapse>
+                                      </>
+                                    ))}
                                   </>
                                 ))}
-                              </>
-                            ))}
-                          </Card>
-                        </Accordion>
-                      </Row>
+                              </Card>
+                            </Accordion>
+                          </Row>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </>
                   ))}
                 </>

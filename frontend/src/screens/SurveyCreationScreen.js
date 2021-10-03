@@ -30,8 +30,6 @@ import {
 import { deleteQuestion } from '../actions/questionActions'
 
 import icons from '../icons.js'
-import { surveyAssignedWithPatientReducer } from '../reducers/surveyReducers'
-import { set } from 'mongoose'
 
 // Patient Table
 const columns = [
@@ -60,16 +58,20 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   var surv = localStorage.getItem('surveyId')
 
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
-  const { loading, error, patients } = patientList
+  const {
+    loading: loadingPatients,
+    error: errorPatients,
+    patients,
+  } = patientList
 
-  // const surveyAssignedWithPatient = useSelector(
-  //   (state) => state.surveyAssignedWithPatient,
-  // )
-  // const {
-  //   loading: loadingAssignements,
-  //   error: errorAssignements,
-  //   patientsAssignements,
-  // } = surveyAssignedWithPatient
+  const surveyAssignedWithPatient = useSelector(
+    (state) => state.surveyAssignedWithPatient,
+  )
+  const {
+    loading: loadingAssignements,
+    error: errorAssignements,
+    patientsAssignements,
+  } = surveyAssignedWithPatient
 
   var surveyDetail = useSelector((state) => state.survey)
   var { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
@@ -101,14 +103,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const userLogin = useSelector((state) => state.doctorLogin)
   const { loading: loginLoading, error: loginError, userInfo } = userLogin
 
-  // const [assignments, setAssignments] = React.useState(
-  //   Array(patients.length).fill(false),
-  // )
-
-  // (Array.from([1, 2, 3], x => x + x))
-
-  //const [assignments, setAssignments] = useState([])
-
   const handleSelectAssignments = (e, index) => {
     var values = [...assignments]
     values[index] = e.target.checked
@@ -124,24 +118,29 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   }
 
   const submitSurvey = () => {
-    var selectedPatients = []
+    var result = {
+      selectedPatients: [],
+      surveyId: surv.split('"')[1],
+      doctorId: userInfo._id,
+    }
+    //var selectedPatients = []
     for (var i = 0; i < assignments.length; i++) {
       if (assignments[i])
-        selectedPatients.push({
+        result.selectedPatients.push({
           name: patients[i].name,
           patientId: patients[i]._id,
-          doctorId: userInfo._id,
-          surveyId: surv.split('"')[1],
+          // doctorId: userInfo._id,
+          // surveyId: surv.split('"')[1],
         })
     }
     if (
       window.confirm(
-        `Are you sure to send surveys to ${selectedPatients.map(
+        `Are you sure to send surveys to ${result.selectedPatients.map(
           (e) => ' ' + e.name,
         )}`,
       )
     ) {
-      dispatch(assignSurveys(selectedPatients))
+      dispatch(assignSurveys(result))
     }
   }
 
@@ -173,13 +172,17 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const [assignments, setAssignments] = useState([])
 
   useEffect(() => {
-    if (surv !== undefined) dispatch(listPatientsAndDisease(surv.split('"')[1]))
-  }, [dispatch, surv])
+    if (surv !== undefined) {
+      dispatch(listPatientsAndDisease(surv.split('"')[1]))
+    }
+  }, [dispatch, surv, currentId])
 
   useEffect(() => {
-    var values = [...assignments]
-    values = Array.from(patients, (x) => x.assigned)
-    setAssignments(values)
+    if (patients) {
+      var values = [...assignments]
+      values = Array.from(patients, (x) => x.assigned)
+      setAssignments(values)
+    }
   }, [patients])
 
   return (
@@ -221,7 +224,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                             float: 'right',
                             display: 'inline-block',
                           }}
-                          // variant="danger"
                           variant="light"
                           className="btn-sm"
                           onClick={() => deleteHandler(q.question._id)}
@@ -459,30 +461,35 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                 <th>Diseases</th>
               </tr>
             </thead>
-            {/* fare in modo che vengano checkati i pazienti  */}
             <tbody>
-              {patients.map((patient, index) => (
-                <tr>
-                  <td>
-                    <Form.Group controlId="isadmin">
-                      <Form.Check
-                        type="checkbox"
-                        // da sistemare
-                        // checked={isAdmin}
-                        // onChange={(e) => setIsAdmin(e.target.checked)}
-
-                        checked={assignments[index]}
-                        onChange={(e) => handleSelectAssignments(e, index)}
-
-                        //checked={patient.assigned}
-                      ></Form.Check>
-                    </Form.Group>
-                  </td>
-                  <td>{patient.name}</td>
-                  <td>{patient.surname}</td>
-                  <td>{patient.disease}</td>
-                </tr>
-              ))}
+              {loadingPatients ? (
+                <Loader />
+              ) : errorPatients ? (
+                <Message variant="danger">{errorPatients}</Message>
+              ) : (
+                <>
+                  {patients.map((patient, index) => (
+                    <tr>
+                      <td>
+                        <Form.Group controlId="isadmin">
+                          <Form.Check
+                            type="checkbox"
+                            checked={
+                              assignments.length !== 0
+                                ? assignments[index]
+                                : false
+                            }
+                            onChange={(e) => handleSelectAssignments(e, index)}
+                          ></Form.Check>
+                        </Form.Group>
+                      </td>
+                      <td>{patient.name}</td>
+                      <td>{patient.surname}</td>
+                      <td>{patient.disease}</td>
+                    </tr>
+                  ))}
+                </>
+              )}
             </tbody>
           </Table>
 

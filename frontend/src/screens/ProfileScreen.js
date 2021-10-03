@@ -193,7 +193,7 @@ const ProfileScreen = ({ location, history }) => {
                   )}
 
                   <td>
-                    {response.response ? (
+                    {response.completed ? (
                       <i
                         className="fas fa-check"
                         style={{ color: 'green' }}

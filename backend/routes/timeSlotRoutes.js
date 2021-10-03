@@ -26,7 +26,6 @@ router.put(
   asyncHandler(async (req, res) => {
     const { survey, items } = req.body
 
-    console.log(req.body)
     const deletedTimeSlots = await TimeSlot.deleteMany({ survey: survey })
 
     if (deletedTimeSlots) {
@@ -38,19 +37,10 @@ router.put(
           endHour: items[i].endHour,
           endMinutes: items[i].endMinutes,
         })
-        console.log(timeSlot)
         const res = await timeSlot.save()
-        console.log(res)
       }
       res.status(201)
     }
-
-    // console.log(survey)
-    // console.log(surveyTimeSlots)
-    // console.log(req.body)
-
-    //const timeSlotAdded = await timeSlot.save()
-    //res.status(201).json(timeSlotAdded)
   }),
 )
 

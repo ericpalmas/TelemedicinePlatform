@@ -42,19 +42,6 @@ router.post(
   }),
 )
 
-// @desc Fetch all sensors
-// @route GET /api/sensors
-// @access Public
-// router.get(
-//   '/:id',
-//   asyncHandler(async (req, res) => {
-//     const surveyTimeSlots = await TimeSlot.find({
-//       survey: req.params.id,
-//     })
-//     res.json(surveyTimeSlots)
-//   }),
-// )
-
 // @desc Fetch single survey
 // @route GET /api/surveys/:id
 // @access Public
@@ -112,13 +99,19 @@ router.route('/assignment').post(
   protect,
   asyncHandler(async (req, res) => {
     const { assignments } = req.body
-    if (assignments) {
+
+    const oldSurveysAssigned = await SurveyResponse.deleteMany({
+      survey: assignments.surveyId,
+      completed: false,
+    })
+
+    if (assignments.selectedPatients) {
       const currentDate = new Date()
-      for (var i = 0; i < assignments.length; i++) {
+      for (var i = 0; i < assignments.selectedPatients.length; i++) {
         const surveyResponse = new SurveyResponse({
-          patient: assignments[i].patientId,
-          doctor: assignments[i].doctorId,
-          survey: assignments[i].surveyId,
+          patient: assignments.selectedPatients[i].patientId,
+          doctor: assignments.doctorId,
+          survey: assignments.surveyId,
           completed: false,
           createdAt: currentDate,
           updatedAt: currentDate,
@@ -126,7 +119,7 @@ router.route('/assignment').post(
 
         const result = await surveyResponse.save()
       }
-      res.status(201).json(result)
+      res.status(201)
     } else {
       res.status(404)
       throw new Error('nothing passed')
@@ -140,39 +133,6 @@ router.route('/assignment').post(
 router.get(
   '/assignedSurveys/patients/:id',
   asyncHandler(async (req, res) => {
-    // var patientIds = []
-    // const patientWithSurveyAssigned = await SurveyResponse.find({
-    //   survey: req.params.id,
-    // }).distinct('patient')
-
-    // for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
-    //   patientIds.push(patientWithSurveyAssigned[i] + '')
-    // }
-
-    // var result = []
-    // var patients = await Patient.find()
-
-    // for (var i = 0; i < patients.length; i++) {
-    //   if (patientIds.includes(patients[i]._id + '')) {
-    //     result.push({
-    //       _id: patients[i]._id,
-    //       assigned: true,
-    //     })
-    //   } else {
-    //     result.push({
-    //       _id: patients[i]._id,
-    //       assigned: false,
-    //     })
-    //   }
-    // }
-
-    // if (result) {
-    //   res.json(result)
-    // } else {
-    //   res.status(404)
-    //   throw new Error('Survey not found')
-    // }
-
     var patientIds = []
     const patientWithSurveyAssigned = await SurveyResponse.find({
       survey: req.params.id,

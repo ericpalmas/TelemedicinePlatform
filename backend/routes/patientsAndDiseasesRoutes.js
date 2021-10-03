@@ -11,7 +11,7 @@ import SurveyResponse from '../models/surveyResponseModel.js'
 router.get(
   '/:id',
   asyncHandler(async (req, res) => {
-    console.log(req.params.id)
+    var patientIds = []
 
     const patientWithSurveyAssigned = await SurveyResponse.find({
       survey: req.params.id,
@@ -19,8 +19,6 @@ router.get(
     for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
       patientIds.push(patientWithSurveyAssigned[i] + '')
     }
-
-    var patientIds = []
 
     const ress = await PatientDisease.find({})
       .select('patient disease')

@@ -10,7 +10,9 @@
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -d"
+    "data:destroy": "node backend/seeder -d",
+    "test": "jest",
+    "eject": "react-scripts eject"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
   },
   "homepage": "https://github.com/ericpalmas/TelemedicinePlatform#readme",
   "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.14.5",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
@@ -30,10 +33,16 @@
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.2",
+    "react-scripts": "^4.0.3",
     "react-select": "^4.3.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
+    "@testing-library/cypress": "^8.0.1",
     "concurrently": "^6.0.0",
+    "cypress": "^8.5.0",
     "nodemon": "^2.0.7"
   }
 }
