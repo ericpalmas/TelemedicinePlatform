@@ -20,6 +20,7 @@ import Patient from '../components/Patient'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import EditQuestionModal from '../modals/EditQuestionModal'
+import EditSurveyModal from '../modals/EditSurveyModal'
 
 import { listPatientsAndDisease } from '../actions/patientActions'
 import {
@@ -250,6 +251,10 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
                               >
                                 <MdIcons.MdDelete size={30} />
                               </Button>
+                              <EditSurveyModal
+                                surveyName={survey.survey.name}
+                                surveyId={survey.survey._id}
+                              />
                             </Col>
                           </Row>
                         </>

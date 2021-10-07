@@ -28,6 +28,9 @@ import {
   SURVEY_DELETE_REQUEST,
   SURVEY_DELETE_SUCCESS,
   SURVEY_DELETE_FAIL,
+  SURVEY_UPDATE_NAME_REQUEST,
+  SURVEY_UPDATE_NAME_SUCCESS,
+  SURVEY_UPDATE_NAME_FAIL,
 } from '../constants/surveyConstants'
 
 export const listSurveyTemplates = () => async (dispatch) => {
@@ -295,6 +298,34 @@ export const deleteSurvey = (id) => async (dispatch) => {
 
     dispatch({
       type: SURVEY_DELETE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const updateNameSurvey = (parameters) => async (dispatch) => {
+  console.log(parameters)
+  try {
+    dispatch({
+      type: SURVEY_UPDATE_NAME_REQUEST,
+    })
+    const { data } = await axios.put(
+      `/api/surveys/updateName/${parameters.id}`,
+      { parameters }
+    )
+
+    dispatch({
+      type: SURVEY_UPDATE_NAME_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+
+    dispatch({
+      type: SURVEY_UPDATE_NAME_FAIL,
       payload: message,
     })
   }

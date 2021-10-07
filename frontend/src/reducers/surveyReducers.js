@@ -28,6 +28,9 @@ import {
   SURVEY_DELETE_REQUEST,
   SURVEY_DELETE_SUCCESS,
   SURVEY_DELETE_FAIL,
+  SURVEY_UPDATE_NAME_REQUEST,
+  SURVEY_UPDATE_NAME_SUCCESS,
+  SURVEY_UPDATE_NAME_FAIL,
 } from '../constants/surveyConstants'
 
 export const surveyTemplateListReducer = (state = { surveys: [] }, action) => {
@@ -198,6 +201,24 @@ export const surveyDeleteReducer = (state = {}, action) => {
         success: true,
       }
     case SURVEY_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const surveyUpdateNameReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SURVEY_UPDATE_NAME_REQUEST:
+      return {
+        loading: true,
+      }
+    case SURVEY_UPDATE_NAME_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case SURVEY_UPDATE_NAME_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

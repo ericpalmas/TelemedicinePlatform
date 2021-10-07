@@ -25,7 +25,6 @@ router.put(
   '/',
   asyncHandler(async (req, res) => {
     const { survey, items } = req.body
-    console.log(items)
     const deletedTimeSlots = await TimeSlot.deleteMany({ survey: survey })
 
     if (deletedTimeSlots) {

@@ -268,8 +268,6 @@ const AddSurveyTIme = () => {
       }
     }
 
-    //console.log(validated)
-
     if (!findError) {
       const result = {
         survey: currentSurveyId,
@@ -277,7 +275,6 @@ const AddSurveyTIme = () => {
       }
       dispatch(updateTimeSlots(result))
     } else {
-      console.log('DATI NON VALIDI')
       e.preventDefault()
     }
   }
@@ -467,10 +464,6 @@ const AddSurveyTIme = () => {
 
                           <br />
                           <br />
-                          {/* <Form.Control.Feedback type='invalid'>
-                              Write first option
-                            </Form.Control.Feedback> */}
-                          {/* </InputGroup> */}
                         </Form>
                       </>
                     ))

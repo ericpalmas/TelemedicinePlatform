@@ -164,4 +164,18 @@ router.put(
   })
 )
 
+router.put(
+  '/updateName/:id',
+  asyncHandler(async (req, res) => {
+    const { parameters } = req.body
+    const filter = { _id: req.params.id }
+    const result = await Survey.updateOne(filter, { name: parameters.name })
+    if (result) {
+      res.json(result)
+    } else {
+      res.status(404)
+    }
+  })
+)
+
 export default router

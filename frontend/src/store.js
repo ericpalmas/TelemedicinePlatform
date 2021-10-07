@@ -35,6 +35,7 @@ import {
   surveyResponsesReducer,
   surveyAssignedWithPatientReducer,
   surveyDeleteReducer,
+  surveyUpdateNameReducer,
 } from './reducers/surveyReducers'
 
 import {
@@ -102,6 +103,7 @@ const reducer = combineReducers({
   updateTimeSlot: updateTimeSlotReducer,
   surveyAssignedWithPatient: surveyAssignedWithPatientReducer,
   surveyDelete: surveyDeleteReducer,
+  surveyUpdateName: surveyUpdateNameReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
