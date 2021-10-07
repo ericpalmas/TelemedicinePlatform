@@ -137,7 +137,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
       surveyId: surv.split('"')[1],
       doctorId: userInfo._id,
     }
-    //var selectedPatients = []
+
     for (var i = 0; i < assignments.length; i++) {
       if (assignments[i])
         result.selectedPatients.push({

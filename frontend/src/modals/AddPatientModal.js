@@ -14,7 +14,6 @@ import { listDiseases } from '../actions/diseaseActions'
 const AddPatientModal = () => {
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
-  //const [birthDate, setBirthDate] = useState('')
   const [age, setAge] = useState('')
   const [therapy, setTherapy] = useState('')
 
@@ -116,12 +115,12 @@ const AddPatientModal = () => {
   return (
     <>
       <Button
-        variant="primary"
-        size="lg"
+        variant='primary'
+        size='lg'
         style={{ float: 'right' }}
         onClick={handleShow}
       >
-        <i className="fas fa-plus mr-2"></i>
+        <i className='fas fa-plus mr-2'></i>
         New patient
       </Button>
 
@@ -131,90 +130,90 @@ const AddPatientModal = () => {
             <Modal.Title>New patient</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group controlId="nameValidation">
-              <Form.Label className="mt-2">
+            <Form.Group controlId='nameValidation'>
+              <Form.Label className='mt-2'>
                 <h5>Name</h5>
               </Form.Label>
               <InputGroup hasValidation>
                 <Form.Control
-                  type="name"
-                  placeholder="Enter name"
+                  type='name'
+                  placeholder='Enter name'
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback type='invalid'>
                   Please choose a name.
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            <Form.Group controlId="surnameValidation">
-              <Form.Label className="mt-2">
+            <Form.Group controlId='surnameValidation'>
+              <Form.Label className='mt-2'>
                 <h5>Surname</h5>
               </Form.Label>
               <InputGroup hasValidation>
                 <Form.Control
-                  type="surname"
-                  placeholder="Enter surname"
+                  type='surname'
+                  placeholder='Enter surname'
                   value={surname}
                   required
                   onChange={(e) => setSurname(e.target.value)}
                 />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback type='invalid'>
                   Please choose a surname.
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            <Form.Group controlId="surnameValidation">
-              <Form.Label className="mt-2">
+            <Form.Group controlId='surnameValidation'>
+              <Form.Label className='mt-2'>
                 <h5>Data di nascita</h5>
               </Form.Label>
               <InputGroup hasValidation>
                 <Form.Control
-                  type="date"
+                  type='date'
                   required
                   // value={birthDate}
                   // onChange={(e) => setBirthDate(e.target.value)}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                 />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback type='invalid'>
                   Please write date of birth.
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            <Form.Label className="mt-2">
+            <Form.Label className='mt-2'>
               <h5>Therapy</h5>
             </Form.Label>
             <Form.Control
-              as="textarea"
+              as='textarea'
               rows={3}
-              type="therapy"
-              placeholder="Enter therapy"
+              type='therapy'
+              placeholder='Enter therapy'
               value={therapy}
               onChange={(e) => setTherapy(e.target.value)}
             />
 
-            <Form.Label className="mt-2">
+            <Form.Label className='mt-2'>
               <h5>Select diseases</h5>
             </Form.Label>
 
             <Button
-              className="ml-2 mr-2"
-              variant="light"
-              id="addRemoveButton"
+              className='ml-2 mr-2'
+              variant='light'
+              id='addRemoveButton'
               onClick={handleRemoveLastFields}
-              inline="true"
+              inline='true'
             >
               -
             </Button>
 
             <Button
-              className="ml-2 mr-2"
-              variant="light"
-              id="addRemoveButton"
+              className='ml-2 mr-2'
+              variant='light'
+              id='addRemoveButton'
               onClick={handleAddFields}
-              inline="true"
+              inline='true'
             >
               +
             </Button>
@@ -222,13 +221,13 @@ const AddPatientModal = () => {
             {loading ? (
               <Loader />
             ) : error ? (
-              <Message variant="danger">{error}</Message>
+              <Message variant='danger'>{error}</Message>
             ) : (
               <>
                 {items.map((item, index) => (
                   // <Form.Group>
                   <Form.Control
-                    as="select"
+                    as='select'
                     onChange={(event) => handleInputChange(index, event)}
                   >
                     {diseases.map((d) => (
@@ -243,11 +242,11 @@ const AddPatientModal = () => {
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant='secondary' onClick={handleClose}>
               Close
             </Button>
 
-            <Button variant="primary" type="submit">
+            <Button variant='primary' type='submit'>
               Save Changes
             </Button>
           </Modal.Footer>

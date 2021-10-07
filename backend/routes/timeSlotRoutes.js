@@ -15,7 +15,7 @@ router.get(
       survey: req.params.id,
     })
     res.json(surveyTimeSlots)
-  }),
+  })
 )
 
 // @desc Add new sensor
@@ -25,7 +25,7 @@ router.put(
   '/',
   asyncHandler(async (req, res) => {
     const { survey, items } = req.body
-
+    console.log(items)
     const deletedTimeSlots = await TimeSlot.deleteMany({ survey: survey })
 
     if (deletedTimeSlots) {
@@ -41,7 +41,7 @@ router.put(
       }
       res.status(201)
     }
-  }),
+  })
 )
 
 export default router
