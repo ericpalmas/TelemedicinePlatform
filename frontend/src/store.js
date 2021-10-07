@@ -34,6 +34,7 @@ import {
   surveyResponsesByDoctorReducer,
   surveyResponsesReducer,
   surveyAssignedWithPatientReducer,
+  surveyDeleteReducer,
 } from './reducers/surveyReducers'
 
 import {
@@ -100,6 +101,7 @@ const reducer = combineReducers({
   surveyTimeSlotList: surveyTimeSlotListReducer,
   updateTimeSlot: updateTimeSlotReducer,
   surveyAssignedWithPatient: surveyAssignedWithPatientReducer,
+  surveyDelete: surveyDeleteReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
@@ -120,7 +122,7 @@ const middleware = [thunk]
 const store = createStore(
   reducer,
   initialState,
-  composeWithDevTools(applyMiddleware(...middleware)),
+  composeWithDevTools(applyMiddleware(...middleware))
 )
 
 export default store

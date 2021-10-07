@@ -7,6 +7,7 @@ import { IconContext } from 'react-icons/lib'
 import AddQuestionModal from '../modals/AddQuestionModal'
 import AddSurveyModal from '../modals/AddSurveyModal'
 
+import * as MdIcons from 'react-icons/md'
 import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
@@ -42,26 +43,20 @@ const Sidebar = () => {
     dispatch(listSurveyTemplates())
   }, [dispatch])
 
-  // const uploadSurvey = (id) => {
-  //   dispatch(saveSurveyId(id)).then(() => {
-  //     dispatch(surveyDetails(id))
-  //   })
-  // }
-
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
-        <nav id="sidebarNav" sidebar={true}>
-          <div id="sidebarWrap">
-            <div id="navIcon" to="#"></div>
+        <nav id='sidebarNav' sidebar={true}>
+          <div id='sidebarWrap'>
+            <div id='navIcon' to='#'></div>
             <div
-              id="sidebarLink"
+              id='sidebarLink'
               onClick={showSubnav}
               style={{ justifyContent: 'space-between' }}
             >
               <div>
                 <IoIcons.IoIosPaper />
-                <span id="sidebarLabel"> Surveys</span>
+                <span id='sidebarLabel'> Surveys</span>
               </div>
               <div>
                 {subnav ? (
@@ -75,18 +70,28 @@ const Sidebar = () => {
             {subnav ? (
               <>
                 {surveys.map((survey) => (
-                  <div id="dropdownLink">
-                    <Nav.Link>
-                      <IoIcons.IoIosPaper />
-                      <span
-                        id="sidebarLabel"
-                        style={{ color: '#fff' }}
-                        onClick={() => dispatch(currentSurvey(survey._id))}
-                      >
-                        {survey.name}
-                      </span>
-                    </Nav.Link>
-                  </div>
+                  <>
+                    {survey.deleted ? (
+                      <></>
+                    ) : (
+                      <>
+                        <div id='dropdownLink'>
+                          <Nav.Link>
+                            <IoIcons.IoIosPaper />
+                            <span
+                              id='sidebarLabel'
+                              style={{ color: '#fff' }}
+                              onClick={() =>
+                                dispatch(currentSurvey(survey._id))
+                              }
+                            >
+                              {survey.name}
+                            </span>
+                          </Nav.Link>
+                        </div>
+                      </>
+                    )}
+                  </>
                 ))}
               </>
             ) : (
@@ -94,30 +99,30 @@ const Sidebar = () => {
             )}
 
             {/* Normal menu item */}
-            <id id="sidebarLink">
+            <id id='sidebarLink'>
               <div>
                 <IoIcons.IoIosPaper />
                 <AddSurveyModal />
               </div>
             </id>
 
-            <div id="sidebarLink">
+            <div id='sidebarLink'>
               <IoIcons.IoMdAddCircle />
               <AddQuestionModal />
             </div>
 
-            <div id="sidebarLink">
+            <div id='sidebarLink'>
               <BiIcons.BiTime />
               <AddSurveyTIme />
             </div>
 
             {/* Normal menu item */}
-            <id id="sidebarLink">
+            {/* <id id="sidebarLink">
               <div>
                 <VscIcons.VscPreview />
                 <span id="sidebarLabel"> Preview</span>
               </div>
-            </id>
+            </id> */}
           </div>
         </nav>
       </IconContext.Provider>

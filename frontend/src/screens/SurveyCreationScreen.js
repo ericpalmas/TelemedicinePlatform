@@ -26,6 +26,7 @@ import {
   surveyDetails,
   assignSurveys,
   listSurveyAssignedWithPatients,
+  deleteSurvey,
 } from '../actions/surveyActions'
 import { deleteQuestion } from '../actions/questionActions'
 
@@ -65,7 +66,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   } = patientList
 
   const surveyAssignedWithPatient = useSelector(
-    (state) => state.surveyAssignedWithPatient,
+    (state) => state.surveyAssignedWithPatient
   )
   const {
     loading: loadingAssignements,
@@ -84,7 +85,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   } = currentSurvey
 
   const assignSurveysToPatient = useSelector(
-    (state) => state.surveyPatientAssignment,
+    (state) => state.surveyPatientAssignment
   )
   const {
     loading: loadingAssignemtsToPatient,
@@ -103,6 +104,13 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const userLogin = useSelector((state) => state.doctorLogin)
   const { loading: loginLoading, error: loginError, userInfo } = userLogin
 
+  const surveyDelete = useSelector((state) => state.surveyDelete)
+  const {
+    loading: loadingSurveyDelete,
+    error: errorSurveyDelete,
+    success: successSurveyDelete,
+  } = surveyDelete
+
   const handleSelectAssignments = (e, index) => {
     var values = [...assignments]
     values[index] = e.target.checked
@@ -114,6 +122,12 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
       dispatch(deleteQuestion(id)).then(() => {
         dispatch(surveyDetails(surv.split('"')[1]))
       })
+    }
+  }
+
+  const deleteSurveyHandler = (id) => {
+    if (window.confirm('Are you sure ' + id)) {
+      dispatch(deleteSurvey(id))
     }
   }
 
@@ -129,15 +143,13 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
         result.selectedPatients.push({
           name: patients[i].name,
           patientId: patients[i]._id,
-          // doctorId: userInfo._id,
-          // surveyId: surv.split('"')[1],
         })
     }
     if (
       window.confirm(
         `Are you sure to send surveys to ${result.selectedPatients.map(
-          (e) => ' ' + e.name,
-        )}`,
+          (e) => ' ' + e.name
+        )}`
       )
     ) {
       dispatch(assignSurveys(result))
@@ -198,253 +210,288 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
             {loadingSurvey ? (
               <Loader />
             ) : errorSurvey ? (
-              <Message variant="danger">{errorSurvey}</Message>
+              <Message variant='danger'>{errorSurvey}</Message>
             ) : (
-              <Col
-                md={9}
-                style={{
-                  borderRight: 'solid 1px grey',
-                  borderLeft: 'solid 1px grey',
-                }}
-              >
-                {survey.survey !== null ? (
-                  <h1 className="pl-3">{survey.survey.name} Survey</h1>
+              <>
+                {survey.survey.deleted ? (
+                  <>
+                    <Col md={9}>
+                      <h3>The survey was deleted </h3>
+                    </Col>
+                  </>
                 ) : (
-                  <h2>Caricare un documento o crearne uno nuovo</h2>
+                  <>
+                    <Col
+                      md={9}
+                      style={{
+                        borderRight: 'solid 1px grey',
+                        borderLeft: 'solid 1px grey',
+                      }}
+                    >
+                      {survey.survey !== null ? (
+                        <>
+                          <Row>
+                            <Col>
+                              <h1 className='pl-3'>
+                                {survey.survey.name} Survey
+                              </h1>
+                            </Col>
+                            <Col>
+                              <Button
+                                style={{
+                                  float: 'right',
+                                  display: 'inline-block',
+                                }}
+                                variant='light'
+                                className='btn-sm'
+                                onClick={() =>
+                                  deleteSurveyHandler(survey.survey._id)
+                                }
+                              >
+                                <MdIcons.MdDelete size={30} />
+                              </Button>
+                            </Col>
+                          </Row>
+                        </>
+                      ) : (
+                        <h2>Upload a document or create a new one</h2>
+                      )}
+
+                      {survey.questions.map((q, index) => (
+                        <Col key={q.question._id}>
+                          <br />
+                          <Card>
+                            <Card.Header>
+                              Domanda {index + 1}
+                              <Button
+                                style={{
+                                  float: 'right',
+                                  display: 'inline-block',
+                                }}
+                                variant='light'
+                                className='btn-sm'
+                                onClick={() => deleteHandler(q.question._id)}
+                              >
+                                <MdIcons.MdDelete size={30} />
+                              </Button>
+                              <EditQuestionModal question={q} />
+                            </Card.Header>
+
+                            <Card.Body>
+                              <blockquote className='blockquote mb-0'>
+                                <Card.Title>{q.question.text}</Card.Title>
+
+                                {q.question.check ? (
+                                  <>
+                                    {q.answers.map((answer) => (
+                                      <>
+                                        <Form.Check
+                                          key={answer._id}
+                                          custom
+                                          disabled
+                                          inline
+                                          label={answer.text}
+                                          type='checkbox'
+                                        />
+
+                                        {answer.image === undefined ||
+                                        answer.image === -1 ? (
+                                          <></>
+                                        ) : (
+                                          <Figure className='m-0'>
+                                            <Figure.Image
+                                              width={30}
+                                              height={30}
+                                              src={icons[answer.image].path}
+                                              value={answer.image}
+                                            />
+                                          </Figure>
+                                        )}
+
+                                        <br></br>
+                                      </>
+                                    ))}
+                                  </>
+                                ) : q.question.radio ? (
+                                  <>
+                                    {q.answers.map((answer) => (
+                                      <>
+                                        <Form.Check
+                                          key={answer._id}
+                                          custom
+                                          disabled
+                                          inline
+                                          label={answer.text}
+                                          type='radio'
+                                        />
+
+                                        {answer.image === null ||
+                                        answer.image === -1 ? (
+                                          <></>
+                                        ) : (
+                                          <Figure className='m-0'>
+                                            <Figure.Image
+                                              width={30}
+                                              height={30}
+                                              src={icons[answer.image].path}
+                                              value={answer.image}
+                                            />
+                                          </Figure>
+                                        )}
+
+                                        <br></br>
+                                      </>
+                                    ))}
+                                  </>
+                                ) : q.question.slider ? (
+                                  <>
+                                    <Row className='justify-content-md-center'>
+                                      {q.answers[0].image === undefined ||
+                                      q.answers[0].image === -1 ? (
+                                        <></>
+                                      ) : (
+                                        <Figure className='m-0'>
+                                          <Figure.Image
+                                            width={30}
+                                            height={30}
+                                            src={icons[q.answers[0].image].path}
+                                            value={q.answers[0].image}
+                                          />
+                                        </Figure>
+                                      )}
+
+                                      <Col xs md='auto'>
+                                        {q.answers[0].text}
+                                      </Col>
+
+                                      <Col xs>
+                                        <Form>
+                                          <Form.Group controlId='formBasicRangeCustom'>
+                                            <Form.Control type='range' custom />
+                                          </Form.Group>
+                                        </Form>
+                                      </Col>
+
+                                      <Col xs md='auto'>
+                                        {q.answers[1].text}
+                                      </Col>
+
+                                      {q.answers[1].image === undefined ||
+                                      q.answers[1].image === -1 ? (
+                                        <></>
+                                      ) : (
+                                        <Figure className='m-0'>
+                                          <Figure.Image
+                                            width={30}
+                                            height={30}
+                                            src={icons[q.answers[1].image].path}
+                                            value={q.answers[1].image}
+                                          />
+                                        </Figure>
+                                      )}
+                                    </Row>
+                                  </>
+                                ) : q.question.trueFalse ? (
+                                  <>
+                                    <Button className='m-1'>Si</Button>
+                                    <Button
+                                      inline
+                                      className='m-1'
+                                      style={{
+                                        backgroundColor: '#f7a723',
+                                      }}
+                                    >
+                                      No
+                                    </Button>
+                                  </>
+                                ) : q.question.incrementDecrement ? (
+                                  <>
+                                    {q.answers[0].image === undefined ||
+                                    q.answers[0].image === -1 ? (
+                                      <></>
+                                    ) : (
+                                      <Figure className='m-0'>
+                                        <Figure.Image
+                                          width={30}
+                                          height={30}
+                                          src={icons[q.answers[0].image].path}
+                                          value={q.answers[0].image}
+                                        />
+                                      </Figure>
+                                    )}
+                                    <h1>00</h1>
+                                    <Button className='m-1'>-</Button>
+                                    <Button
+                                      inline
+                                      className='m-1'
+                                      style={{
+                                        backgroundColor: '#f7a723',
+                                      }}
+                                    >
+                                      +
+                                    </Button>
+                                  </>
+                                ) : q.question.insertTime ? (
+                                  <>
+                                    <Row className='justify-content-md-center'>
+                                      {/* Variable width content */}
+                                      <Col xs md='auto'>
+                                        00 :
+                                      </Col>
+                                      <Col xs md='auto'>
+                                        00
+                                      </Col>
+                                    </Row>
+                                    <Row className='justify-content-md-center'>
+                                      <Col xs md='auto'>
+                                        <Button>-</Button>
+                                      </Col>
+                                      <Col xs md='auto'>
+                                        <Button
+                                          style={{
+                                            backgroundColor: '#f7a723',
+                                          }}
+                                        >
+                                          +
+                                        </Button>
+                                      </Col>
+                                      <Col xs md='auto'>
+                                        <Button>-</Button>
+                                      </Col>
+                                      <Col xs md='auto'>
+                                        <Button
+                                          style={{
+                                            backgroundColor: '#f7a723',
+                                          }}
+                                        >
+                                          +
+                                        </Button>
+                                      </Col>
+                                    </Row>
+                                  </>
+                                ) : (
+                                  <Form.Group>
+                                    <Form.Control
+                                      placeholder='Open question'
+                                      disabled
+                                    />
+                                  </Form.Group>
+                                )}
+                              </blockquote>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      ))}
+                    </Col>
+                  </>
                 )}
-
-                {survey.questions.map((q, index) => (
-                  <Col key={q.question._id}>
-                    <br />
-                    <Card>
-                      <Card.Header>
-                        Domanda {index + 1}
-                        <Button
-                          style={{
-                            float: 'right',
-                            display: 'inline-block',
-                          }}
-                          variant="light"
-                          className="btn-sm"
-                          onClick={() => deleteHandler(q.question._id)}
-                        >
-                          <MdIcons.MdDelete size={30} />
-                        </Button>
-                        <EditQuestionModal question={q} />
-                      </Card.Header>
-
-                      <Card.Body>
-                        <blockquote className="blockquote mb-0">
-                          <Card.Title>{q.question.text}</Card.Title>
-
-                          {q.question.check ? (
-                            <>
-                              {q.answers.map((answer) => (
-                                <>
-                                  <Form.Check
-                                    key={answer._id}
-                                    custom
-                                    disabled
-                                    inline
-                                    label={answer.text}
-                                    type="checkbox"
-                                  />
-
-                                  {answer.image === undefined ||
-                                  answer.image === -1 ? (
-                                    <></>
-                                  ) : (
-                                    <Figure className="m-0">
-                                      <Figure.Image
-                                        width={30}
-                                        height={30}
-                                        src={icons[answer.image].path}
-                                        value={answer.image}
-                                      />
-                                    </Figure>
-                                  )}
-
-                                  <br></br>
-                                </>
-                              ))}
-                            </>
-                          ) : q.question.radio ? (
-                            <>
-                              {q.answers.map((answer) => (
-                                <>
-                                  <Form.Check
-                                    key={answer._id}
-                                    custom
-                                    disabled
-                                    inline
-                                    label={answer.text}
-                                    type="radio"
-                                  />
-
-                                  {answer.image === null ||
-                                  answer.image === -1 ? (
-                                    <></>
-                                  ) : (
-                                    <Figure className="m-0">
-                                      <Figure.Image
-                                        width={30}
-                                        height={30}
-                                        src={icons[answer.image].path}
-                                        value={answer.image}
-                                      />
-                                    </Figure>
-                                  )}
-
-                                  <br></br>
-                                </>
-                              ))}
-                            </>
-                          ) : q.question.slider ? (
-                            <>
-                              <Row className="justify-content-md-center">
-                                {q.answers[0].image === undefined ||
-                                q.answers[0].image === -1 ? (
-                                  <></>
-                                ) : (
-                                  <Figure className="m-0">
-                                    <Figure.Image
-                                      width={30}
-                                      height={30}
-                                      src={icons[q.answers[0].image].path}
-                                      value={q.answers[0].image}
-                                    />
-                                  </Figure>
-                                )}
-
-                                <Col xs md="auto">
-                                  {q.answers[0].text}
-                                </Col>
-
-                                <Col xs>
-                                  <Form>
-                                    <Form.Group controlId="formBasicRangeCustom">
-                                      <Form.Control type="range" custom />
-                                    </Form.Group>
-                                  </Form>
-                                </Col>
-
-                                <Col xs md="auto">
-                                  {q.answers[1].text}
-                                </Col>
-
-                                {q.answers[1].image === undefined ||
-                                q.answers[1].image === -1 ? (
-                                  <></>
-                                ) : (
-                                  <Figure className="m-0">
-                                    <Figure.Image
-                                      width={30}
-                                      height={30}
-                                      src={icons[q.answers[1].image].path}
-                                      value={q.answers[1].image}
-                                    />
-                                  </Figure>
-                                )}
-                              </Row>
-                            </>
-                          ) : q.question.trueFalse ? (
-                            <>
-                              <Button className="m-1">Si</Button>
-                              <Button
-                                inline
-                                className="m-1"
-                                style={{
-                                  backgroundColor: '#f7a723',
-                                }}
-                              >
-                                No
-                              </Button>
-                            </>
-                          ) : q.question.incrementDecrement ? (
-                            <>
-                              {q.answers[0].image === undefined ||
-                              q.answers[0].image === -1 ? (
-                                <></>
-                              ) : (
-                                <Figure className="m-0">
-                                  <Figure.Image
-                                    width={30}
-                                    height={30}
-                                    src={icons[q.answers[0].image].path}
-                                    value={q.answers[0].image}
-                                  />
-                                </Figure>
-                              )}
-                              <h1>00</h1>
-                              <Button className="m-1">-</Button>
-                              <Button
-                                inline
-                                className="m-1"
-                                style={{
-                                  backgroundColor: '#f7a723',
-                                }}
-                              >
-                                +
-                              </Button>
-                            </>
-                          ) : q.question.insertTime ? (
-                            <>
-                              <Row className="justify-content-md-center">
-                                {/* Variable width content */}
-                                <Col xs md="auto">
-                                  00 :
-                                </Col>
-                                <Col xs md="auto">
-                                  00
-                                </Col>
-                              </Row>
-                              <Row className="justify-content-md-center">
-                                <Col xs md="auto">
-                                  <Button>-</Button>
-                                </Col>
-                                <Col xs md="auto">
-                                  <Button
-                                    style={{
-                                      backgroundColor: '#f7a723',
-                                    }}
-                                  >
-                                    +
-                                  </Button>
-                                </Col>
-                                <Col xs md="auto">
-                                  <Button>-</Button>
-                                </Col>
-                                <Col xs md="auto">
-                                  <Button
-                                    style={{
-                                      backgroundColor: '#f7a723',
-                                    }}
-                                  >
-                                    +
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </>
-                          ) : (
-                            <Form.Group>
-                              <Form.Control
-                                placeholder="Open question"
-                                disabled
-                              />
-                            </Form.Group>
-                          )}
-                        </blockquote>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Col>
+              </>
             )}
           </>
         ) : (
           <>
             <Col md={9}>
-              <h3> Nessun questionario caricato </h3>
+              <h3> No survey loaded </h3>
             </Col>
           </>
         )}
@@ -465,15 +512,15 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
               {loadingPatients ? (
                 <Loader />
               ) : errorPatients ? (
-                <Message variant="danger">{errorPatients}</Message>
+                <Message variant='danger'>{errorPatients}</Message>
               ) : (
                 <>
                   {patients.map((patient, index) => (
                     <tr>
                       <td>
-                        <Form.Group controlId="isadmin">
+                        <Form.Group controlId='isadmin'>
                           <Form.Check
-                            type="checkbox"
+                            type='checkbox'
                             checked={
                               assignments.length !== 0
                                 ? assignments[index]

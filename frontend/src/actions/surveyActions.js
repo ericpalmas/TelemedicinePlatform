@@ -25,6 +25,9 @@ import {
   SURVEY_ASSIGNED_WITH_PATIENT_REQUEST,
   SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS,
   SURVEY_ASSIGNED_WITH_PATIENT_FAIL,
+  SURVEY_DELETE_REQUEST,
+  SURVEY_DELETE_SUCCESS,
+  SURVEY_DELETE_FAIL,
 } from '../constants/surveyConstants'
 
 export const listSurveyTemplates = () => async (dispatch) => {
@@ -148,7 +151,7 @@ export const assignSurveys = (assignments) => async (dispatch, getState) => {
     const { data } = await axios.post(
       '/api/surveys/assignment',
       { assignments },
-      config,
+      config
     )
 
     dispatch({
@@ -166,43 +169,41 @@ export const assignSurveys = (assignments) => async (dispatch, getState) => {
   }
 }
 
-export const listSurveyResponsesByDoctor = (doctorId) => async (
-  dispatch,
-  getState,
-) => {
-  try {
-    dispatch({ type: SURVEY_ASSIGNED_BY_DOCTOR_REQUEST })
+export const listSurveyResponsesByDoctor =
+  (doctorId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: SURVEY_ASSIGNED_BY_DOCTOR_REQUEST })
 
-    const {
-      doctorLogin: { userInfo },
-    } = getState()
+      const {
+        doctorLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.get(
+        '/api/surveyResponses/byDoctorId',
+        config,
+        { doctorId }
+      )
+
+      dispatch({
+        type: SURVEY_ASSIGNED_BY_DOCTOR_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
     }
-
-    const { data } = await axios.get(
-      '/api/surveyResponses/byDoctorId',
-      config,
-      { doctorId },
-    )
-
-    dispatch({
-      type: SURVEY_ASSIGNED_BY_DOCTOR_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: SURVEY_ASSIGNED_BY_DOCTOR_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
   }
-}
 
 export const listSurveyResponses = () => async (dispatch, getState) => {
   try {
@@ -220,7 +221,7 @@ export const listSurveyResponses = () => async (dispatch, getState) => {
 
     const { data } = await axios.get(
       '/api/surveyResponses/surveyAssignments',
-      config,
+      config
     )
 
     dispatch({
@@ -238,39 +239,63 @@ export const listSurveyResponses = () => async (dispatch, getState) => {
   }
 }
 
-export const listSurveyAssignedWithPatients = (id) => async (
-  dispatch,
-  getState,
-) => {
-  try {
-    dispatch({ type: SURVEY_ASSIGNED_WITH_PATIENT_REQUEST })
+export const listSurveyAssignedWithPatients =
+  (id) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: SURVEY_ASSIGNED_WITH_PATIENT_REQUEST })
 
-    const {
-      doctorLogin: { userInfo },
-    } = getState()
+      const {
+        doctorLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.get(
+        `/api/surveys/assignedSurveys/patients/${id}`,
+        config
+      )
+
+      dispatch({
+        type: SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: SURVEY_ASSIGNED_WITH_PATIENT_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
     }
+  }
 
-    const { data } = await axios.get(
-      `/api/surveys/assignedSurveys/patients/${id}`,
-      config,
-    )
+export const deleteSurvey = (id) => async (dispatch) => {
+  console.log(id)
+  try {
+    dispatch({
+      type: SURVEY_DELETE_REQUEST,
+    })
+
+    const { data } = await axios.put(`/api/surveys/updateDelete/${id}`)
 
     dispatch({
-      type: SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS,
+      type: SURVEY_DELETE_SUCCESS,
       payload: data,
     })
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+
     dispatch({
-      type: SURVEY_ASSIGNED_WITH_PATIENT_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      type: SURVEY_DELETE_FAIL,
+      payload: message,
     })
   }
 }

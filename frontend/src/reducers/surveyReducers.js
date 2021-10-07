@@ -25,6 +25,9 @@ import {
   SURVEY_ASSIGNED_WITH_PATIENT_REQUEST,
   SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS,
   SURVEY_ASSIGNED_WITH_PATIENT_FAIL,
+  SURVEY_DELETE_REQUEST,
+  SURVEY_DELETE_SUCCESS,
+  SURVEY_DELETE_FAIL,
 } from '../constants/surveyConstants'
 
 export const surveyTemplateListReducer = (state = { surveys: [] }, action) => {
@@ -136,7 +139,7 @@ export const surveyPatientAssignmentReducer = (state = {}, action) => {
 
 export const surveyResponsesByDoctorReducer = (
   state = { surveysResponses: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case SURVEY_ASSIGNED_BY_DOCTOR_REQUEST:
@@ -152,7 +155,7 @@ export const surveyResponsesByDoctorReducer = (
 
 export const surveyResponsesReducer = (
   state = { surveysResponses: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case SURVEY_ASSIGNED_REQUEST:
@@ -168,7 +171,7 @@ export const surveyResponsesReducer = (
 
 export const surveyAssignedWithPatientReducer = (
   state = { surveyAssignments: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case SURVEY_ASSIGNED_WITH_PATIENT_REQUEST:
@@ -176,6 +179,25 @@ export const surveyAssignedWithPatientReducer = (
     case SURVEY_ASSIGNED_WITH_PATIENT_SUCCESS:
       return { loading: false, surveyAssignments: action.payload }
     case SURVEY_ASSIGNED_WITH_PATIENT_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+// delete a disease from database
+export const surveyDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SURVEY_DELETE_REQUEST:
+      return {
+        loading: true,
+      }
+    case SURVEY_DELETE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case SURVEY_DELETE_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

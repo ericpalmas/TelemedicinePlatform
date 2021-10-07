@@ -18,7 +18,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const surveys = await Survey.find({})
     res.json(surveys)
-  }),
+  })
 )
 
 // @desc Add new survey template
@@ -39,7 +39,7 @@ router.post(
 
     const createdSurvey = await survey.save()
     res.status(201).json(createdSurvey)
-  }),
+  })
 )
 
 // @desc Fetch single survey
@@ -77,7 +77,7 @@ router.get(
             var va = offeredAnswers.filter(
               (answer) =>
                 JSON.stringify(answer.question) ===
-                JSON.stringify(result.questions[i].question._id),
+                JSON.stringify(result.questions[i].question._id)
             )
             result.questions[i].answers = va
           }
@@ -89,7 +89,7 @@ router.get(
       res.status(404)
       throw new Error('Survey not found')
     }
-  }),
+  })
 )
 
 // @desc   Assign survey to patient
@@ -124,7 +124,7 @@ router.route('/assignment').post(
       res.status(404)
       throw new Error('nothing passed')
     }
-  }),
+  })
 )
 
 // @desc Fetch single survey
@@ -148,7 +148,20 @@ router.get(
       res.status(404)
       throw new Error('Survey not found')
     }
-  }),
+  })
+)
+
+router.put(
+  '/updateDelete/:id',
+  asyncHandler(async (req, res) => {
+    const filter = { _id: req.params.id }
+    const result = await Survey.updateOne(filter, { deleted: true })
+    if (result) {
+      res.json(result)
+    } else {
+      res.status(404)
+    }
+  })
 )
 
 export default router
