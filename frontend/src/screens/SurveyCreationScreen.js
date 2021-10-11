@@ -11,6 +11,7 @@ import {
   Table,
   InputGroup,
 } from 'react-bootstrap'
+
 import BootstrapTable from 'react-bootstrap-table-next'
 import * as FaIcons from 'react-icons/fa'
 import * as TiIcons from 'react-icons/ti'

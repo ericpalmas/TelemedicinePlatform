@@ -56,7 +56,10 @@ const Sidebar = () => {
             >
               <div>
                 <IoIcons.IoIosPaper />
-                <span id='sidebarLabel'> Surveys</span>
+                <span data-testid='surveys' id='sidebarLabel'>
+                  {' '}
+                  Surveys
+                </span>
               </div>
               <div>
                 {subnav ? (
@@ -99,30 +102,22 @@ const Sidebar = () => {
             )}
 
             {/* Normal menu item */}
-            <id id='sidebarLink'>
+            <id id='sidebarLink' data-testid='addSurvey'>
               <div>
                 <IoIcons.IoIosPaper />
                 <AddSurveyModal />
               </div>
             </id>
 
-            <div id='sidebarLink'>
+            <div id='sidebarLink' data-testid='addQuestion'>
               <IoIcons.IoMdAddCircle />
               <AddQuestionModal />
             </div>
 
-            <div id='sidebarLink'>
+            <div id='sidebarLink' data-testid='addTimeSlot'>
               <BiIcons.BiTime />
               <AddSurveyTIme />
             </div>
-
-            {/* Normal menu item */}
-            {/* <id id="sidebarLink">
-              <div>
-                <VscIcons.VscPreview />
-                <span id="sidebarLabel"> Preview</span>
-              </div>
-            </id> */}
           </div>
         </nav>
       </IconContext.Provider>

@@ -8,11 +8,7 @@ import PropTypes from 'prop-types'
 //import { reduxForm } from 'redux-form'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import {
-  deleteDisease,
-  // updateDisease,
-  // listDiseases,
-} from '../actions/diseaseActions'
+import { deleteDisease } from '../actions/diseaseActions'
 import { DISEASE_CREATE_RESET } from '../constants/diseaseConstants'
 
 const Disease = ({ disease }) => {
@@ -24,29 +20,32 @@ const Disease = ({ disease }) => {
     }
   }
 
-  //useEffect(() => {}, [dispatch])
-
   return (
     <Card
-      className="my-3 p-3 rounded"
+      className='my-3 p-3 rounded'
       style={{ width: '60rem', height: '5rem' }}
     >
       <a>
         <a href={`/patients/patientsByDisease/${disease._id}`}>
-          <Card.Title as="div" className="mr-1" style={{ float: 'left' }}>
-            <strong>{disease.name}</strong>
+          <Card.Title as='div' className='mr-1' style={{ float: 'left' }}>
+            <strong data-testid='diseaseName'>{disease.name}</strong>
           </Card.Title>
         </a>
 
         <Button
-          variant="danger"
+          data-testid='deleteDiseaseButton'
+          variant='danger'
           style={{ float: 'right' }}
           onClick={() => deleteHandler(disease._id)}
         >
-          <i className="fas fa-trash"></i>
+          <i className='fas fa-trash'></i>
         </Button>
-        <Button variant="light" style={{ float: 'right' }}>
-          <i className="fas fa-edit"></i>
+        <Button
+          data-testid='editDiseaseButton'
+          variant='light'
+          style={{ float: 'right' }}
+        >
+          <i className='fas fa-edit'></i>
         </Button>
       </a>
     </Card>

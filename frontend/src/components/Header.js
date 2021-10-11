@@ -4,7 +4,6 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../actions/doctorActions'
-//import SearchBox from './SearchBox'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -17,39 +16,35 @@ const Header = () => {
   }
   return (
     <header>
-      <Navbar
-        //fixed="top"
-        bg="primary"
-        variant="dark"
-        expand="lg"
-        collapseOnSelect
-      >
+      <Navbar bg='primary' variant='dark' expand='lg' collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand>TelemedicinePlatform</Navbar.Brand>
+          <LinkContainer to='/'>
+            <Navbar.Brand data-testid='title'>
+              TelemedicinePlatform
+            </Navbar.Brand>
           </LinkContainer>
 
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
             <Nav>
-              <LinkContainer to="/diseases">
-                <Nav.Link href="/diseases">
-                  <i className="fa fa-medkit"></i> Diseases
+              <LinkContainer to='/diseases'>
+                <Nav.Link data-testid='diseases' href='/diseases'>
+                  <i className='fa fa-medkit'></i> Diseases
                 </Nav.Link>
               </LinkContainer>
             </Nav>
             <Nav>
-              <LinkContainer to="/patients">
-                <Nav.Link href="/patients">
-                  <i className="fa fa-users"></i> Patients
+              <LinkContainer to='/patients'>
+                <Nav.Link data-testid='patients' href='/patients'>
+                  <i className='fa fa-users'></i> Patients
                 </Nav.Link>
               </LinkContainer>
             </Nav>
 
-            <Nav className="ml-auto">
+            <Nav className='ml-auto'>
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id="username">
-                  <LinkContainer to="/profile">
+                <NavDropdown title={userInfo.name} id='username'>
+                  <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
@@ -57,24 +52,24 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <LinkContainer to="/login">
-                  <Nav.Link href="/login">
-                    <i className="fas fa-user"></i> Sign In
+                <LinkContainer to='/login'>
+                  <Nav.Link href='/login'>
+                    <i className='fas fa-user'></i> Sign In
                   </Nav.Link>
                 </LinkContainer>
               )}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
-                  <LinkContainer to="/admin/doctorlist">
+                <NavDropdown title='Admin' id='adminmenu'>
+                  <LinkContainer to='/admin/doctorlist'>
                     <NavDropdown.Item>Doctors</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/patientList">
+                  <LinkContainer to='/admin/patientList'>
                     <NavDropdown.Item>Patients</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/diseaseList">
+                  <LinkContainer to='/admin/diseaseList'>
                     <NavDropdown.Item>Diseases</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/surveyList">
+                  <LinkContainer to='/admin/surveyList'>
                     <NavDropdown.Item>Surveys</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>

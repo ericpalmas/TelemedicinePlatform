@@ -28,28 +28,29 @@ const Patient = ({ patient }) => {
 
   return (
     <Card
-      className="my-3 p-3 rounded"
+      className='my-3 p-3 rounded'
       style={{ width: '60rem', height: '5rem' }}
     >
       <a>
         <a href={`/patients/${patient._id}`}>
-          <Card.Title as="div" className="mr-1" style={{ float: 'left' }}>
-            <strong>{patient.name}</strong>
+          <Card.Title as='div' className='mr-1' style={{ float: 'left' }}>
+            <strong data-testid='patientName'>{patient.name}</strong>
           </Card.Title>
 
-          <Card.Title as="div" className="mr-5" style={{ float: 'left' }}>
-            <strong>{patient.surname}</strong>
+          <Card.Title as='div' className='mr-5' style={{ float: 'left' }}>
+            <strong data-testid='patientSurname'>{patient.surname}</strong>
           </Card.Title>
         </a>
 
         <Button
-          variant="danger"
+          data-testid='deleteButton'
+          variant='danger'
           style={{ float: 'right' }}
           onClick={() => deleteHandler(patient._id)}
         >
-          <i className="fas fa-trash"></i>
+          <i className='fas fa-trash'></i>
         </Button>
-        <EditPatientModal patient={patient} />
+        <EditPatientModal data-testid='editButton' patient={patient} />
       </a>
     </Card>
   )
