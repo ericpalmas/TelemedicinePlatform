@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing message component message renders correctly 1`] = `
+<div
+  className="fade alert alert-info show"
+  role="alert"
+>
+  errore
+</div>
+`;
+
+exports[`Testing message component renders 1`] = `
+<DocumentFragment>
+  <div
+    class="fade alert alert-info show"
+    role="alert"
+  >
+    Errore
+  </div>
+</DocumentFragment>
+`;
