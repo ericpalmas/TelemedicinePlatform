@@ -58,7 +58,7 @@ const selectRow = {
 const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   const dispatch = useDispatch()
 
-  var surv = localStorage.getItem('surveyId')
+  var surv = localStorage.getItem('surveyId') || 'noIdSaved'
 
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const {
@@ -171,22 +171,24 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   }, [currentId])
 
   useEffect(() => {
-    updateCUrrentSurvey()
-    if (surv !== undefined) {
-      dispatch(surveyDetails(surv.split('"')[1]))
-        .then(() => {
-          setSurveyUploaded(true)
-        })
-        .catch(() => {
-          setSurveyUploaded(false)
-        })
+    if (surv !== 'noIdSaved') {
+      if (surv !== undefined) {
+        dispatch(surveyDetails(surv.split('"')[1]))
+          .then(() => {
+            setSurveyUploaded(true)
+          })
+          .catch(() => {
+            setSurveyUploaded(false)
+          })
+      }
     }
+    updateCUrrentSurvey()
   }, [dispatch, match, history, updateCUrrentSurvey, surv])
 
   const [assignments, setAssignments] = useState([])
 
   useEffect(() => {
-    if (surv !== undefined) {
+    if (surv !== undefined && surv !== 'noIdSaved') {
       dispatch(listPatientsAndDisease(surv.split('"')[1]))
     }
   }, [dispatch, surv, currentId])

@@ -29,7 +29,7 @@ const AddSurveyTIme = () => {
   const [msg, setMsg] = useState('Start is date greather than end date')
   const [errorStartEnd, setErrorStartEnd] = useState(false)
 
-  var currentSurveyId = localStorage.getItem('surveyId').split('"')[1]
+  var currentSurveyId = localStorage.getItem('surveyId') || 'noSurveyId'
 
   const surveyTimeSlotsList = useSelector((state) => state.surveyTimeSlotList)
   const { loading, error, surveyTimeSlots } = surveyTimeSlotsList
@@ -47,15 +47,17 @@ const AddSurveyTIme = () => {
   }, [dispatch, currentSurveyId, surveyTimeSlots.length || 0, loading])
 
   useEffect(() => {
-    updateItems()
-    dispatch(surveyTimeSlotList(currentSurveyId))
+    if (currentSurveyId !== 'noSurveyId') {
+      updateItems()
+      dispatch(surveyTimeSlotList(currentSurveyId.split('"')[1]))
+    }
   }, [dispatch, currentSurveyId, successUpdate, updateItems])
 
   const addAnswer = () => {
     setItems([
       ...items,
       {
-        survey: currentSurveyId,
+        survey: currentSurveyId.split('"')[1],
         startHour: 0,
         startMinutes: 0,
         endHour: 0,
@@ -270,7 +272,7 @@ const AddSurveyTIme = () => {
 
     if (!findError) {
       const result = {
-        survey: currentSurveyId,
+        survey: currentSurveyId.split('"')[1],
         items,
       }
       dispatch(updateTimeSlots(result))

@@ -46,7 +46,7 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post(
       '/api/doctors/login',
       { email, password },
-      config,
+      config
     )
 
     dispatch({
@@ -75,52 +75,56 @@ export const logout = () => (dispatch) => {
   dispatch({ type: DOCTOR_LIST_RESET })
 }
 
-export const register = (name, surname, email, password) => async (
-  dispatch,
-  getState,
-) => {
-  try {
-    dispatch({
-      type: DOCTOR_REGISTER_REQUEST,
-    })
+export const register =
+  (name, surname, email, password) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: DOCTOR_REGISTER_REQUEST,
+      })
 
-    const {
-      doctorLogin: { userInfo },
-    } = getState()
+      const {
+        doctorLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.post(
+        '/api/doctors',
+        { name, surname, email, password },
+        config
+      )
+
+      dispatch({
+        type: DOCTOR_REGISTER_SUCCESS,
+        payload: data,
+      })
+
+      // dispatch({
+      //     type: DOCTOR_LOGIN_SUCCESS,
+      //     payload: data,
+      // })
+
+      //localStorage.setItem('userInfo', JSON.stringify(data))
+
+      dispatch({
+        type: DOCTOR_LOGIN_SUCCESS,
+        payload: data,
+      })
+      localStorage.setItem('userInfo', JSON.stringify(data))
+    } catch (error) {
+      dispatch({
+        type: DOCTOR_REGISTER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
     }
-
-    const { data } = await axios.post(
-      '/api/doctors',
-      { name, surname, email, password },
-      config,
-    )
-
-    dispatch({
-      type: DOCTOR_REGISTER_SUCCESS,
-      payload: data,
-    })
-
-    // dispatch({
-    //     type: DOCTOR_LOGIN_SUCCESS,
-    //     payload: data,
-    // })
-
-    //localStorage.setItem('userInfo', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: DOCTOR_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
   }
-}
 
 export const getDoctorDetails = (id) => async (dispatch, getState) => {
   try {
