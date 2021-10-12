@@ -26,7 +26,7 @@ const PatientListScreen = () => {
   const { loading, error, doctorPatients } = doctorPatientList
 
   const patientAndDiseasesList = useSelector(
-    (state) => state.patientsAndDiseasesList,
+    (state) => state.patientsAndDiseasesList
   )
   const {
     loading: loadingPatientAndDiseases,
@@ -34,8 +34,10 @@ const PatientListScreen = () => {
     patients: patientAndDiseases,
   } = patientAndDiseasesList
 
-  const userLogin = useSelector((state) => state.doctorLogin)
-  const { userInfo } = userLogin
+  // const userLogin = useSelector((state) => state.doctorLogin)
+  // const { userInfo } = userLogin || 'noUserInfoSaved'
+
+  var userInfo = localStorage.getItem('userInfo') || 'noUserInfoSaved'
 
   const [patientElaborated, setPatientElaborated] = useState([])
 
@@ -44,8 +46,10 @@ const PatientListScreen = () => {
   }, [dispatch])
 
   useEffect(() => {
-    dispatch(listDoctorPatients(userInfo._id))
-  }, [dispatch])
+    if (userInfo !== 'noUserInfoSaved') {
+      dispatch(listDoctorPatients(userInfo.split('"')[3]))
+    }
+  }, [dispatch, userInfo])
 
   useEffect(() => {
     setPatientElaborated([])
@@ -61,36 +65,45 @@ const PatientListScreen = () => {
   return (
     <>
       <h1>List of patients</h1>
-      <Row className="align-items-center">
-        <Col className="text-right" sm={6} md={4}>
-          <InputGroup className="mb-3 mt-4" style={{ width: '20rem' }}>
-            <FormControl
-              placeholder="Search"
-              aria-label="Recipient's username"
-              aria-describedby="basic-addon2"
-            />
-          </InputGroup>
-        </Col>
-        <Col sm={6}>
-          <AddPatientModal />
-        </Col>
-      </Row>
 
-      {loadingPatientAndDiseases ? (
-        <Loader />
-      ) : errorPatientAndDiseases ? (
-        <Message variant="danger">{errorPatientAndDiseases}</Message>
-      ) : (
-        <Row
-          className="mt-4"
-          style={{ float: 'left', display: 'inline-block' }}
-        >
-          {patientElaborated.map((patient) => (
-            <Col sm={12} key={patient._id}>
-              <Patient key={patient._id} patient={patient} />
+      {userInfo !== 'noUserInfoSaved' ? (
+        <>
+          <Row className='align-items-center'>
+            <Col className='text-right' sm={6} md={4}>
+              <InputGroup className='mb-3 mt-4' style={{ width: '20rem' }}>
+                <FormControl
+                  placeholder='Search'
+                  aria-label="Recipient's username"
+                  aria-describedby='basic-addon2'
+                />
+              </InputGroup>
             </Col>
-          ))}
-        </Row>
+            <Col sm={6}>
+              <AddPatientModal />
+            </Col>
+          </Row>
+
+          {loadingPatientAndDiseases ? (
+            <Loader />
+          ) : errorPatientAndDiseases ? (
+            <Message variant='danger'>{errorPatientAndDiseases}</Message>
+          ) : (
+            <Row
+              className='mt-4'
+              style={{ float: 'left', display: 'inline-block' }}
+            >
+              {patientElaborated.map((patient) => (
+                <Col sm={12} key={patient._id}>
+                  <Patient key={patient._id} patient={patient} />
+                </Col>
+              ))}
+            </Row>
+          )}
+        </>
+      ) : (
+        <>
+          <p>You have to do the login to see these data</p>
+        </>
       )}
     </>
   )

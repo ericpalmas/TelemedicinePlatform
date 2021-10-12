@@ -18,7 +18,6 @@ const AddSurveyTIme = () => {
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
   const handleClose = () => setShow(false)
-  //const handleShow = () => setShow(true)
 
   const handleShow = () => {
     setShow(true)
@@ -26,7 +25,7 @@ const AddSurveyTIme = () => {
   }
   const [validated, setValidated] = useState(false)
   const [items, setItems] = useState([])
-  const [msg, setMsg] = useState('Start is date greather than end date')
+  const [msg, setMsg] = useState('Start date is greather than end date')
   const [errorStartEnd, setErrorStartEnd] = useState(false)
 
   var currentSurveyId = localStorage.getItem('surveyId') || 'noSurveyId'
@@ -185,69 +184,6 @@ const AddSurveyTIme = () => {
       console.log(items)
     }
   }
-
-  // const submitHandler = (e) => {
-  //   e.preventDefault()
-
-  //   items.forEach((item, i) => {
-  //     if (item.startHour > item.endHour) {
-  //       setErrorStartEnd(true)
-  //     } else {
-  //       if (item.startMinutes > item.endMinutes) {
-  //         setErrorStartEnd(true)
-  //       } else {
-  //         setErrorStartEnd(false)
-
-  //         const result = {
-  //           survey: currentSurveyId,
-  //           items,
-  //         }
-  //         // console.log(result)
-  //         // console.log('DISPATCH')
-  //         dispatch(updateTimeSlots(result))
-  //       }
-  //     }
-  //   })
-
-  //   const form = e.currentTarget
-  //   if (form.checkValidity() === false) {
-  //     e.preventDefault()
-  //     e.stopPropagation()
-  //   }
-  //   setValidated(true)
-
-  //   dispatch(updateTimeSlots(result))
-  // }
-
-  // const submitHandler = (e) => {
-  //   //e.preventDefault()
-
-  //   // const result = {
-  //   //   survey: currentSurveyId,
-  //   //   items,
-  //   // }
-
-  //   items.forEach((item, i) => {
-  //     if (item.startHour > item.endHour) {
-  //       setErrorStartEnd(true)
-  //     } else {
-  //       if (item.startMinutes > item.endMinutes) {
-  //         setErrorStartEnd(true)
-  //       } else {
-  //         setErrorStartEnd(false)
-
-  //         const result = {
-  //           survey: currentSurveyId,
-  //           items,
-  //         }
-
-  //         dispatch(updateTimeSlots(result))
-  //       }
-  //     }
-  //   })
-
-  //   // dispatch(updateTimeSlots(result))
-  // }
 
   const submitHandler = (e) => {
     var findError = false
