@@ -13,7 +13,7 @@ afterEach(cleanup)
 
 // We use msw to intercept the network request during the test,
 // and return the response 'John Smith' after 150ms
-// when receiving a get request to the `/api/user` endpoint
+// when receiving a get request to the `/api/surveys` endpoint
 export const handlers = [
   rest.get('/api/surveys', (req, res, ctx) => {
     return res(
@@ -36,41 +36,6 @@ export const handlers = [
           createdAt: '2021-05-24T19:43:04.248Z',
           updatedAt: '2021-05-24T19:43:04.248Z',
         },
-        {
-          deleted: true,
-          _id: '60afc8997a28752f04424a86',
-          name: 'rrrrrr',
-          description: 'dddddd',
-          createdAt: '2021-05-27T16:28:09.384Z',
-          updatedAt: '2021-10-07T09:51:38.556Z',
-          __v: 0,
-        },
-        {
-          deleted: false,
-          _id: '60afc8ca1193ee3f00223c58',
-          name: 'ciaooo mondo',
-          description: 'vvvvvvvvv',
-          createdAt: '2021-05-27T16:28:58.835Z',
-          __v: 0,
-        },
-        {
-          deleted: true,
-          _id: '60b0ba3555472d24f4ccc443',
-          __v: 0,
-          updatedAt: '2021-10-07T09:58:42.941Z',
-          createdAt: '2021-10-06T19:17:39.432Z',
-          description: 'fffffff',
-          name: 'ciao',
-        },
-        {
-          deleted: true,
-          _id: '615f158fd7edf27080f38be8',
-          name: 'iiiiiii',
-          description: 'nuovo problema',
-          createdAt: '2021-10-07T15:43:11.791Z',
-          updatedAt: '2021-10-07T19:27:09.558Z',
-          __v: 0,
-        },
       ]),
       ctx.delay(150)
     )
@@ -88,29 +53,7 @@ afterEach(() => server.resetHandlers())
 // Disable API mocking after the tests are done.
 afterAll(() => server.close())
 
-const localStorageMock = (function () {
-  let store = {}
-
-  return {
-    getItem: function (key) {
-      return store[key] || null
-    },
-    setItem: function (key, value) {
-      store[key] = value.toString()
-    },
-    removeItem: function (key) {
-      delete store[key]
-    },
-    clear: function () {
-      store = {}
-    },
-  }
-})()
-
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-})
-
+// local storage deve essere sempre settato
 describe('Testing message component', () => {
   test('fetches & receives a user after clicking the fetch user button', async () => {
     render(
@@ -119,23 +62,9 @@ describe('Testing message component', () => {
       </Provider>
     )
 
-    // should show no user initially, and not be fetching a user
-    // expect(screen.getByText(/no user/i)).toBeInTheDocument()
-    // expect(screen.queryByText(/Fetching user\.\.\./i)).not.toBeInTheDocument()
-
-    // after clicking the 'Fetch user' button, it should now show that it is fetching the user
-    // fireEvent.click(screen.getByRole('button', { name: /Fetch user/i }))
-    // expect(screen.getByText(/no user/i)).toBeInTheDocument()
-
-    // after some time, the user should be received
-
+    fireEvent.click(await screen.findByTestId('buttonShowSurveys'))
     expect(await screen.findByText(/Parkinson/i)).toBeInTheDocument()
     expect(await screen.findByText(/Sleep disorders/i)).toBeInTheDocument()
-    // expect(await screen.findByText(/Parkinson/i)).toBeInTheDocument()
-    // expect(await screen.findByText(/Parkinson/i)).toBeInTheDocument()
-
-    // expect(screen.queryByText(/no user/i)).not.toBeInTheDocument()
-    // expect(screen.queryByText(/Fetching user\.\.\./i)).not.toBeInTheDocument()
   })
 
   test('test buttons', async () => {
@@ -149,14 +78,15 @@ describe('Testing message component', () => {
     expect(await getByTestId('addTimeSlot')).toBeTruthy()
   })
 
-  //   test('test patient data', async () => {
-  //     const { getByTestId, getByText } = render(
-  //       <Provider store={store}>
-  //         <Sidebar />
-  //       </Provider>
-  //     )
+  test('test button click', async () => {
+    render(
+      <Provider store={store}>
+        <Sidebar />
+      </Provider>
+    )
 
-  //     expect(await getByTestId('patientName')).toHaveTextContent('Marco')
-  //     expect(await getByTestId('patientSurname')).toHaveTextContent('Rossi')
-  //   })
+    fireEvent.click(await screen.findByTestId('addSurvey'))
+    fireEvent.click(await screen.findByTestId('addQuestion'))
+    fireEvent.click(await screen.findByTestId('addTimeSlot'))
+  })
 })

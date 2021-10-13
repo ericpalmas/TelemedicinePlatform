@@ -53,6 +53,7 @@ const Sidebar = () => {
               id='sidebarLink'
               onClick={showSubnav}
               style={{ justifyContent: 'space-between' }}
+              data-testid='buttonShowSurveys'
             >
               <div>
                 <IoIcons.IoIosPaper />
