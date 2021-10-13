@@ -27,11 +27,8 @@ const PatientScreen = ({ history, match }) => {
   const { loading, error, patient } = patientDetail
 
   const patientDiseasesList = useSelector((state) => state.patientDiseasesList)
-  const {
-    loadingPatientDiseases,
-    errorPatientDiseases,
-    patientDiseases,
-  } = patientDiseasesList
+  const { loadingPatientDiseases, errorPatientDiseases, patientDiseases } =
+    patientDiseasesList
 
   const responsesList = useSelector((state) => state.responsesList)
   const {
@@ -47,8 +44,6 @@ const PatientScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(listSurveyResponses(match.params.id))
-
-    console.log(responses)
   }, [dispatch, match])
 
   return (
@@ -56,24 +51,24 @@ const PatientScreen = ({ history, match }) => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <Row className="mt-4 mb-4">
-            <Col md={6} className="mb-4">
-              <h2 className="mt-4 mb-4">Patient Profile</h2>
+          <Row className='mt-4 mb-4'>
+            <Col md={6} className='mb-4'>
+              <h2 className='mt-4 mb-4'>Patient Profile</h2>
               <p>
                 {patient.name} {patient.surname}
               </p>
 
-              <h2 className="mt-4 mb-4">Diseases</h2>
+              <h2 className='mt-4 mb-4'>Diseases</h2>
               {patientDiseases.map((disease) => (
                 <p key={disease._id}>{disease.disease.name}</p>
               ))}
               <p>{patient.pathology}</p>
               <Row>
                 <Col>
-                  <h2 className="mt-4 mb-4">Treatment</h2>
+                  <h2 className='mt-4 mb-4'>Treatment</h2>
                 </Col>
               </Row>
               <p>{patient.therapy}</p>
@@ -109,7 +104,7 @@ const PatientScreen = ({ history, match }) => {
           </Row> */}
 
           {/* risposte ai questionari  */}
-          <Row className="mt-4 mb-4">
+          <Row className='mt-4 mb-4'>
             <h2>Patient survey responses</h2>
             <br></br>
           </Row>
@@ -117,7 +112,7 @@ const PatientScreen = ({ history, match }) => {
           {loadingResponses ? (
             <Loader />
           ) : errorResponses ? (
-            <Message variant="danger">{errorResponses}</Message>
+            <Message variant='danger'>{errorResponses}</Message>
           ) : (
             <>
               {responses ? (
@@ -128,7 +123,7 @@ const PatientScreen = ({ history, match }) => {
                         <>
                           <Row>
                             <Accordion
-                              defaultActiveKey="0"
+                              defaultActiveKey='0'
                               style={{
                                 overflow: 'hidden',
                                 position: 'relative',
@@ -139,8 +134,8 @@ const PatientScreen = ({ history, match }) => {
                                 <Card.Header>
                                   <Accordion.Toggle
                                     as={Button}
-                                    variant="link"
-                                    eventKey="1"
+                                    variant='link'
+                                    eventKey='1'
                                   >
                                     {response.survey.map((surv) => (
                                       <>
@@ -149,7 +144,7 @@ const PatientScreen = ({ history, match }) => {
                                         {response._id[0] ? (
                                           response._id[0].updatedAt.substring(
                                             12,
-                                            16,
+                                            16
                                           )
                                         ) : (
                                           <></>
@@ -158,7 +153,7 @@ const PatientScreen = ({ history, match }) => {
                                         {response._id[0] ? (
                                           response._id[0].updatedAt.substring(
                                             0,
-                                            10,
+                                            10
                                           )
                                         ) : (
                                           <></>
@@ -173,7 +168,7 @@ const PatientScreen = ({ history, match }) => {
                                   <>
                                     {survey.question.map((question) => (
                                       <>
-                                        <Accordion.Collapse eventKey="1">
+                                        <Accordion.Collapse eventKey='1'>
                                           <Card.Body>
                                             <h4>{question.text}</h4>
 
@@ -201,7 +196,7 @@ const PatientScreen = ({ history, match }) => {
                                                       {index + 1}) &nbsp;{' '}
                                                       {val.answer}{' '}
                                                     </p>
-                                                  ),
+                                                  )
                                                 )}
                                               </>
                                             ) : question.open ? (

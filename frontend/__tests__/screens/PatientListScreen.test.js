@@ -6,8 +6,6 @@ import { Provider } from 'react-redux'
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import PatientListScreen from '../../src/screens/PatientListScreen'
-//import { saveToStorage } from '../../src/storage'
-//import {} from '../../__setups__/browserMocks'
 
 import store from '../../src/store'
 
@@ -99,25 +97,6 @@ export const handlers = [
   }),
 ]
 
-// const fakeLocalStorage = (function () {
-//   let store = {}
-
-//   return {
-//     getItem: function (key) {
-//       return store[key] || null
-//     },
-//     setItem: function (key, value) {
-//       store[key] = value.toString()
-//     },
-//     removeItem: function (key) {
-//       delete store[key]
-//     },
-//     clear: function () {
-//       store = {}
-//     },
-//   }
-// })()
-
 const server = setupServer(...handlers)
 
 // Enable API mocking before tests.
@@ -130,47 +109,6 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe('Testing patient list component', () => {
-  // beforeAll(() => {
-  //   Object.defineProperty(window, 'localStorage', {
-  //     value: fakeLocalStorage,
-  //   })
-
-  //   const localStorage = {
-  //     _id: '60ac01c8c458a814c89b16de',
-  //     name: 'marco',
-  //     surname: 'rossi',
-  //     email: 'marco.rossi@example.com',
-  //     token:
-  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYWMwMWM4YzQ1OGE4MTRjODliMTZkZSIsImlhdCI6MTYzNDExNDI5OSwiZXhwIjoxNjM2NzA2Mjk5fQ.b-gYqbEShCUAyyHQva4qmIqU86ULYYS5DQBzRqO8DkY',
-  //     isAdmin: false,
-  //   }
-
-  //   saveToStorage(localStorage.toString())
-
-  //   expect(window.localStorage.getItem('the-key')).toEqual(
-  //     localStorage.toString()
-  //   )
-  // })
-
-  // beforeEach(() => {
-  //   // to fully reset the state between tests, clear the storage
-  //   localStorage.clear()
-  //   // and reset all mocks
-  //   jest.clearAllMocks()
-
-  //   // clearAllMocks will impact your other mocks too, so you can optionally reset individual mocks instead:
-  //   localStorage.setItem.mockClear()
-  // })
-
-  // test('should not impact the next test', () => {
-  //   const KEY = 'foo',
-  //     VALUE = 'bar'
-  //   dispatch(action.update(KEY, VALUE))
-  //   expect(localStorage.setItem).toHaveBeenLastCalledWith(KEY, VALUE)
-  //   expect(localStorage.__STORE__[KEY]).toBe(VALUE)
-  //   expect(Object.keys(localStorage.__STORE__).length).toBe(1)
-  // })
-
   test('fetches & receives patients', async () => {
     render(
       <Provider store={store}>
@@ -181,25 +119,5 @@ describe('Testing patient list component', () => {
     expect(
       await screen.findByText(/You have to do the login to see these data/i)
     ).toBeInTheDocument()
-    //expect(await screen.findByText(/Massimo/i)).toBeInTheDocument()
   })
-
-  // test('saves the key to the storage', async () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <PatientListScreen />
-  //     </Provider>
-  //   )
-
-  //   expect(await screen.findByText(/Aldo/i)).toBeInTheDocument()
-  // })
-
-  // it('should sign out a user', async () => {
-  //   const spyLoStoRemove = jest.spyOn(localStorage, 'removeItem')
-
-  //   await signOutUser()
-
-  //   expect(spyLoStoRemove).toHaveBeenCalled()
-  //   expect(spyLoStoRemove).toHaveBeenCalledTimes(2)
-  // })
 })

@@ -16,7 +16,7 @@ const PatientsByDisease = ({ history, match }) => {
   const dispatch = useDispatch()
 
   const patientListByDisease = useSelector(
-    (state) => state.patientByDiseaseList,
+    (state) => state.patientByDiseaseList
   )
   const { loading, error, patients } = patientListByDisease
 
@@ -27,61 +27,76 @@ const PatientsByDisease = ({ history, match }) => {
     patients: patientsAndDiseases,
   } = patientList
 
+  var userInfo = localStorage.getItem('userInfo') || 'noUserInfoSaved'
+
   useEffect(() => {
-    dispatch(listPatientsByDisease(match.params.id))
-    // .then(() => {
-    //   dispatch(listPatientsAndDiseases())
-    // })
+    if (userInfo !== 'noUserInfoSaved') {
+      dispatch(listPatientsByDisease(match.params.id))
+    }
   }, [dispatch, match])
 
   useEffect(() => {
-    dispatch(listPatientsAndDiseases())
+    if (userInfo !== 'noUserInfoSaved') {
+      dispatch(listPatientsAndDiseases())
+    }
   }, [dispatch])
 
   return (
     <>
       <h1>List of patients</h1>
 
-      <InputGroup className="mb-3 mt-4" style={{ width: '20rem' }}>
-        <FormControl
-          placeholder="Search"
-          aria-label="Recipient's username"
-          aria-describedby="basic-addon2"
-        />
-      </InputGroup>
+      {userInfo !== 'noUserInfoSaved' ? (
+        <>
+          <InputGroup className='mb-3 mt-4' style={{ width: '20rem' }}>
+            <FormControl
+              placeholder='Search'
+              aria-label="Recipient's username"
+              aria-describedby='basic-addon2'
+            />
+          </InputGroup>
 
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant='danger'>{error}</Message>
+          ) : (
+            <Row
+              className='mt-4'
+              style={{ float: 'left', display: 'inline-block' }}
+            >
+              {patientsAndDiseases.map((patient) => (
+                <Col sm={12} key={patient._id}>
+                  {patients.filter((e) => e.patient._id === patient._id)
+                    .length > 0 ? (
+                    <>
+                      <Patient key={patient._id} patient={patient} />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </Col>
+              ))}
+            </Row>
+          )}
+
+          <div
+            className='mt-4'
+            style={{ float: 'left', display: 'inline-block' }}
+          >
+            <Button variant='primary' size='lg'>
+              New patient
+            </Button>{' '}
+            <Button variant='primary' size='lg'>
+              Remove patient
+            </Button>
+          </div>
+        </>
       ) : (
-        <Row
-          className="mt-4"
-          style={{ float: 'left', display: 'inline-block' }}
-        >
-          {patientsAndDiseases.map((patient) => (
-            <Col sm={12} key={patient._id}>
-              {patients.filter((e) => e.patient._id === patient._id).length >
-              0 ? (
-                <>
-                  <Patient key={patient._id} patient={patient} />
-                </>
-              ) : (
-                <></>
-              )}
-            </Col>
-          ))}
-        </Row>
+        <>
+          {' '}
+          <p>You have to do the login to see these data</p>
+        </>
       )}
-
-      <div className="mt-4" style={{ float: 'left', display: 'inline-block' }}>
-        <Button variant="primary" size="lg">
-          New patient
-        </Button>{' '}
-        <Button variant="primary" size="lg">
-          Remove patient
-        </Button>
-      </div>
     </>
   )
 }
