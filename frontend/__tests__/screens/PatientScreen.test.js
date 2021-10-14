@@ -2966,8 +2966,5 @@ describe('Testing patient detail page component', () => {
       </Provider>
     )
     screen.debug()
-    //expect(await screen.findByText(/Patient Profile/i)).toBeInTheDocument()
-    // expect(await screen.findByText(/Parkinson/i)).toBeInTheDocument()
-    // expect(await screen.findByText(/Sleep disorders/i)).toBeInTheDocument()
   })
 })

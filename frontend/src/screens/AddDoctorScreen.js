@@ -11,7 +11,7 @@ import { DOCTOR_REGISTER_RESET } from '../constants/doctorConstants'
 //import { listProductDetails, updateProduct } from '../actions/productActions'
 //
 
-const AddDoctorScreen = ({ match, history }) => {
+const AddDoctorScreen = ({ history }) => {
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
   const [email, setEmail] = useState('')
@@ -43,66 +43,67 @@ const AddDoctorScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to="/admin/doctorlist" className="btn btn-light my-3">
+      <Link to='/admin/doctorlist' className='btn btn-light my-3'>
         Go Back
       </Link>
       <FormContainer>
         <h1>Register new doctor</h1>
-        {message && <Message variant="danger">{message}</Message>}
-        {error && <Message variant="danger">{error}</Message>}
+        {message && <Message variant='danger'>{message}</Message>}
+        {error && <Message variant='danger'>{error}</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name">
+          <Form.Group controlId='name'>
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="name"
-              placeholder="Enter name"
+              type='name'
+              placeholder='Enter name'
               value={name}
               onChange={(e) => setName(e.target.value)}
+              data-testid='insertName'
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="surname">
+          <Form.Group controlId='surname'>
             <Form.Label>Surname</Form.Label>
             <Form.Control
-              type="name"
-              placeholder="Enter surname"
+              type='name'
+              placeholder='Enter surname'
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="email">
+          <Form.Group controlId='email'>
             <Form.Label>Email Address</Form.Label>
             <Form.Control
-              type="email"
-              placeholder="Enter email"
+              type='email'
+              placeholder='Enter email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="password">
+          <Form.Group controlId='password'>
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type="password"
-              placeholder="Enter password"
+              type='password'
+              placeholder='Enter password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="confirmPassword">
+          <Form.Group controlId='confirmPassword'>
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
-              type="password"
-              placeholder="Confirm password"
+              type='password'
+              placeholder='Confirm password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
-          <Button type="submit" variant="primary">
+          <Button type='submit' variant='primary' data-testid='registerButton'>
             Register
           </Button>
         </Form>

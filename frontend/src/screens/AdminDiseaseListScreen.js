@@ -62,16 +62,16 @@ const AdminDiseaseListScreen = ({ history }) => {
       {loadingDiseaseList ? (
         <Loader />
       ) : errorDiseaseList ? (
-        <Message variant="danger">{errorDiseaseList}</Message>
+        <Message variant='danger'>{errorDiseaseList}</Message>
       ) : (
         <>
           <Row>
-            <Col className="mb-2 mt-4 ml-0 pl-0">
+            <Col className='mb-2 mt-4 ml-0 pl-0'>
               <h1>Diseases</h1>
             </Col>
           </Row>
-          <Row className="align-items-center">
-            <Table striped bordered hover responsive className="table-lg">
+          <Row className='align-items-center'>
+            <Table striped bordered hover responsive className='table-lg'>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -90,16 +90,16 @@ const AdminDiseaseListScreen = ({ history }) => {
                     <td>{disease.description}</td>
                     <td>
                       <LinkContainer to={`/admin/patient/${disease._id}/edit`}>
-                        <Button variant="light" className="btn-sm">
-                          <i className="fas fa-edit"></i>
+                        <Button variant='light' className='btn-sm'>
+                          <i className='fas fa-edit'></i>
                         </Button>
                       </LinkContainer>
                       <Button
-                        variant="danger"
-                        className="btn-sm"
+                        variant='danger'
+                        className='btn-sm'
                         onClick={() => deleteHandler(disease._id)}
                       >
-                        <i className="fas fa-trash"></i>
+                        <i className='fas fa-trash'></i>
                       </Button>
                     </td>
                   </tr>

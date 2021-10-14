@@ -45,25 +45,25 @@ const AdminDoctorListScreen = ({ history }) => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <>
           <Row>
-            <Col className="mb-2 mt-4 ml-0 pl-0">
+            <Col className='mb-2 mt-4 ml-0 pl-0'>
               <h1>Doctors</h1>
             </Col>
           </Row>
-          <Row className="align-items-center">
-            <Col className="mb-4 mt-4 pl-0 ml-0 mr-0 pr-0">
+          <Row className='align-items-center'>
+            <Col className='mb-4 mt-4 pl-0 ml-0 mr-0 pr-0'>
               <LinkContainer to={`/admin/addDoctor`} style={{ float: 'right' }}>
-                <Button variant="primary" size="lg" style={{ float: 'right' }}>
-                  <i className="fas fa-plus mr-2"></i>
+                <Button variant='primary' size='lg' style={{ float: 'right' }}>
+                  <i className='fas fa-plus mr-2'></i>
                   New doctor
                 </Button>
               </LinkContainer>
             </Col>
 
-            <Table striped bordered hover responsive className="table-lg">
+            <Table striped bordered hover responsive className='table-lg'>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -86,28 +86,32 @@ const AdminDoctorListScreen = ({ history }) => {
                     <td>
                       {user.isAdmin ? (
                         <i
-                          className="fas fa-check"
+                          className='fas fa-check'
                           style={{ color: 'green' }}
                         ></i>
                       ) : (
                         <i
-                          className="fas fa-times"
+                          className='fas fa-times'
                           style={{ color: 'red' }}
                         ></i>
                       )}
                     </td>
                     <td>
                       <LinkContainer to={`/admin/doctor/${user._id}/edit`}>
-                        <Button variant="light" className="btn-sm">
-                          <i className="fas fa-edit"></i>
+                        <Button
+                          variant='light'
+                          className='btn-sm'
+                          data-testid='newDoctorButton'
+                        >
+                          <i className='fas fa-edit'></i>
                         </Button>
                       </LinkContainer>
                       <Button
-                        variant="danger"
-                        className="btn-sm"
+                        variant='danger'
+                        className='btn-sm'
                         onClick={() => deleteHandler(user._id)}
                       >
-                        <i className="fas fa-trash"></i>
+                        <i className='fas fa-trash'></i>
                       </Button>
                     </td>
                   </tr>
