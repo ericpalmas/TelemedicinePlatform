@@ -19,12 +19,6 @@ import { listDiseases, deleteDisease } from '../actions/diseaseActions'
 const AdminDiseaseListScreen = ({ history }) => {
   const dispatch = useDispatch()
 
-  //   const patientList = useSelector((state) => state.patientList)
-  //   const { loading, error, patients } = patientList
-
-  //   const patientDelete = useSelector((state) => state.patientDelete)
-  //   const { success: successDelete } = patientDelete
-
   const diseaseList = useSelector((state) => state.diseaseList)
   const {
     loading: loadingDiseaseList,

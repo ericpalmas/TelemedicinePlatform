@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Row,
@@ -9,6 +9,7 @@ import {
   Accordion,
   Card,
 } from 'react-bootstrap'
+import { CSVLink, CSVDownload } from 'react-csv'
 import BootstrapTable from 'react-bootstrap-table-next'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
 import Message from '../components/Message'
@@ -18,10 +19,25 @@ import { listPatientDiseases } from '../actions/diseaseActions'
 import { listSurveyResponses } from '../actions/responsesActions'
 
 import { columns, selectRow, data, dati } from '../sensorTableData.js'
+import DownloadCSV from '../components/DownloadCSV'
 
 //dentro use effect farò la query per avere il singolo paziente
 const PatientScreen = ({ history, match }) => {
   const dispatch = useDispatch()
+
+  const [updated, setUpdated] = useState(false)
+
+  const csvLink = React.createRef()
+
+  var headers = [
+    { label: 'Survey Name', key: 'surveyName' },
+    { label: 'Date', key: 'date' },
+    { label: 'Hour', key: 'hour' },
+    { label: 'Name', key: 'name' },
+    { label: 'Surname', key: 'surname' },
+  ]
+
+  var data = []
 
   const patientDetail = useSelector((state) => state.patientDetail)
   const { loading, error, patient } = patientDetail
@@ -39,6 +55,9 @@ const PatientScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(patientDetails(match.params.id))
+  }, [dispatch, match])
+
+  useEffect(() => {
     dispatch(listPatientDiseases(match.params.id))
   }, [dispatch, match])
 
@@ -46,9 +65,84 @@ const PatientScreen = ({ history, match }) => {
     dispatch(listSurveyResponses(match.params.id))
   }, [dispatch, match])
 
+  const createCSV = () => {
+    if (responses) {
+      if (responses.lenght !== 0) {
+        if (responses[0] !== undefined) {
+          responses[0].surveyResponses.forEach((response, index) => {
+            // setto gli header
+            if (response.question[0]) {
+              headers.push({
+                label: response.question[0].text,
+                key: 'Question ' + (index + 1),
+              })
+            } else {
+              headers.push({
+                label: 'Question ' + (index + 1),
+                key: 'Question ' + (index + 1),
+              })
+            }
+          })
+
+          // setto i dati
+          responses.forEach((response, i) => {
+            var cur = {
+              surveyName: response.survey[0].name,
+              name: patient.name,
+              surname: patient.surname,
+            }
+            response.surveyResponses.forEach((singleResponse, index) => {
+              cur['date'] =
+                singleResponse.question[0] !== undefined
+                  ? singleResponse.question[0].updatedAt.substring(0, 10)
+                  : 'date'
+              cur['hour'] =
+                singleResponse.question[0] !== undefined
+                  ? singleResponse.question[0].updatedAt.substring(12, 16)
+                  : 'date'
+
+              if (singleResponse.answer.type === 'Check') {
+                if (singleResponse.answer.answers !== undefined) {
+                  var string = ''
+                  singleResponse.answer.answers.forEach(function (element) {
+                    string += element.answer + '; '
+                  })
+
+                  if (
+                    headers.find(
+                      (elem) => elem.key === 'Question ' + (index + 1)
+                    )
+                  )
+                    cur['Question ' + (index + 1)] = string
+                  //console.log(singleResponse.answer.type + ': ' + string)
+                }
+              } else {
+                // console.log(
+                //   singleResponse.answer.type +
+                //     ': ' +
+                //     singleResponse.answer.answer
+                // )
+                if (
+                  headers.find((elem) => elem.key === 'Question ' + (index + 1))
+                )
+                  cur['Question ' + (index + 1)] = singleResponse.answer.answer
+              }
+            })
+            data.push(cur)
+          })
+
+          console.log(headers)
+          console.log(data)
+
+          csvLink.current.link.click()
+        }
+      }
+    }
+  }
+
   return (
     <>
-      {loading ? (
+      {loading && loadingPatientDiseases ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>{error}</Message>
@@ -105,7 +199,38 @@ const PatientScreen = ({ history, match }) => {
 
           {/* risposte ai questionari  */}
           <Row className='mt-4 mb-4'>
-            <h2>Patient survey responses</h2>
+            <Col>
+              <h2>Patient survey responses</h2>
+            </Col>
+
+            <Col>
+              {/* <Button onClick={createCSV}>Download transactions to csv</Button>
+              <CSVLink
+                data={data}
+                headers={headers}
+                filename='transactions.csv'
+                className='hidden'
+                ref={csvLink}
+                target='_blank'
+              /> */}
+              <DownloadCSV
+                data={data}
+                headers={headers}
+                responses={responses}
+                patient={patient}
+              />
+              {/* {data.length !== 0 ? (
+                <>
+                  
+             
+                </>
+              ) : (
+                <>
+                  <p>Nothing to download</p>
+                </>
+              )} */}
+            </Col>
+
             <br></br>
           </Row>
 
