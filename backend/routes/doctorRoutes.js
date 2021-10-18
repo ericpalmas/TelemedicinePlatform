@@ -7,18 +7,6 @@ import DoctorPatient from '../models/doctorPatientModel.js'
 
 import { protect, admin } from '../middleware/authMiddleware.js'
 
-// @desc Fetch all patients
-// @route GET /api/patients
-// @access Public
-// router.get(
-//   '/',
-//   asyncHandler(async (req, res) => {
-//     const doctors = await Doctor.find({})
-
-//     res.json(doctors)
-//   }),
-// )
-
 // @desc   Auth doctor & get token
 // @route  POST /api/doctors/login
 // @access Public
@@ -42,7 +30,7 @@ router.post(
       res.status(401)
       throw new Error('Invalid email or password')
     }
-  }),
+  })
 )
 
 // @desc   Register a new doctor
@@ -80,7 +68,7 @@ router.route('/').post(
       res.status(400)
       throw new Error('Invalid user data')
     }
-  }),
+  })
 )
 
 // @desc   Get doctor profile
@@ -103,7 +91,7 @@ router.route('/profile').get(
       res.status(404)
       throw new Error('User not found')
     }
-  }),
+  })
 )
 
 // @desc    Update doctor profile
@@ -137,7 +125,7 @@ router.route('/profile').put(
       res.status(404)
       throw new Error('User not found')
     }
-  }),
+  })
 )
 
 // @desc    Delete doctor
@@ -155,7 +143,7 @@ router.route('/:id').delete(
       res.status(404)
       throw new Error('User not found')
     }
-  }),
+  })
 )
 
 // @desc    Get all doctors
@@ -167,7 +155,7 @@ router.route('/').get(
   asyncHandler(async (req, res) => {
     const users = await Doctor.find({})
     res.json(users)
-  }),
+  })
 )
 
 // @desc    Get doctor by ID
@@ -184,7 +172,7 @@ router.route('/:id').get(
       res.status(404)
       throw new Error('User not found')
     }
-  }),
+  })
 )
 
 // @desc    Update doctor
@@ -215,7 +203,7 @@ router.route('/:id').put(
       res.status(404)
       throw new Error('User not found')
     }
-  }),
+  })
 )
 
 // @desc    Get doctor patients
@@ -228,7 +216,7 @@ router.route('/patients/:id').get(
       .populate('patient')
       .select('patient')
     res.json(users)
-  }),
+  })
 )
 
 export default router

@@ -60,7 +60,10 @@ import {
   updateTimeSlotReducer,
 } from './reducers/timeSlotReducers'
 
-import { responsesListReducer } from './reducers/responsesReducers'
+import {
+  responsesListReducer,
+  patientsResponsesListReducer,
+} from './reducers/responsesReducers'
 
 const reducer = combineReducers({
   patientList: patientListReducer,
@@ -104,6 +107,7 @@ const reducer = combineReducers({
   surveyAssignedWithPatient: surveyAssignedWithPatientReducer,
   surveyDelete: surveyDeleteReducer,
   surveyUpdateName: surveyUpdateNameReducer,
+  patientsResponsesList: patientsResponsesListReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')

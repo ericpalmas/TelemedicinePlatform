@@ -3,6 +3,9 @@ import {
   PATIENT_RESPONSE_LIST_REQUEST,
   PATIENT_RESPONSE_LIST_SUCCESS,
   PATIENT_RESPONSE_LIST_FAIL,
+  PATIENTS_RESPONSE_LIST_REQUEST,
+  PATIENTS_RESPONSE_LIST_SUCCESS,
+  PATIENTS_RESPONSE_LIST_FAIL,
 } from '../constants/responsesConstants'
 
 import {
@@ -57,3 +60,44 @@ export const listSurveyResponses = (id) => async (dispatch, getState) => {
     })
   }
 }
+
+export const listPatientsSurveyResponses =
+  (id) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PATIENTS_RESPONSE_LIST_REQUEST,
+      })
+
+      const {
+        doctorLogin: { userInfo },
+      } = getState()
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.get(`/api/responses/doctor/${id}`, config)
+
+      dispatch({
+        type: PATIENTS_RESPONSE_LIST_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        localStorage.removeItem('userInfo')
+        dispatch({ type: DOCTOR_LOGOUT })
+        dispatch({ type: DOCTOR_DETAILS_RESET })
+        dispatch({ type: DOCTOR_LIST_RESET })
+      }
+      dispatch({
+        type: PATIENTS_RESPONSE_LIST_FAIL,
+        payload: message,
+      })
+    }
+  }

@@ -65,81 +65,6 @@ const PatientScreen = ({ history, match }) => {
     dispatch(listSurveyResponses(match.params.id))
   }, [dispatch, match])
 
-  const createCSV = () => {
-    if (responses) {
-      if (responses.lenght !== 0) {
-        if (responses[0] !== undefined) {
-          responses[0].surveyResponses.forEach((response, index) => {
-            // setto gli header
-            if (response.question[0]) {
-              headers.push({
-                label: response.question[0].text,
-                key: 'Question ' + (index + 1),
-              })
-            } else {
-              headers.push({
-                label: 'Question ' + (index + 1),
-                key: 'Question ' + (index + 1),
-              })
-            }
-          })
-
-          // setto i dati
-          responses.forEach((response, i) => {
-            var cur = {
-              surveyName: response.survey[0].name,
-              name: patient.name,
-              surname: patient.surname,
-            }
-            response.surveyResponses.forEach((singleResponse, index) => {
-              cur['date'] =
-                singleResponse.question[0] !== undefined
-                  ? singleResponse.question[0].updatedAt.substring(0, 10)
-                  : 'date'
-              cur['hour'] =
-                singleResponse.question[0] !== undefined
-                  ? singleResponse.question[0].updatedAt.substring(12, 16)
-                  : 'date'
-
-              if (singleResponse.answer.type === 'Check') {
-                if (singleResponse.answer.answers !== undefined) {
-                  var string = ''
-                  singleResponse.answer.answers.forEach(function (element) {
-                    string += element.answer + '; '
-                  })
-
-                  if (
-                    headers.find(
-                      (elem) => elem.key === 'Question ' + (index + 1)
-                    )
-                  )
-                    cur['Question ' + (index + 1)] = string
-                  //console.log(singleResponse.answer.type + ': ' + string)
-                }
-              } else {
-                // console.log(
-                //   singleResponse.answer.type +
-                //     ': ' +
-                //     singleResponse.answer.answer
-                // )
-                if (
-                  headers.find((elem) => elem.key === 'Question ' + (index + 1))
-                )
-                  cur['Question ' + (index + 1)] = singleResponse.answer.answer
-              }
-            })
-            data.push(cur)
-          })
-
-          console.log(headers)
-          console.log(data)
-
-          csvLink.current.link.click()
-        }
-      }
-    }
-  }
-
   return (
     <>
       {loading && loadingPatientDiseases ? (
@@ -204,31 +129,12 @@ const PatientScreen = ({ history, match }) => {
             </Col>
 
             <Col>
-              {/* <Button onClick={createCSV}>Download transactions to csv</Button>
-              <CSVLink
-                data={data}
-                headers={headers}
-                filename='transactions.csv'
-                className='hidden'
-                ref={csvLink}
-                target='_blank'
-              /> */}
               <DownloadCSV
                 data={data}
                 headers={headers}
                 responses={responses}
                 patient={patient}
               />
-              {/* {data.length !== 0 ? (
-                <>
-                  
-             
-                </>
-              ) : (
-                <>
-                  <p>Nothing to download</p>
-                </>
-              )} */}
             </Col>
 
             <br></br>

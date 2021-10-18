@@ -187,7 +187,11 @@ const AddSurveyTIme = () => {
 
   const submitHandler = (e) => {
     var findError = false
+    console.log(items)
     for (var i = 0; i < items.length; i++) {
+      console.log(items[i].startMinutes)
+      console.log(items[i].endMinutes)
+
       if (items[i].startHour > items[i].endHour) {
         setErrorStartEnd(true)
         setValidated(false)

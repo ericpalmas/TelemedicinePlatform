@@ -18,6 +18,7 @@ import {
   listPatientsAndDiseases,
 } from '../actions/patientActions'
 import { listDoctorPatients } from '../actions/doctorActions'
+import { listPatientsSurveyResponses } from '../actions/responsesActions'
 
 const PatientListScreen = () => {
   const dispatch = useDispatch()
@@ -33,6 +34,15 @@ const PatientListScreen = () => {
     error: errorPatientAndDiseases,
     patients: patientAndDiseases,
   } = patientAndDiseasesList
+
+  const patientsResponsesList = useSelector(
+    (state) => state.patientsResponsesList
+  )
+  const {
+    loading: loadingResponses,
+    error: errorResponses,
+    responses,
+  } = patientsResponsesList
 
   // const userLogin = useSelector((state) => state.doctorLogin)
   // const { userInfo } = userLogin || 'noUserInfoSaved'
@@ -50,6 +60,11 @@ const PatientListScreen = () => {
       dispatch(listDoctorPatients(userInfo.split('"')[3]))
     }
   }, [dispatch, userInfo])
+
+  useEffect(() => {
+    dispatch(listPatientsSurveyResponses())
+    console.log(responses)
+  }, [dispatch])
 
   useEffect(() => {
     setPatientElaborated([])
