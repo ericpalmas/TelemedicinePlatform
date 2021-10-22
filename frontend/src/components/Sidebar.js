@@ -12,16 +12,18 @@ import * as IoIcons from 'react-icons/io'
 import * as RiIcons from 'react-icons/ri'
 import * as VscIcons from 'react-icons/vsc'
 import * as BiIcons from 'react-icons/bi'
+import * as AiIcons from 'react-icons/ai'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   listSurveyTemplates,
-  //saveSurveyId,
   surveyDetails,
   currentSurvey,
 } from '../actions/surveyActions'
 import AddSurveyTIme from '../modals/AddSurveyTIme'
+import DownloadSurveyCSV from '../components/DownloadSurveyCSV'
+import { listPatientsSurveyResponses } from '../actions/responsesActions'
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false)
@@ -39,9 +41,51 @@ const Sidebar = () => {
   const surveyTemplateList = useSelector((state) => state.surveyTemplateList)
   const { loading, error, surveys } = surveyTemplateList
 
+  const patientsResponsesList = useSelector(
+    (state) => state.patientsResponsesList
+  )
+  const {
+    loading: loadingResponses,
+    error: errorResponses,
+    responses,
+  } = patientsResponsesList
+
+  const curSurv = useSelector((state) => state.currentSurvey)
+  const {
+    loading: loadingCurrentSurvey,
+    error: errorCurrentSurvey,
+    survey: currentId,
+  } = curSurv
+
+  var headers = [
+    { label: 'Survey Name', key: 'surveyName' },
+    { label: 'Date', key: 'date' },
+    { label: 'Hour', key: 'hour' },
+    { label: 'Name', key: 'name' },
+    { label: 'Surname', key: 'surname' },
+  ]
+  var surv = localStorage.getItem('surveyId') || 'noIdSaved'
+
+  var data = []
+
+  //var responses = []
+
   useEffect(() => {
     dispatch(listSurveyTemplates())
   }, [dispatch])
+
+  useEffect(() => {
+    if (surv !== 'noIdSaved') {
+      dispatch(listPatientsSurveyResponses(surv.split('"')[1]))
+      console.log(responses)
+    }
+  }, [dispatch, surv])
+
+  useEffect(() => {
+    if (surv !== 'noIdSaved') {
+      surv = localStorage.getItem('surveyId') || 'noIdSaved'
+    }
+  }, [currentId])
 
   return (
     <>
@@ -71,36 +115,52 @@ const Sidebar = () => {
               </div>
             </div>
 
+            {/* {loading ? (
+              <Loader />
+            ) : error ? (
+              <Message variant='danger'>{error}</Message>
+            ) : (
+              <> */}
             {subnav ? (
               <>
-                {surveys.map((survey) => (
+                {loading ? (
+                  <Loader />
+                ) : error ? (
+                  <Message variant='danger'>{error}</Message>
+                ) : (
                   <>
-                    {survey.deleted ? (
-                      <></>
-                    ) : (
+                    {surveys.map((survey) => (
                       <>
-                        <div id='dropdownLink'>
-                          <Nav.Link>
-                            <IoIcons.IoIosPaper />
-                            <span
-                              id='sidebarLabel'
-                              style={{ color: '#fff' }}
-                              onClick={() =>
-                                dispatch(currentSurvey(survey._id))
-                              }
-                            >
-                              {survey.name}
-                            </span>
-                          </Nav.Link>
-                        </div>
+                        {survey.deleted ? (
+                          <></>
+                        ) : (
+                          <>
+                            <div id='dropdownLink'>
+                              <Nav.Link>
+                                <IoIcons.IoIosPaper />
+                                <span
+                                  id='sidebarLabel'
+                                  style={{ color: '#fff' }}
+                                  onClick={() =>
+                                    dispatch(currentSurvey(survey._id))
+                                  }
+                                >
+                                  {survey.name}
+                                </span>
+                              </Nav.Link>
+                            </div>
+                          </>
+                        )}
                       </>
-                    )}
+                    ))}
                   </>
-                ))}
+                )}
               </>
             ) : (
               <></>
             )}
+            {/* </>
+            )} */}
 
             {/* Normal menu item */}
             <id id='sidebarLink' data-testid='addSurvey'>
@@ -118,6 +178,15 @@ const Sidebar = () => {
             <div id='sidebarLink' data-testid='addTimeSlot'>
               <BiIcons.BiTime />
               <AddSurveyTIme />
+            </div>
+
+            <div id='sidebarLink' data-testid='downloadCSV'>
+              <AiIcons.AiOutlineDownload />
+              <DownloadSurveyCSV
+                data={data}
+                headers={headers}
+                responses={responses}
+              />
             </div>
           </div>
         </nav>

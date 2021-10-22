@@ -44,9 +44,6 @@ const PatientListScreen = () => {
     responses,
   } = patientsResponsesList
 
-  // const userLogin = useSelector((state) => state.doctorLogin)
-  // const { userInfo } = userLogin || 'noUserInfoSaved'
-
   var userInfo = localStorage.getItem('userInfo') || 'noUserInfoSaved'
 
   const [patientElaborated, setPatientElaborated] = useState([])
@@ -62,8 +59,10 @@ const PatientListScreen = () => {
   }, [dispatch, userInfo])
 
   useEffect(() => {
-    dispatch(listPatientsSurveyResponses())
-    console.log(responses)
+    if (userInfo !== 'noUserInfoSaved') {
+      dispatch(listPatientsSurveyResponses(userInfo.split('"')[3]))
+      console.log(responses)
+    }
   }, [dispatch])
 
   useEffect(() => {
@@ -93,6 +92,7 @@ const PatientListScreen = () => {
                 />
               </InputGroup>
             </Col>
+
             <Col sm={6}>
               <AddPatientModal />
             </Col>

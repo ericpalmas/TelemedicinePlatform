@@ -43,7 +43,12 @@ const AddSurveyTIme = () => {
 
   const updateItems = useCallback(() => {
     setItems(surveyTimeSlots)
-  }, [dispatch, currentSurveyId, surveyTimeSlots.length || 0, loading])
+  }, [
+    dispatch,
+    currentSurveyId,
+    surveyTimeSlots ? surveyTimeSlots.length : 0,
+    loading,
+  ])
 
   useEffect(() => {
     if (currentSurveyId !== 'noSurveyId') {

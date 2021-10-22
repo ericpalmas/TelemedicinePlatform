@@ -89,17 +89,81 @@ router.route('/:id').get(
   })
 )
 
-router.route('/doctor/:id').get(
+// router.route('/doctor/:id').get(
+//   protect,
+//   asyncHandler(async (req, res) => {
+//     const oggettiToArray = await DoctorPatient.find({
+//       doctor: req.params.id,
+//     }).select('patient')
+//     const listaID = oggettiToArray.map((a) => a.patient)
+
+//     const response = await Response.aggregate([
+//       { $match: { patient: { $in: listaID } } },
+
+//       {
+//         $lookup: {
+//           from: Patient.collection.name,
+//           localField: 'patient',
+//           foreignField: '_id',
+//           as: 'patient',
+//         },
+//       },
+
+//       {
+//         $lookup: {
+//           from: Question.collection.name,
+//           localField: 'question',
+//           foreignField: '_id',
+//           as: 'question',
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: SurveyResponse.collection.name,
+//           localField: 'surveyResponse',
+//           foreignField: '_id',
+//           as: 'surveyResponse',
+//         },
+//       },
+//       {
+//         $addFields: {
+//           survey_id: {
+//             $toObjectId: { $arrayElemAt: ['$surveyResponse.survey', 0] },
+//           },
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: Survey.collection.name,
+//           localField: 'survey_id',
+//           foreignField: '_id',
+//           as: 'survey',
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: '$patient', //$region is the column name in collection
+//           surveyResponses: {
+//             $push: {
+//               patient: '$patient',
+//               question: '$question',
+//               answer: '$answer',
+//               surveyResponse: '$surveyResponse',
+//               survey: '$survey',
+//             },
+//           },
+//         },
+//       },
+//     ])
+
+//     res.json(response)
+//   })
+// )
+
+router.route('/survey/:id').get(
   protect,
   asyncHandler(async (req, res) => {
-    const oggettiToArray = await DoctorPatient.find({
-      doctor: req.params.id,
-    }).select('patient')
-    const listaID = oggettiToArray.map((a) => a.patient)
-
     const response = await Response.aggregate([
-      { $match: { patient: { $in: listaID } } },
-
       {
         $lookup: {
           from: Patient.collection.name,
@@ -132,6 +196,10 @@ router.route('/doctor/:id').get(
           },
         },
       },
+
+      {
+        $match: { survey_id: new mongoose.Types.ObjectId(req.params.id) },
+      },
       {
         $lookup: {
           from: Survey.collection.name,
@@ -140,9 +208,25 @@ router.route('/doctor/:id').get(
           as: 'survey',
         },
       },
+
+      // {
+      //   $group: {
+      //     _id: '$patient', //$region is the column name in collection
+      //     surveyResponses: {
+      //       $push: {
+      //         patient: '$patient',
+      //         question: '$question',
+      //         answer: '$answer',
+      //         surveyResponse: '$surveyResponse',
+      //         survey: '$survey',
+      //       },
+      //     },
+      //   },
+      // },
+
       {
         $group: {
-          _id: '$patient', //$region is the column name in collection
+          _id: '$surveyResponse',
           surveyResponses: {
             $push: {
               patient: '$patient',
@@ -152,6 +236,8 @@ router.route('/doctor/:id').get(
               survey: '$survey',
             },
           },
+
+          survey: { $first: '$survey' },
         },
       },
     ])

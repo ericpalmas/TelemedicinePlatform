@@ -78,7 +78,7 @@ export const listPatientsSurveyResponses =
         },
       }
 
-      const { data } = await axios.get(`/api/responses/doctor/${id}`, config)
+      const { data } = await axios.get(`/api/responses/survey/${id}`, config)
 
       dispatch({
         type: PATIENTS_RESPONSE_LIST_SUCCESS,
