@@ -5,6 +5,7 @@ import Survey from '../models/surveyModel.js'
 import SurveyResponse from '../models/surveyResponseModel.js'
 import Question from '../models/questionModel.js'
 import PatientDisease from '../models/patientDiseaseModel.js'
+import DoctorPatient from '../models/doctorPatientModel.js'
 import OfferedAnswer from '../models/offeredAnswerModel.js'
 import Patient from '../models/patientModel.js'
 import TimeSlot from '../models/timeSlotModel.js'
@@ -119,7 +120,7 @@ router.route('/assignment').post(
 
         const result = await surveyResponse.save()
       }
-      res.status(201)
+      res.status(201).json(result)
     } else {
       res.status(404)
       throw new Error('nothing passed')
@@ -130,20 +131,69 @@ router.route('/assignment').post(
 // @desc Fetch single survey
 // @route GET /api/surveys/:id
 // @access Public
-router.get(
+router.post(
   '/assignedSurveys/patients/:id',
   asyncHandler(async (req, res) => {
+    //controllo che i pazienti siano assegnati al dottore loggato
+
+    // const oggettiToArray = await DoctorPatient.find({
+    //   doctor: '60ac01c8c458a814c89b16de',
+    // }).select('patient')
+    // const listaID = oggettiToArray.map((a) => a.patient)
+
+    // const patientWithoutDiseases = await Patient.find({})
+    //   .where('_id')
+    //   .nin(listaID)
+
+    const { surveyId, doctorId } = req.body
+
+    console.log(req.body)
+    console.log(surveyId)
+    console.log(doctorId)
+
     var patientIds = []
     const patientWithSurveyAssigned = await SurveyResponse.find({
       survey: req.params.id,
+      completed: false,
     }).distinct('patient')
+
+    //console.log(listaID)
+
+    // console.log('patient with id assigned')
+    // console.log(patientWithSurveyAssigned)
 
     for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
       patientIds.push(patientWithSurveyAssigned[i] + '')
     }
 
-    if (patientIds) {
-      res.json(patientIds)
+    const doctorPatients = await DoctorPatient.find({
+      doctor: '60ac01c8c458a814c89b16de',
+    })
+    //  .where('patient')
+    // .nin(patientIds)
+    // .select('patient')
+
+    //console.log(doctorPatients)
+
+    var risultato = []
+    for (var i = 0; i < doctorPatients.length; i++) {
+      if (patientIds.includes(doctorPatients[i].patient)) {
+        risultato.push({
+          _id: doctorPatients[i].patient,
+          assigned: true,
+        })
+      } else {
+        risultato.push({
+          _id: doctorPatients[i].patient,
+          assigned: false,
+        })
+      }
+    }
+
+    //console.log(risultato)
+
+    if (risultato) {
+      res.status(200).json(risultato)
     } else {
       res.status(404)
       throw new Error('Survey not found')

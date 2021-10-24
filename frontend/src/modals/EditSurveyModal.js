@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -6,10 +6,12 @@ import Loader from '../components/Loader'
 import Modal from 'react-bootstrap/Modal'
 import { Button, Form, FormLabel } from 'react-bootstrap'
 
-import { updateNameSurvey } from '../actions/surveyActions'
+import { updateNameSurvey, surveyDetails } from '../actions/surveyActions'
 
 const EditSurveyModal = ({ surveyName, surveyId }) => {
-  const [name, setName] = useState(surveyName)
+  // const [name, setName] = useState(surveyName)
+  const [name, setName] = useState('')
+
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -23,6 +25,18 @@ const EditSurveyModal = ({ surveyName, surveyId }) => {
     success: successUpdateName,
   } = surveyUpdateName
 
+  const currentSurvey = useSelector((state) => state.currentSurvey)
+  const {
+    loading: loadingCurrentSurvey,
+    error: errorCurrentSurvey,
+    survey: currentId,
+  } = currentSurvey
+
+  var surveyDetail = useSelector((state) => state.survey)
+  var { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
+
+  var surv = localStorage.getItem('surveyId') || 'noIdSaved'
+
   const submitHandler = (e) => {
     e.preventDefault()
     const newName = {
@@ -33,7 +47,20 @@ const EditSurveyModal = ({ surveyName, surveyId }) => {
     dispatch(updateNameSurvey(newName))
   }
 
-  useEffect(() => {}, [dispatch])
+  const updateCUrrentSurvey = useCallback(() => {
+    if (!loadingSurvey && currentId) {
+      dispatch(surveyDetails(currentId))
+    }
+  }, [currentId])
+
+  useEffect(() => {
+    if (surv !== 'noIdSaved') {
+      if (surv !== undefined) {
+        dispatch(surveyDetails(surv.split('"')[1]))
+      }
+    }
+    updateCUrrentSurvey()
+  }, [dispatch, surv, successUpdateName, updateCUrrentSurvey])
 
   return (
     <>

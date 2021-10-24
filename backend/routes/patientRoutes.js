@@ -16,7 +16,7 @@ router.get(
     const patients = await Patient.find({})
 
     res.json(patients)
-  }),
+  })
 )
 
 // @desc Add new disease
@@ -60,7 +60,7 @@ router.post(
       res.status(404)
       throw new Error('Patient not created')
     }
-  }),
+  })
 )
 
 // @desc    Delete a patient
@@ -83,7 +83,7 @@ router.delete(
       res.status(404)
       throw new Error('Patient not found')
     }
-  }),
+  })
 )
 
 // @desc    Update a patient
@@ -123,7 +123,7 @@ router.put(
       res.status(404)
       throw new Error('Product not found')
     }
-  }),
+  })
 )
 
 // @desc Fetch single patient
@@ -140,17 +140,36 @@ router.get(
       res.status(404)
       throw new Error('Patient not found')
     }
-  }),
+  })
 )
 
 // @desc Fetch patients by disease
 // @route GET /api/patients/patientsByDisease/:id
 // @access Public
-router.get(
+router.post(
   '/patientsByDisease/:id',
   asyncHandler(async (req, res) => {
+    const { surveyId, doctorId } = req.body
+
+    console.log(req.body)
+    console.log(surveyId)
+    console.log(doctorId)
+
+    var doctorPatientIds = []
+    const doctorPatients = await DoctorPatient.find({
+      doctor: doctorId,
+    })
+    for (var i = 0; i < doctorPatients.length; i++) {
+      doctorPatientIds.push(doctorPatients[i].patient + '')
+    }
+    console.log('doctor patients')
+    console.log(doctorPatientIds)
+
+    // mettere il controllo che i pazienti ritornati siano assegnati al dottore loggato
     const result = await PatientDisease.find({ disease: req.params.id })
       .select('patient disease')
+      .where('patient')
+      .in(doctorPatientIds)
       .populate('patient')
       .exec()
 
@@ -160,7 +179,7 @@ router.get(
       res.status(404)
       throw new Error('Disease not found')
     }
-  }),
+  })
 )
 
 export default router

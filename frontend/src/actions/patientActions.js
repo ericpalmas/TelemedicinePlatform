@@ -68,11 +68,15 @@ export const patientDetails = (id) => async (dispatch) => {
   }
 }
 
-export const listPatientsByDisease = (id) => async (dispatch) => {
+export const listPatientsByDisease = (parameters) => async (dispatch) => {
+  console.log(parameters)
   try {
     dispatch({ type: PATIENT_BY_DISEASE_LIST_REQUEST })
 
-    const { data } = await axios.get(`/api/patients/patientsByDisease/${id}`)
+    const { data } = await axios.post(
+      `/api/patients/patientsByDisease/${parameters.patientId}`,
+      parameters
+    )
 
     dispatch({
       type: PATIENT_BY_DISEASE_LIST_SUCCESS,
@@ -110,11 +114,14 @@ export const listPatientsAndDiseases = () => async (dispatch) => {
   }
 }
 
-export const listPatientsAndDisease = (id) => async (dispatch) => {
+export const listPatientsAndDisease = (parameters) => async (dispatch) => {
   try {
     dispatch({ type: PATIENT_AND_DISEASE_LIST_REQUEST })
 
-    const { data } = await axios.get(`/api/patientsAndDiseases/${id}`)
+    const { data } = await axios.post(
+      `/api/patientsAndDiseases/${parameters.surveyId}`,
+      parameters
+    )
 
     dispatch({
       type: PATIENT_AND_DISEASE_LIST_SUCCESS,

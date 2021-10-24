@@ -29,9 +29,20 @@ const PatientsByDisease = ({ history, match }) => {
 
   var userInfo = localStorage.getItem('userInfo') || 'noUserInfoSaved'
 
+  const userLogin = useSelector((state) => state.doctorLogin)
+  const {
+    loading: loginLoading,
+    error: loginError,
+    userInfo: user_info,
+  } = userLogin
+
   useEffect(() => {
     if (userInfo !== 'noUserInfoSaved') {
-      dispatch(listPatientsByDisease(match.params.id))
+      var parameters = {
+        patientId: match.params.id,
+        doctorId: user_info._id,
+      }
+      dispatch(listPatientsByDisease(parameters))
     }
   }, [dispatch, match])
 

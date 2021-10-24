@@ -128,7 +128,6 @@ export const surveyPatientAssignmentReducer = (state = {}, action) => {
       return {
         loading: false,
         success: true,
-        assignments: action.payload,
       }
     case SURVEY_PATIENT_ASSIGNMENT_FAIL:
       return {

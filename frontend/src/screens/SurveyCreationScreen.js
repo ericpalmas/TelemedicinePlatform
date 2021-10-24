@@ -27,7 +27,6 @@ import { listPatientsAndDisease } from '../actions/patientActions'
 import {
   surveyDetails,
   assignSurveys,
-  listSurveyAssignedWithPatients,
   deleteSurvey,
 } from '../actions/surveyActions'
 import { deleteQuestion } from '../actions/questionActions'
@@ -60,21 +59,14 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
   var surv = localStorage.getItem('surveyId') || 'noIdSaved'
 
+  //var userInf = localStorage.getItem('userInfo') || 'noUserInfoSaved'
+
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const {
     loading: loadingPatients,
     error: errorPatients,
     patients,
   } = patientList
-
-  const surveyAssignedWithPatient = useSelector(
-    (state) => state.surveyAssignedWithPatient
-  )
-  const {
-    loading: loadingAssignements,
-    error: errorAssignements,
-    patientsAssignements,
-  } = surveyAssignedWithPatient
 
   var surveyDetail = useSelector((state) => state.survey)
   var { loading: loadingSurvey, error: errorSurvey, survey } = surveyDetail
@@ -93,15 +85,14 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
     loading: loadingAssignemtsToPatient,
     error: errorAssignemtsToPatient,
     assignments: assignmentsToPatients,
-    success,
+    success: successAssignemtsToPatient,
   } = assignSurveysToPatient
 
   const [surveyUploaded, setSurveyUploaded] = useState(false)
-  const [assignementUploaded, setAssignementSurveyUploaded] = useState(false)
 
-  const [items, setItems] = useState([])
-  const [hour, setHour] = useState(0)
-  const [minutes, setMinutes] = useState(0)
+  // const [items, setItems] = useState([])
+  // const [hour, setHour] = useState(0)
+  // const [minutes, setMinutes] = useState(0)
 
   const userLogin = useSelector((state) => state.doctorLogin)
   const { loading: loginLoading, error: loginError, userInfo } = userLogin
@@ -183,23 +174,41 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
       }
     }
     updateCUrrentSurvey()
-  }, [dispatch, match, history, updateCUrrentSurvey, surv])
+  }, [dispatch, match, history, updateCUrrentSurvey, surv, successSurveyDelete])
 
   const [assignments, setAssignments] = useState([])
 
   useEffect(() => {
-    if (surv !== undefined && surv !== 'noIdSaved') {
-      dispatch(listPatientsAndDisease(surv.split('"')[1]))
+    if (
+      surv !== undefined &&
+      surv !== 'noIdSaved'
+
+      //&& userInfo !== 'noUserInfoSaved'
+    ) {
+      var parameters = {
+        surveyId: surv.split('"')[1],
+        doctorId: userInfo._id,
+      }
+      dispatch(listPatientsAndDisease(parameters))
     }
-  }, [dispatch, surv, currentId])
+  }, [dispatch, surv, currentId, successAssignemtsToPatient])
 
   useEffect(() => {
     if (patients) {
-      var values = [...assignments]
-      values = Array.from(patients, (x) => x.assigned)
+      //var values = [...assignments]
+
+      var values = Array.from(patients, (x) => x.assigned)
+      console.log(values)
+
       setAssignments(values)
+      console.log(assignments)
     }
-  }, [patients])
+  }, [
+    patients,
+    loadingAssignemtsToPatient,
+    patients,
+    successAssignemtsToPatient,
+  ])
 
   return (
     <div>

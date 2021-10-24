@@ -4,34 +4,71 @@ const router = express.Router()
 import PatientDisease from '../models/patientDiseaseModel.js'
 import Patient from '../models/patientModel.js'
 import SurveyResponse from '../models/surveyResponseModel.js'
+import DoctorPatient from '../models/doctorPatientModel.js'
 
 // @desc Fetch patients and diseases
 // @route GET /api/patientsAndDiseases
 // @access Public
-router.get(
+router.post(
   '/:id',
   asyncHandler(async (req, res) => {
-    var patientIds = []
+    const { surveyId, doctorId } = req.body
 
+    console.log(req.body)
+    console.log(surveyId)
+    console.log(doctorId)
+
+    // l'id passato è quello del questionario
+    // pazienti di un certo dottore
+    var doctorPatientIds = []
+    const doctorPatients = await DoctorPatient.find({
+      doctor: doctorId,
+    })
+    for (var i = 0; i < doctorPatients.length; i++) {
+      doctorPatientIds.push(doctorPatients[i].patient + '')
+    }
+    console.log('doctor patients')
+    console.log(doctorPatientIds)
+
+    // pazienti a cui è stato assegnato quel questionario
+    var patientIds = []
     const patientWithSurveyAssigned = await SurveyResponse.find({
       survey: req.params.id,
-    }).distinct('patient')
+      completed: false,
+    })
+      .where('patient')
+      .in(doctorPatientIds)
+      .distinct('patient')
     for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
       patientIds.push(patientWithSurveyAssigned[i] + '')
     }
+    console.log('patients with assigned surveys')
+    console.log(patientWithSurveyAssigned)
 
     const ress = await PatientDisease.find({})
       .select('patient disease')
+      .where('patient')
+      .in(doctorPatientIds)
       .populate('patient')
       .populate('disease')
       .exec()
 
-    const oggettiToArray = await PatientDisease.find({}).select('patient')
+    const oggettiToArray = await PatientDisease.find({})
+      .where('patient')
+      .in(doctorPatientIds)
+      .select('patient')
     const listaID = oggettiToArray.map((a) => a.patient)
+
+    console.log(listaID)
 
     const patientWithoutDiseases = await Patient.find({})
       .where('_id')
       .nin(listaID)
+      .where('_id')
+      .in(doctorPatientIds)
+
+    console.log('patientWithoutDiseases')
+    console.log(patientWithoutDiseases)
 
     var patientDiseases = []
 
@@ -49,7 +86,7 @@ router.get(
               patientDiseases[j].disease.concat(', ', ress[i].disease.name)
               var newVal = patientDiseases[j].disease.concat(
                 ', ',
-                ress[i].disease.name,
+                ress[i].disease.name
               )
               patientDiseases[j].disease = newVal
               return true
@@ -91,7 +128,7 @@ router.get(
       res.status(404)
       throw new Error('Disease not found')
     }
-  }),
+  })
 )
 
 // @desc Fetch patients and diseases
@@ -129,7 +166,7 @@ router.get(
               patientDiseases[j].disease.concat(', ', ress[i].disease.name)
               var newVal = patientDiseases[j].disease.concat(
                 ', ',
-                ress[i].disease.name,
+                ress[i].disease.name
               )
               patientDiseases[j].disease = newVal
               return true
@@ -169,7 +206,7 @@ router.get(
       res.status(404)
       throw new Error('Disease not found')
     }
-  }),
+  })
 )
 
 export default router
