@@ -1,7 +1,6 @@
 import React from 'react'
 import { Row, Col, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import SidebarNuova from '../components/SidebarNuova'
 
 const HomeScreen = () => {
   return (
