@@ -68,8 +68,6 @@ const Sidebar = () => {
 
   var data = []
 
-  //var responses = []
-
   useEffect(() => {
     dispatch(listSurveyTemplates())
   }, [dispatch])
@@ -115,12 +113,6 @@ const Sidebar = () => {
               </div>
             </div>
 
-            {/* {loading ? (
-              <Loader />
-            ) : error ? (
-              <Message variant='danger'>{error}</Message>
-            ) : (
-              <> */}
             {subnav ? (
               <>
                 {loading ? (
@@ -171,8 +163,9 @@ const Sidebar = () => {
             </id>
 
             <div id='sidebarLink' data-testid='addQuestion'>
-              <IoIcons.IoMdAddCircle />
-              <AddQuestionModal />
+              <IoIcons.IoMdAddCircle id='icon' />
+
+              <AddQuestionModal id='modalLink' />
             </div>
 
             <div id='sidebarLink' data-testid='addTimeSlot'>

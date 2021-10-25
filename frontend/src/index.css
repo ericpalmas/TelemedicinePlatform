@@ -16,8 +16,6 @@ main {
 }
 
 #sidebarLink :hover {
-  /* background: #252831;
-  border-left: 4px solid #632ce4; */
   cursor: pointer;
 }
 
@@ -32,17 +30,41 @@ main {
 
 #sidebarNav {
   background: #adb5bd;
-  width: 250px;
-  height: 100vh;
+  width: 12%;
+  height: 100%;
   display: flex;
   justify-content: center;
   position: fixed;
   top: 0;
-  /* left: ${({ sidebar }) => (sidebar ? '0' : '-100%')}; */
   left: 0;
   transition: 350ms;
   z-index: 10;
 }
+@media screen and (max-width: 1710px) {
+  #sidebarNav {
+    width: 15%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+}
+
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+/* @media screen and (max-width: 1500px) {
+  #sidebarNav {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+  }
+  #sidebarLink {
+    float: left;
+  }
+  div.content {
+    margin-left: 0;
+  }
+} */
 
 #sidebarWrap {
   width: 100%;
@@ -64,6 +86,72 @@ main {
 }
 
 #dropdownLink :hover {
-  /* background: #343a40; */
   cursor: pointer;
 }
+
+/* sidebar nuova */
+/* body {
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  height: 100%;
+  overflow: auto;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+
+.sidebar a.active {
+  background-color: #04aa6d;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+} */
+
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+/* @media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {
+    float: left;
+  }
+  div.content {
+    margin-left: 0;
+  }
+} */
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+/* @media screen and (max-width: 1200px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+  .sidebar {
+    width: 10%;
+    height: 100%;
+  }
+} */
