@@ -9,38 +9,38 @@ import {
   FormControl,
   Card,
 } from 'react-bootstrap'
-import Disease from '../components/Disease'
-import AddDiseaseModal from '../modals/AddDiseaseModal'
-import EditDiseaseModal from '../modals/EditDiseaseModal'
+//import Disease from '../components/Disease'
+import AddStudyModal from '../modals/AddStudyModal'
+// import EditDiseaseModal from '../modals/EditDiseaseModal'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listDiseases, deleteDisease } from '../actions/diseaseActions'
+import { listStudies, deleteStudy, createStudy } from '../actions/studyActions'
 
-const DiseaseListScreen = () => {
+const StudyListScreen = () => {
   const dispatch = useDispatch()
 
   const [search, setSearch] = useState('')
 
-  const diseaseList = useSelector((state) => state.diseaseList)
+  const studyList = useSelector((state) => state.studyList)
   const {
-    loading: loadingDiseaseList,
-    error: errorDiseaseList,
-    diseases,
-  } = diseaseList
+    loading: loadingStudyList,
+    error: errorStudyList,
+    studies,
+  } = studyList
 
-  const diseaseDelete = useSelector((state) => state.diseaseDelete)
+  const studyDelete = useSelector((state) => state.studyDelete)
   const {
     loading: loadingDelete,
     error: errorDelete,
     success: successDelete,
-  } = diseaseDelete
+  } = studyDelete
 
   const userLogin = useSelector((state) => state.doctorLogin)
   const { userInfo } = userLogin
 
   useEffect(() => {
     let isMounted = true
-    dispatch(listDiseases())
+    dispatch(listStudies())
     return () => {
       isMounted = false
     }
@@ -48,13 +48,13 @@ const DiseaseListScreen = () => {
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
-      dispatch(deleteDisease(id))
+      dispatch(deleteStudy(id))
     }
   }
 
   return (
     <>
-      <h1>List of diseases</h1>
+      <h1>List of studies</h1>
       <Row className='align-items-center'>
         <Col className='text-right' sm={6} md={4}>
           <InputGroup className='mb-3 mt-4' style={{ width: '20rem' }}>
@@ -68,54 +68,54 @@ const DiseaseListScreen = () => {
           </InputGroup>
         </Col>
         <Col sm={6}>
-          <AddDiseaseModal />
+          <AddStudyModal />
         </Col>
       </Row>
 
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
-      {loadingDiseaseList ? (
+      {loadingStudyList ? (
         <Loader />
-      ) : errorDiseaseList ? (
-        <Message variant='danger'>{errorDiseaseList}</Message>
+      ) : errorStudyList ? (
+        <Message variant='danger'>{errorStudyList}</Message>
       ) : (
         <>
           <Row
             className='mt-4'
             style={{ float: 'left', display: 'inline-block' }}
           >
-            {diseases
+            {studies
               .filter(
-                (disease) =>
-                  disease.name !== null &&
-                  disease.name.toLowerCase().includes(search.toLowerCase())
+                (study) =>
+                  study.name !== null &&
+                  study.name.toLowerCase().includes(search.toLowerCase())
               )
 
-              .map((disease) => (
-                <Col key={disease._id} sm={12}>
+              .map((study) => (
+                <Col key={study._id} sm={12}>
                   <Card
                     className='my-3 p-3 rounded'
                     style={{ width: '60rem', height: '5rem' }}
                   >
                     <a>
-                      <a href={`/patients/patientsByDisease/${disease._id}`}>
+                      <a href={`/patients/patientsByStudy/${study._id}`}>
                         <Card.Title
                           as='div'
                           className='mr-1'
                           style={{ float: 'left' }}
                         >
-                          <strong>{disease.name}</strong>
+                          <strong>{study.name}</strong>
                         </Card.Title>
                       </a>
 
                       <Button
                         variant='danger'
                         style={{ float: 'right' }}
-                        onClick={() => deleteHandler(disease._id)}
+                        onClick={() => deleteHandler(study._id)}
                       >
                         <i className='fas fa-trash'></i>
                       </Button>
-                      <EditDiseaseModal disease={disease} />
+                      {/* <EditDiseaseModal disease={disease} /> */}
                     </a>
                   </Card>
                 </Col>
@@ -127,4 +127,4 @@ const DiseaseListScreen = () => {
   )
 }
 
-export default DiseaseListScreen
+export default StudyListScreen

@@ -23,6 +23,8 @@ import { listPatientsSurveyResponses } from '../actions/responsesActions'
 const PatientListScreen = () => {
   const dispatch = useDispatch()
 
+  const [search, setSearch] = useState('')
+
   const doctorPatientList = useSelector((state) => state.doctorPatientList)
   const { loading, error, doctorPatients } = doctorPatientList
 
@@ -67,14 +69,20 @@ const PatientListScreen = () => {
 
   useEffect(() => {
     setPatientElaborated([])
-    if (!loading && !loadingPatientAndDiseases) {
-      patientAndDiseases.forEach((patient) => {
-        if (doctorPatients.find((x) => x.patient._id === patient._id)) {
-          setPatientElaborated((state) => [...state, patient])
-        }
-      })
+    if (patientAndDiseases && doctorPatients) {
+      if (!loading && !loadingPatientAndDiseases) {
+        patientAndDiseases.forEach((patient) => {
+          if (doctorPatients.find((x) => x.patient._id === patient._id)) {
+            setPatientElaborated((state) => [...state, patient])
+          }
+        })
+      }
     }
-  }, [patientAndDiseases, doctorPatients, patientElaborated.length])
+  }, [
+    patientAndDiseases,
+    doctorPatients,
+    patientElaborated !== undefined ? patientElaborated.length : 0,
+  ])
 
   return (
     <>
@@ -89,6 +97,8 @@ const PatientListScreen = () => {
                   placeholder='Search'
                   aria-label="Recipient's username"
                   aria-describedby='basic-addon2'
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </InputGroup>
             </Col>
@@ -107,11 +117,23 @@ const PatientListScreen = () => {
               className='mt-4'
               style={{ float: 'left', display: 'inline-block' }}
             >
-              {patientElaborated.map((patient) => (
-                <Col sm={12} key={patient._id}>
-                  <Patient key={patient._id} patient={patient} />
-                </Col>
-              ))}
+              {patientElaborated
+                .filter(
+                  (patient) =>
+                    (patient.name !== null &&
+                      patient.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                    (patient.surname !== null &&
+                      patient.surname
+                        .toLowerCase()
+                        .includes(search.toLowerCase()))
+                )
+                .map((patient) => (
+                  <Col sm={12} key={patient._id}>
+                    <Patient key={patient._id} patient={patient} />
+                  </Col>
+                ))}
             </Row>
           )}
         </>

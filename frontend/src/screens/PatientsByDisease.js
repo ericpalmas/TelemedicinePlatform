@@ -11,9 +11,11 @@ import {
 } from '../actions/patientActions'
 
 const PatientsByDisease = ({ history, match }) => {
+  const dispatch = useDispatch()
+
   const [patientAndDiseases, setPatientAndDiseases] = useState('')
 
-  const dispatch = useDispatch()
+  const [search, setSearch] = useState('')
 
   const patientListByDisease = useSelector(
     (state) => state.patientByDiseaseList
@@ -63,6 +65,8 @@ const PatientsByDisease = ({ history, match }) => {
               placeholder='Search'
               aria-label="Recipient's username"
               aria-describedby='basic-addon2'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </InputGroup>
 
@@ -75,18 +79,31 @@ const PatientsByDisease = ({ history, match }) => {
               className='mt-4'
               style={{ float: 'left', display: 'inline-block' }}
             >
-              {patientsAndDiseases.map((patient) => (
-                <Col sm={12} key={patient._id}>
-                  {patients.filter((e) => e.patient._id === patient._id)
-                    .length > 0 ? (
-                    <>
-                      <Patient key={patient._id} patient={patient} />
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </Col>
-              ))}
+              {patientsAndDiseases
+                .filter(
+                  (patient) =>
+                    (patient.name !== null &&
+                      patient.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                    (patient.surname !== null &&
+                      patient.surname
+                        .toLowerCase()
+                        .includes(search.toLowerCase()))
+                )
+
+                .map((patient) => (
+                  <Col sm={12} key={patient._id}>
+                    {patients.filter((e) => e.patient._id === patient._id)
+                      .length > 0 ? (
+                      <>
+                        <Patient key={patient._id} patient={patient} />
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </Col>
+                ))}
             </Row>
           )}
 

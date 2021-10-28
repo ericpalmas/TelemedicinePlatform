@@ -90,10 +90,6 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
   const [surveyUploaded, setSurveyUploaded] = useState(false)
 
-  // const [items, setItems] = useState([])
-  // const [hour, setHour] = useState(0)
-  // const [minutes, setMinutes] = useState(0)
-
   const userLogin = useSelector((state) => state.doctorLogin)
   const { loading: loginLoading, error: loginError, userInfo } = userLogin
 
@@ -198,10 +194,8 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
       //var values = [...assignments]
 
       var values = Array.from(patients, (x) => x.assigned)
-      console.log(values)
 
       setAssignments(values)
-      console.log(assignments)
     }
   }, [
     patients,

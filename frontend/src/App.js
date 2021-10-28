@@ -21,33 +21,35 @@ import AdminDoctorListScreen from './screens/AdminDoctorListScreen'
 import AdminPatientListScreen from './screens/AdminPatientListScreen'
 import AdminDiseaseListScreen from './screens/AdminDiseaseListScreen'
 import AdminSurveyListScreen from './screens/AdminSurveyListScreen'
+import StudyListScreen from './screens/StudyListScreen'
 
 const App = () => {
   return (
     <Router>
       <Header />
-      <main className="py-4">
+      <main className='py-4'>
         <Container>
-          <Route path="/" component={HomeScreen} exact />
-          <Route path="/patients" component={PatientListScreen} exact />
+          <Route path='/' component={HomeScreen} exact />
+          <Route path='/patients' component={PatientListScreen} exact />
           <Route
-            path="/patients/patientsByDisease/:id"
+            path='/patients/patientsByDisease/:id'
             component={PatientsByDisease}
           />
-          <Route path="/patients/:id" component={PatientScreen} exact />
-          <Route path="/diseases" component={DiseaseListScreen} exact />
-          <Route path="/surveyCreation" component={SurveyCreationScreen} />
-          <Route path="/surveyCreation" component={Sidebar} />
-          <Route path="/patients/:id" component={PatientSidebar} exact />
-          <Route path="/login" component={LoginScreen} />
-          <Route path="/register" component={RegisterScreen} />
-          <Route path="/profile" component={ProfileScreen} />
-          <Route path="/admin/doctorlist" component={AdminDoctorListScreen} />
-          <Route path="/admin/doctor/:id/edit" component={DoctorEditScreen} />
-          <Route path="/admin/addDoctor" component={AddDoctorScreen} />
-          <Route path="/admin/patientList" component={AdminPatientListScreen} />
-          <Route path="/admin/diseaseList" component={AdminDiseaseListScreen} />
-          <Route path="/admin/surveyList" component={AdminSurveyListScreen} />
+          <Route path='/patients/:id' component={PatientScreen} exact />
+          <Route path='/diseases' component={DiseaseListScreen} exact />
+          <Route path='/studies' component={StudyListScreen} exact />
+          <Route path='/surveyCreation' component={SurveyCreationScreen} />
+          <Route path='/surveyCreation' component={Sidebar} />
+          <Route path='/patients/:id' component={PatientSidebar} exact />
+          <Route path='/login' component={LoginScreen} />
+          <Route path='/register' component={RegisterScreen} />
+          <Route path='/profile' component={ProfileScreen} />
+          <Route path='/admin/doctorlist' component={AdminDoctorListScreen} />
+          <Route path='/admin/doctor/:id/edit' component={DoctorEditScreen} />
+          <Route path='/admin/addDoctor' component={AddDoctorScreen} />
+          <Route path='/admin/patientList' component={AdminPatientListScreen} />
+          <Route path='/admin/diseaseList' component={AdminDiseaseListScreen} />
+          <Route path='/admin/surveyList' component={AdminSurveyListScreen} />
         </Container>
       </main>
       <Footer />

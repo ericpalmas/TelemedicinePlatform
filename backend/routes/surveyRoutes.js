@@ -17,7 +17,7 @@ import { protect, admin } from '../middleware/authMiddleware.js'
 router.get(
   '/',
   asyncHandler(async (req, res) => {
-    const surveys = await Survey.find({})
+    const surveys = await Survey.find({ deleted: false })
     res.json(surveys)
   })
 )
@@ -136,31 +136,13 @@ router.post(
   asyncHandler(async (req, res) => {
     //controllo che i pazienti siano assegnati al dottore loggato
 
-    // const oggettiToArray = await DoctorPatient.find({
-    //   doctor: '60ac01c8c458a814c89b16de',
-    // }).select('patient')
-    // const listaID = oggettiToArray.map((a) => a.patient)
-
-    // const patientWithoutDiseases = await Patient.find({})
-    //   .where('_id')
-    //   .nin(listaID)
-
     const { surveyId, doctorId } = req.body
-
-    console.log(req.body)
-    console.log(surveyId)
-    console.log(doctorId)
 
     var patientIds = []
     const patientWithSurveyAssigned = await SurveyResponse.find({
       survey: req.params.id,
       completed: false,
     }).distinct('patient')
-
-    //console.log(listaID)
-
-    // console.log('patient with id assigned')
-    // console.log(patientWithSurveyAssigned)
 
     for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
       patientIds.push(patientWithSurveyAssigned[i] + '')
@@ -169,11 +151,6 @@ router.post(
     const doctorPatients = await DoctorPatient.find({
       doctor: '60ac01c8c458a814c89b16de',
     })
-    //  .where('patient')
-    // .nin(patientIds)
-    // .select('patient')
-
-    //console.log(doctorPatients)
 
     var risultato = []
     for (var i = 0; i < doctorPatients.length; i++) {
@@ -189,8 +166,6 @@ router.post(
         })
       }
     }
-
-    //console.log(risultato)
 
     if (risultato) {
       res.status(200).json(risultato)

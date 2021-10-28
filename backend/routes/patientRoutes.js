@@ -151,10 +151,6 @@ router.post(
   asyncHandler(async (req, res) => {
     const { surveyId, doctorId } = req.body
 
-    console.log(req.body)
-    console.log(surveyId)
-    console.log(doctorId)
-
     var doctorPatientIds = []
     const doctorPatients = await DoctorPatient.find({
       doctor: doctorId,
@@ -162,8 +158,6 @@ router.post(
     for (var i = 0; i < doctorPatients.length; i++) {
       doctorPatientIds.push(doctorPatients[i].patient + '')
     }
-    console.log('doctor patients')
-    console.log(doctorPatientIds)
 
     // mettere il controllo che i pazienti ritornati siano assegnati al dottore loggato
     const result = await PatientDisease.find({ disease: req.params.id })

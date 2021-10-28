@@ -40,6 +40,20 @@ const Header = () => {
                 </Nav.Link>
               </LinkContainer>
             </Nav>
+            <Nav>
+              <LinkContainer to='/studies'>
+                <Nav.Link data-testid='studies' href='/studies'>
+                  <i class='fa fa-stethoscope' aria-hidden='true'></i> Studies
+                </Nav.Link>
+              </LinkContainer>
+            </Nav>
+            <Nav>
+              <LinkContainer to='/surveyCreation'>
+                <Nav.Link data-testid='patients' href='/patients'>
+                  <i className='fa fa-poll-h'></i> Survey creations
+                </Nav.Link>
+              </LinkContainer>
+            </Nav>
 
             <Nav className='ml-auto'>
               {userInfo ? (

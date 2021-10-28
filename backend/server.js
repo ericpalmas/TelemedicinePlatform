@@ -14,6 +14,7 @@ import doctorRoutes from './routes/doctorRoutes.js'
 import surveyResponseRoutes from './routes/surveyResponseRoutes.js'
 import responseRoutes from './routes/responseRoutes.js'
 import timeSlotRoutes from './routes/timeSlotRoutes.js'
+import studyRoutes from './routes/studyRoutes.js'
 
 dotenv.config()
 
@@ -34,6 +35,7 @@ app.use('/api/doctors', doctorRoutes)
 app.use('/api/surveyResponses', surveyResponseRoutes)
 app.use('/api/responses', responseRoutes)
 app.use('/api/timeSlot', timeSlotRoutes)
+app.use('/api/studies', studyRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
@@ -43,7 +45,6 @@ const PORT = process.env.PORT || 5001
 app.listen(
   PORT,
   console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
-      .bold,
-  ),
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
 )

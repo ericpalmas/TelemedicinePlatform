@@ -14,10 +14,6 @@ router.post(
   asyncHandler(async (req, res) => {
     const { surveyId, doctorId } = req.body
 
-    console.log(req.body)
-    console.log(surveyId)
-    console.log(doctorId)
-
     // l'id passato è quello del questionario
     // pazienti di un certo dottore
     var doctorPatientIds = []
@@ -27,8 +23,6 @@ router.post(
     for (var i = 0; i < doctorPatients.length; i++) {
       doctorPatientIds.push(doctorPatients[i].patient + '')
     }
-    console.log('doctor patients')
-    console.log(doctorPatientIds)
 
     // pazienti a cui è stato assegnato quel questionario
     var patientIds = []
@@ -42,8 +36,6 @@ router.post(
     for (var i = 0; i < patientWithSurveyAssigned.length; i++) {
       patientIds.push(patientWithSurveyAssigned[i] + '')
     }
-    console.log('patients with assigned surveys')
-    console.log(patientWithSurveyAssigned)
 
     const ress = await PatientDisease.find({})
       .select('patient disease')
@@ -59,16 +51,11 @@ router.post(
       .select('patient')
     const listaID = oggettiToArray.map((a) => a.patient)
 
-    console.log(listaID)
-
     const patientWithoutDiseases = await Patient.find({})
       .where('_id')
       .nin(listaID)
       .where('_id')
       .in(doctorPatientIds)
-
-    console.log('patientWithoutDiseases')
-    console.log(patientWithoutDiseases)
 
     var patientDiseases = []
 

@@ -8,7 +8,7 @@ const HomeScreen = () => {
       <Row className='justify-content-md-center'>
         {/* Link is better of href because we don't need to load a page, is a single page application */}
 
-        <Col xs lg='2'>
+        <Col xs lg='4'>
           <Card className='my-3 p-3 rounded'>
             <Link to={`/surveyCreation`}>
               <Card.Img
@@ -26,9 +26,27 @@ const HomeScreen = () => {
           </Card>
         </Col>
 
+        <Col xs lg='4'>
+          <Card className='my-3 p-3 rounded'>
+            <Link to={`/diseases`}>
+              <Card.Img
+                src={process.env.PUBLIC_URL + '/images/disease1.png'}
+                variant='top'
+              />
+            </Link>
+            <Card.Body>
+              <Link to={`/diseases`}>
+                <Card.Title as='div'>
+                  <strong>Manage diseases</strong>
+                </Card.Title>
+              </Link>
+            </Card.Body>
+          </Card>
+        </Col>
+
         {/* Link is better of href because we don't need to load a page, is a single page application */}
 
-        <Col xs lg='2'>
+        <Col xs lg='4'>
           <Card className='my-3 p-3 rounded'>
             <Link to={`/patients`}>
               <Card.Img
