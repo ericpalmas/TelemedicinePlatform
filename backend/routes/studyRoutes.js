@@ -8,14 +8,50 @@ import Study from '../models/studyModel.js'
 import Survey from '../models/surveyModel.js'
 import SurveyStudy from '../models/surveyStudyModel.js'
 
-// @desc Fetch all studies
-// @route GET /api/studies
-// @access Public
+// left outer join, quando vogliamo anche i non matching documents
 router.get(
   '/',
   asyncHandler(async (req, res) => {
-    const studies = await Study.find({})
+    const studies = await Study.aggregate([
+      {
+        $lookup: {
+          from: SurveyStudy.collection.name,
+          localField: '_id',
+          foreignField: 'study',
+          as: 'surveys',
+        },
+      },
+      { $unwind: { path: '$surveys', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: 'surveys',
+          localField: 'surveys.survey',
+          foreignField: '_id',
+          as: 'surveyToObjects',
+        },
+      },
 
+      {
+        $group: {
+          _id: '$_id',
+          // surveys: {
+          //   $addToSet: '$surveyToObjects',
+          // },
+          surveys: {
+            $addToSet: { $arrayElemAt: ['$surveyToObjects', 0] },
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: Study.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'study',
+        },
+      },
+    ])
     res.json(studies)
   })
 )

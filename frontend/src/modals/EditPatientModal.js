@@ -79,77 +79,81 @@ const EditPatientModal = ({ patient }) => {
     setItems(values)
   }
 
+  useEffect(() => {
+    console.log(items)
+  }, [items.length])
+
   return (
     <>
-      <Button variant="light" style={{ float: 'right' }} onClick={handleShow}>
-        <i className="fas fa-edit"></i>
+      <Button variant='light' style={{ float: 'right' }} onClick={handleShow}>
+        <i className='fas fa-edit'></i>
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit patient</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Label className="mt-2">
+          <Form.Label className='mt-2'>
             <h5>Name</h5>
           </Form.Label>
           <Form.Control
-            type="name"
-            placeholder="Enter name"
+            type='name'
+            placeholder='Enter name'
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
-          <Form.Label className="mt-2">
+          <Form.Label className='mt-2'>
             <h5>Surname</h5>
           </Form.Label>
           <Form.Control
-            type="surname"
-            placeholder="Enter surname"
+            type='surname'
+            placeholder='Enter surname'
             value={surname}
             onChange={(e) => setSurname(e.target.value)}
           />
 
-          <Form.Label className="mt-2">
+          <Form.Label className='mt-2'>
             <h5>Age</h5>
           </Form.Label>
           <Form.Control
-            type="age"
-            placeholder="Enter age"
+            type='age'
+            placeholder='Enter age'
             value={age}
             onChange={(e) => setAge(e.target.value)}
           />
-          <Form.Label className="mt-2">
+          <Form.Label className='mt-2'>
             <h5>Therapy</h5>
           </Form.Label>
           <Form.Control
-            as="textarea"
+            as='textarea'
             rows={3}
-            type="therapy"
-            placeholder="Enter therapy"
+            type='therapy'
+            placeholder='Enter therapy'
             value={therapy}
             onChange={(e) => setTherapy(e.target.value)}
           />
 
-          <Form.Label className="mt-2">
+          <Form.Label className='mt-2'>
             <h5>Select diseases</h5>
           </Form.Label>
 
           <Button
-            className="ml-2 mr-2"
-            variant="light"
-            id="addRemoveButton"
+            className='ml-2 mr-2'
+            variant='light'
+            id='addRemoveButton'
             onClick={handleRemoveLastFields}
-            inline="true"
+            inline='true'
           >
             -
           </Button>
 
           <Button
-            className="ml-2 mr-2"
-            variant="light"
-            id="addRemoveButton"
+            className='ml-2 mr-2'
+            variant='light'
+            id='addRemoveButton'
             onClick={handleAddFields}
-            inline="true"
+            inline='true'
           >
             +
           </Button>
@@ -157,13 +161,13 @@ const EditPatientModal = ({ patient }) => {
           {loading ? (
             <Loader />
           ) : error ? (
-            <Message variant="danger">{error}</Message>
+            <Message variant='danger'>{error}</Message>
           ) : (
             <>
               {items.map((item, index) => (
                 <Form.Group>
                   <Form.Control
-                    as="select"
+                    as='select'
                     defaultValue={currentDiseases[index]}
                     onChange={(event) => handleInputChange(index, event)}
                     key={item}
@@ -184,11 +188,11 @@ const EditPatientModal = ({ patient }) => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant='secondary' onClick={handleClose}>
             Close
           </Button>
           <Form onSubmit={submitHandler}>
-            <Button variant="primary" type="submit" onClick={handleClose}>
+            <Button variant='primary' type='submit' onClick={handleClose}>
               Save Changes
             </Button>
           </Form>

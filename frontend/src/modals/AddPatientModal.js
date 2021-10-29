@@ -172,8 +172,6 @@ const AddPatientModal = () => {
                 <Form.Control
                   type='date'
                   required
-                  // value={birthDate}
-                  // onChange={(e) => setBirthDate(e.target.value)}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                 />
@@ -225,7 +223,6 @@ const AddPatientModal = () => {
             ) : (
               <>
                 {items.map((item, index) => (
-                  // <Form.Group>
                   <Form.Control
                     as='select'
                     onChange={(event) => handleInputChange(index, event)}
@@ -236,7 +233,6 @@ const AddPatientModal = () => {
                       </option>
                     ))}
                   </Form.Control>
-                  // </Form.Group>
                 ))}
               </>
             )}

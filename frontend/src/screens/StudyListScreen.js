@@ -9,9 +9,9 @@ import {
   FormControl,
   Card,
 } from 'react-bootstrap'
-//import Disease from '../components/Disease'
+
 import AddStudyModal from '../modals/AddStudyModal'
-// import EditDiseaseModal from '../modals/EditDiseaseModal'
+import EditStudyModal from '../modals/EditStudyModal'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listStudies, deleteStudy, createStudy } from '../actions/studyActions'
@@ -87,8 +87,10 @@ const StudyListScreen = () => {
             {studies
               .filter(
                 (study) =>
-                  study.name !== null &&
-                  study.name.toLowerCase().includes(search.toLowerCase())
+                  study.study[0].name !== null &&
+                  study.study[0].name
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
               )
 
               .map((study) => (
@@ -104,7 +106,7 @@ const StudyListScreen = () => {
                           className='mr-1'
                           style={{ float: 'left' }}
                         >
-                          <strong>{study.name}</strong>
+                          <strong>{study.study[0].name}</strong>
                         </Card.Title>
                       </a>
 
@@ -115,7 +117,10 @@ const StudyListScreen = () => {
                       >
                         <i className='fas fa-trash'></i>
                       </Button>
-                      {/* <EditDiseaseModal disease={disease} /> */}
+                      <EditStudyModal
+                        study={study.study[0]}
+                        currentSurveys={study.surveys}
+                      />
                     </a>
                   </Card>
                 </Col>
