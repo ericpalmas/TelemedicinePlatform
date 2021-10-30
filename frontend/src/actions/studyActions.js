@@ -10,6 +10,9 @@ import {
   STUDY_DELETE_REQUEST,
   STUDY_DELETE_SUCCESS,
   STUDY_DELETE_FAIL,
+  STUDY_UPDATE_REQUEST,
+  STUDY_UPDATE_SUCCESS,
+  STUDY_UPDATE_FAIL,
 } from '../constants/studyConstants'
 
 export const listStudies = () => async (dispatch) => {
@@ -78,6 +81,31 @@ export const deleteStudy = (id) => async (dispatch) => {
 
     dispatch({
       type: STUDY_DELETE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const updateStudy = (study) => async (dispatch) => {
+  try {
+    dispatch({
+      type: STUDY_UPDATE_REQUEST,
+    })
+
+    const { data } = await axios.put(`/api/studies/${study._id}`, study)
+
+    dispatch({
+      type: STUDY_UPDATE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+
+    dispatch({
+      type: STUDY_UPDATE_FAIL,
       payload: message,
     })
   }

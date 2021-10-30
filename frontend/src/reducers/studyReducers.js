@@ -9,6 +9,10 @@ import {
   STUDY_DELETE_REQUEST,
   STUDY_DELETE_SUCCESS,
   STUDY_DELETE_FAIL,
+  STUDY_UPDATE_REQUEST,
+  STUDY_UPDATE_SUCCESS,
+  STUDY_UPDATE_FAIL,
+  STUDY_UPDATE_RESET,
 } from '../constants/studyConstants'
 
 export const studyListReducer = (state = { studies: [] }, action) => {
@@ -49,7 +53,26 @@ export const studyCreateReducer = (state = {}, action) => {
   }
 }
 
-// delete a disease from database
+export const studyUpdateReducer = (state = { study: {} }, action) => {
+  switch (action.type) {
+    case STUDY_UPDATE_REQUEST:
+      return { loading: true }
+    case STUDY_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        study: action.payload,
+      }
+    case STUDY_UPDATE_FAIL:
+      return { loading: false, error: action.payload }
+    case STUDY_UPDATE_RESET:
+      return { study: {} }
+    default:
+      return state
+  }
+}
+
+// delete a study from database
 export const studyDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case STUDY_DELETE_REQUEST:

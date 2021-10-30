@@ -113,35 +113,35 @@ router.delete(
 // @desc    Update a patient
 // @route   PUT /api/patients/:id
 // @access  Private
-// router.put(
-//   '/:id',
-//   asyncHandler(async (req, res) => {
-// const { name, surname, age, therapy, items } = req.body
-// const patient = await Patient.findById(req.params.id)
-// if (patient) {
-//   patient.name = name
-//   patient.surname = surname
-//   patient.age = age
-//   patient.therapy = therapy
-//   const updatedPatient = await patient.save()
-//   const deletePatientDiseases = await PatientDisease.deleteMany({
-//     patient: req.params.id,
-//   })
-//   if (deletePatientDiseases) {
-//     for (var i = 0; i < items.length; i++) {
-//       const newDisease = new PatientDisease({
-//         patient: req.params.id,
-//         disease: items[i],
-//       })
-//       await newDisease.save()
-//     }
-//   }
-//   res.json(updatedPatient)
-// } else {
-//   res.status(404)
-//   throw new Error('Product not found')
-// }
-//   })
-// )
+router.put(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const { name, description, surveyIds } = req.body
+
+    const study = await Study.findById(req.params.id)
+    if (study) {
+      study.name = name
+      study.description = description
+      const updatedStudy = await study.save()
+
+      const deletedSurveyStudy = await SurveyStudy.deleteMany({
+        study: req.params.id,
+      })
+      if (deletedSurveyStudy) {
+        for (var i = 0; i < surveyIds.length; i++) {
+          const newSurveyStudy = new SurveyStudy({
+            study: req.params.id,
+            survey: surveyIds[i],
+          })
+          await newSurveyStudy.save()
+        }
+      }
+      res.json(updatedStudy)
+    } else {
+      res.status(404)
+      throw new Error('Study not found')
+    }
+  })
+)
 
 export default router

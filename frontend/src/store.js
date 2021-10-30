@@ -69,6 +69,7 @@ import {
   studyListReducer,
   studyCreateReducer,
   studyDeleteReducer,
+  studyUpdateReducer,
 } from './reducers/studyReducers'
 
 const reducer = combineReducers({
@@ -117,6 +118,7 @@ const reducer = combineReducers({
   studyList: studyListReducer,
   studyCreate: studyCreateReducer,
   studyDelete: studyDeleteReducer,
+  studyUpdate: studyUpdateReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')
