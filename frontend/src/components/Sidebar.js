@@ -57,6 +57,10 @@ const Sidebar = () => {
     survey: currentId,
   } = curSurv
 
+  var surv = localStorage.getItem('surveyId') || 'noIdSaved'
+
+  var data = []
+
   var headers = [
     { label: 'Survey Name', key: 'surveyName' },
     { label: 'Date', key: 'date' },
@@ -64,9 +68,6 @@ const Sidebar = () => {
     { label: 'Name', key: 'name' },
     { label: 'Surname', key: 'surname' },
   ]
-  var surv = localStorage.getItem('surveyId') || 'noIdSaved'
-
-  var data = []
 
   useEffect(() => {
     dispatch(listSurveyTemplates())
@@ -75,7 +76,6 @@ const Sidebar = () => {
   useEffect(() => {
     if (surv !== 'noIdSaved') {
       dispatch(listPatientsSurveyResponses(surv.split('"')[1]))
-      console.log(responses)
     }
   }, [dispatch, surv])
 

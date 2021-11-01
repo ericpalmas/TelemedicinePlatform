@@ -63,6 +63,7 @@ import {
 import {
   responsesListReducer,
   patientsResponsesListReducer,
+  patientsStudyResponsesListReducer,
 } from './reducers/responsesReducers'
 
 import {
@@ -121,6 +122,7 @@ const reducer = combineReducers({
   studyDelete: studyDeleteReducer,
   studyUpdate: studyUpdateReducer,
   patientsByStudyList: patientsByStudyListReducer,
+  patientsStudyResponsesList: patientsStudyResponsesListReducer,
 })
 
 const surveyInfoFromStorage = localStorage.getItem('surveyId')

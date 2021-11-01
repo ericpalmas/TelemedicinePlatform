@@ -7,6 +7,9 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { patientsByStudylist } from '../actions/studyActions'
 import { listPatientsAndDiseases } from '../actions/patientActions'
+import { listPatientsStudyResponses } from '../actions/responsesActions'
+import DownloadSurveyStudyCSV from '../components/DownloadSurveyStudyCSV'
+import * as AiIcons from 'react-icons/ai'
 
 const PatientListByStudy = ({ history, match }) => {
   const dispatch = useDispatch()
@@ -23,12 +26,16 @@ const PatientListByStudy = ({ history, match }) => {
     patients: patientsAndDiseases,
   } = patientAndDiseasesList
 
-  const [search, setSearch] = useState('')
+  const patientsResponsesList = useSelector(
+    (state) => state.patientsStudyResponsesList
+  )
+  const {
+    loading: loadingResponses,
+    error: errorResponses,
+    responses,
+  } = patientsResponsesList
 
-  //   const patientListByDisease = useSelector(
-  //     (state) => state.patientByDiseaseList
-  //   )
-  //   const { loading, error, patients } = patientListByDisease
+  const [search, setSearch] = useState('')
 
   var userInfo = localStorage.getItem('userInfo') || 'noUserInfoSaved'
 
@@ -52,9 +59,23 @@ const PatientListByStudy = ({ history, match }) => {
   }, [dispatch])
 
   useEffect(() => {
+    dispatch(listPatientsStudyResponses(match.params.id))
+  }, [dispatch, match])
+
+  useEffect(() => {
     console.log(patients)
     console.log(patientsAndDiseases)
   }, [dispatch, patients, patientsAndDiseases])
+
+  var data = []
+
+  var headers = [
+    { label: 'Survey Name', key: 'surveyName' },
+    { label: 'Date', key: 'date' },
+    { label: 'Hour', key: 'hour' },
+    { label: 'Name', key: 'name' },
+    { label: 'Surname', key: 'surname' },
+  ]
 
   return (
     <>
@@ -106,40 +127,17 @@ const PatientListByStudy = ({ history, match }) => {
                     )}
                   </Col>
                 ))}
-
-              {/* {patientsAndDiseases && patients ? (
-                <>
-                  {patientsAndDiseases
-                    .filter(
-                      (patient) =>
-                        (patient.name !== null &&
-                          patient.name
-                            .toLowerCase()
-                            .includes(search.toLowerCase())) ||
-                        (patient.surname !== null &&
-                          patient.surname
-                            .toLowerCase()
-                            .includes(search.toLowerCase()))
-                    )
-
-                    .map((patient) => (
-                      <Col sm={12} key={patient._id}>
-                        {patients.filter((e) => e.patient._id === patient._id)
-                          .length > 0 ? (
-                          <>
-                            <Patient patient={patient} />
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </Col>
-                    ))}
-                </>
-              ) : (
-                <></>
-              )} */}
             </Row>
           )}
+
+          <div id='sidebarLink' data-testid='downloadCSV'>
+            <AiIcons.AiOutlineDownload />
+            <DownloadSurveyStudyCSV
+              data={data}
+              headers={headers}
+              responses={responses}
+            />
+          </div>
 
           {/* <div
             className='mt-4'
