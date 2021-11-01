@@ -7,6 +7,9 @@ import Patient from '../models/patientModel.js'
 import Study from '../models/studyModel.js'
 import Survey from '../models/surveyModel.js'
 import SurveyStudy from '../models/surveyStudyModel.js'
+import SurveyResponse from '../models/surveyResponseModel.js'
+
+import mongoose from 'mongoose'
 
 // left outer join, quando vogliamo anche i non matching documents
 router.get(
@@ -141,6 +144,69 @@ router.put(
       res.status(404)
       throw new Error('Study not found')
     }
+  })
+)
+
+router.get(
+  '/patients/:id',
+  asyncHandler(async (req, res) => {
+    console.log('study patients')
+    const patients = await SurveyStudy.aggregate([
+      {
+        $match: { study: new mongoose.Types.ObjectId(req.params.id) },
+      },
+      {
+        $lookup: {
+          from: SurveyResponse.collection.name,
+          localField: 'survey',
+          foreignField: 'survey',
+          as: 'surveyResponse',
+        },
+      },
+      {
+        $unwind: { path: '$surveyResponse', preserveNullAndEmptyArrays: true },
+      },
+
+      {
+        $lookup: {
+          from: Patient.collection.name,
+          localField: 'surveyResponse.patient',
+          foreignField: '_id',
+          as: 'patient',
+        },
+      },
+
+      {
+        $unwind: { path: '$patient', preserveNullAndEmptyArrays: true },
+      },
+
+      {
+        $group: {
+          _id: null,
+          patient: { $addToSet: '$patient' },
+        },
+      },
+      {
+        $unwind: '$patient',
+      },
+      {
+        $project: {
+          _id: 0,
+        },
+      },
+
+      // {
+      //   $project: {
+      //     patient: {
+      //       $ifNull: ['$patient', false],
+      //     },
+      //   },
+      // },
+
+      // { $project: {Package: 1, deps: {'$setUnion': '$deps.Package'}}}
+    ])
+
+    res.json(patients)
   })
 )
 

@@ -13,6 +13,9 @@ import {
   STUDY_UPDATE_SUCCESS,
   STUDY_UPDATE_FAIL,
   STUDY_UPDATE_RESET,
+  PATIENTS_BY_STUDY_LIST_REQUEST,
+  PATIENTS_BY_STUDY_LIST_SUCCESS,
+  PATIENTS_BY_STUDY_LIST_FAIL,
 } from '../constants/studyConstants'
 
 export const studyListReducer = (state = { studies: [] }, action) => {
@@ -85,6 +88,22 @@ export const studyDeleteReducer = (state = {}, action) => {
         success: true,
       }
     case STUDY_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const patientsByStudyListReducer = (
+  state = { patients: [] },
+  action
+) => {
+  switch (action.type) {
+    case PATIENTS_BY_STUDY_LIST_REQUEST:
+      return { loading: true, patients: [] }
+    case PATIENTS_BY_STUDY_LIST_SUCCESS:
+      return { loading: false, patients: action.payload }
+    case PATIENTS_BY_STUDY_LIST_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

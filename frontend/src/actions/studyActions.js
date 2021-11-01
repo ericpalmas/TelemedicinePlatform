@@ -13,6 +13,9 @@ import {
   STUDY_UPDATE_REQUEST,
   STUDY_UPDATE_SUCCESS,
   STUDY_UPDATE_FAIL,
+  PATIENTS_BY_STUDY_LIST_REQUEST,
+  PATIENTS_BY_STUDY_LIST_SUCCESS,
+  PATIENTS_BY_STUDY_LIST_FAIL,
 } from '../constants/studyConstants'
 
 export const listStudies = () => async (dispatch) => {
@@ -107,6 +110,27 @@ export const updateStudy = (study) => async (dispatch) => {
     dispatch({
       type: STUDY_UPDATE_FAIL,
       payload: message,
+    })
+  }
+}
+
+export const patientsByStudylist = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: PATIENTS_BY_STUDY_LIST_REQUEST })
+
+    const { data } = await axios.get(`/api/studies/patients/${id}`)
+
+    dispatch({
+      type: PATIENTS_BY_STUDY_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PATIENTS_BY_STUDY_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     })
   }
 }
