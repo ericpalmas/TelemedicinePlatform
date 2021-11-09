@@ -19,9 +19,9 @@ export default class DownloadSurveyStudyCSV extends Component {
         if (props.responses[0] !== undefined) {
           props.responses[0].surveyResponses.forEach((response, index) => {
             // setto gli header
-            if (response.question[0]) {
+            if (response.question) {
               props.headers.push({
-                label: response.question[0].text,
+                label: response.question.text,
                 key: 'Question ' + (index + 1),
               })
             } else {
@@ -36,18 +36,18 @@ export default class DownloadSurveyStudyCSV extends Component {
             var cur = {}
             response.surveyResponses.forEach((singleResponse, index) => {
               cur = {
-                surveyName: response.survey[0] ? response.survey[0].name : '',
-                name: singleResponse.patient[0]
-                  ? singleResponse.patient[0].name
+                surveyName: singleResponse.survey
+                  ? singleResponse.survey.name
                   : '',
-                surname: singleResponse.patient[0]
-                  ? singleResponse.patient[0].surname
+                name: singleResponse.patient ? singleResponse.patient.name : '',
+                surname: singleResponse.patient
+                  ? singleResponse.patient.surname
                   : '',
-                date: singleResponse.surveyResponse[0]
-                  ? singleResponse.surveyResponse[0].updatedAt.substring(0, 10)
+                date: singleResponse.surveyResponse
+                  ? singleResponse.surveyResponse.updatedAt.substring(0, 10)
                   : '',
-                hour: singleResponse.surveyResponse[0]
-                  ? singleResponse.surveyResponse[0].updatedAt.substring(12, 16)
+                hour: singleResponse.surveyResponse
+                  ? singleResponse.surveyResponse.updatedAt.substring(12, 16)
                   : '',
               }
             })
@@ -98,9 +98,8 @@ export default class DownloadSurveyStudyCSV extends Component {
         headers={this.state.headers}
         asyncOnClick={true}
         filename='AllContent.csv'
-        style={{ color: '#e1e9fc', paddingLeft: '1rem' }}
       >
-        Download patients
+        Download responses
       </CSVLink>
     )
   }

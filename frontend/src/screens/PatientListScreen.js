@@ -28,6 +28,13 @@ const PatientListScreen = () => {
   const doctorPatientList = useSelector((state) => state.doctorPatientList)
   const { loading, error, doctorPatients } = doctorPatientList
 
+  const patientDelete = useSelector((state) => state.patientDelete)
+  const {
+    loading: loadingDeletePatient,
+    error: errorDeletePatient,
+    success: successDeletePatient,
+  } = patientDelete
+
   const patientAndDiseasesList = useSelector(
     (state) => state.patientsAndDiseasesList
   )
@@ -52,13 +59,13 @@ const PatientListScreen = () => {
 
   useEffect(() => {
     dispatch(listPatientsAndDiseases())
-  }, [dispatch])
+  }, [dispatch, successDeletePatient])
 
   useEffect(() => {
     if (userInfo !== 'noUserInfoSaved') {
       dispatch(listDoctorPatients(userInfo.split('"')[3]))
     }
-  }, [dispatch, userInfo])
+  }, [dispatch, userInfo, successDeletePatient])
 
   useEffect(() => {
     if (userInfo !== 'noUserInfoSaved') {

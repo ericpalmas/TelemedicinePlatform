@@ -59,7 +59,7 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
 
   var surv = localStorage.getItem('surveyId') || 'noIdSaved'
 
-  //var userInf = localStorage.getItem('userInfo') || 'noUserInfoSaved'
+  var userInf = localStorage.getItem('userInfo') || 'noUserInfoSaved'
 
   const patientList = useSelector((state) => state.patientsAndDiseaseList)
   const {
@@ -121,10 +121,14 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   }
 
   const submitSurvey = () => {
-    var result = {
-      selectedPatients: [],
-      surveyId: surv.split('"')[1],
-      doctorId: userInfo._id,
+    var result = {}
+
+    if (userInfo !== null) {
+      result = {
+        selectedPatients: [],
+        surveyId: surv.split('"')[1],
+        doctorId: userInfo._id,
+      }
     }
 
     for (var i = 0; i < assignments.length; i++) {
@@ -177,15 +181,16 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
   useEffect(() => {
     if (
       surv !== undefined &&
-      surv !== 'noIdSaved'
-
-      //&& userInfo !== 'noUserInfoSaved'
+      surv !== 'noIdSaved' &&
+      userInf !== 'noUserInfoSaved'
     ) {
+      //if (userInfo._id !== undefined) {
       var parameters = {
         surveyId: surv.split('"')[1],
         doctorId: userInfo._id,
       }
       dispatch(listPatientsAndDisease(parameters))
+      //}
     }
   }, [dispatch, surv, currentId, successAssignemtsToPatient])
 
@@ -203,6 +208,11 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
     patients,
     successAssignemtsToPatient,
   ])
+
+  useEffect(() => {
+    userInf = localStorage.getItem('userInfo') || 'noUserInfoSaved'
+    console.log(userInf)
+  }, [userInf, userInfo, userLogin])
 
   return (
     <div>
@@ -510,51 +520,62 @@ const SurveyCreationScreen = ({ removeQuestionMode, history, match }) => {
           <br />
           <h4> Patient list </h4>
           <br />
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th></th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Diseases</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loadingPatients ? (
-                <Loader />
-              ) : errorPatients ? (
-                <Message variant='danger'>{errorPatients}</Message>
-              ) : (
-                <>
-                  {patients.map((patient, index) => (
-                    <tr>
-                      <td>
-                        <Form.Group controlId='isadmin'>
-                          <Form.Check
-                            type='checkbox'
-                            checked={
-                              assignments.length !== 0
-                                ? assignments[index]
-                                : false
-                            }
-                            onChange={(e) => handleSelectAssignments(e, index)}
-                          ></Form.Check>
-                        </Form.Group>
-                      </td>
-                      <td>{patient.name}</td>
-                      <td>{patient.surname}</td>
-                      <td>{patient.disease}</td>
-                    </tr>
-                  ))}
-                </>
-              )}
-            </tbody>
-          </Table>
 
-          <br />
-          <br />
+          {userInf !== 'noUserInfoSaved' ? (
+            <>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Diseases</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadingPatients ? (
+                    <Loader />
+                  ) : errorPatients ? (
+                    <Message variant='danger'>{errorPatients}</Message>
+                  ) : (
+                    <>
+                      {patients.map((patient, index) => (
+                        <tr>
+                          <td>
+                            <Form.Group controlId='isadmin'>
+                              <Form.Check
+                                type='checkbox'
+                                checked={
+                                  assignments.length !== 0
+                                    ? assignments[index]
+                                    : false
+                                }
+                                onChange={(e) =>
+                                  handleSelectAssignments(e, index)
+                                }
+                              ></Form.Check>
+                            </Form.Group>
+                          </td>
+                          <td>{patient.name}</td>
+                          <td>{patient.surname}</td>
+                          <td>{patient.disease}</td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
+              </Table>
 
-          <Button onClick={submitSurvey}>Save</Button>
+              <br />
+              <br />
+
+              <Button onClick={submitSurvey}>Save</Button>
+            </>
+          ) : (
+            <>
+              <p>To assign survey to patients login</p>
+            </>
+          )}
         </Col>
       </Row>
     </div>

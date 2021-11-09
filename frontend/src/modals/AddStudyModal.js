@@ -4,7 +4,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 
 import Modal from 'react-bootstrap/Modal'
-import { Button, Form, FormLabel, InputGroup } from 'react-bootstrap'
+import { Button, Form, FormLabel, InputGroup, Alert } from 'react-bootstrap'
 import { createStudy, listStudies } from '../actions/studyActions'
 import { listSurveyTemplates } from '../actions/surveyActions'
 
@@ -19,6 +19,8 @@ const AddStudyModal = ({ history }) => {
   const [validated, setValidated] = useState(false)
   const [items, setItems] = useState([])
   const [defaultSurvey, setDefaultSurvey] = useState({})
+  const [errorDuplicates, setErrorDuplicates] = useState(false)
+  const [msg, setMsg] = useState('Duplicates are present')
 
   const studyCreated = useSelector((state) => state.studyCreate)
   const {
@@ -31,7 +33,38 @@ const AddStudyModal = ({ history }) => {
   const surveyTemplateList = useSelector((state) => state.surveyTemplateList)
   const { loading, error, surveys } = surveyTemplateList
 
+  function hasDuplicates(array) {
+    var valuesSoFar = Object.create(null)
+    for (var i = 0; i < array.length; ++i) {
+      var value = array[i]
+      if (value in valuesSoFar) {
+        return true
+      }
+      valuesSoFar[value] = true
+    }
+    return false
+  }
+
+  // const submitHandler = (e) => {
+  //   const form = e.currentTarget
+  //   if (form.checkValidity() === false) {
+  //     e.preventDefault()
+  //     e.stopPropagation()
+  //   }
+
+  //   setValidated(true)
+
+  //   const newStudy = {
+  //     name,
+  //     description,
+  //     surveyIds: items,
+  //   }
+  //   dispatch(createStudy(newStudy))
+  // }
+
   const submitHandler = (e) => {
+    var findError = false
+
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -40,12 +73,23 @@ const AddStudyModal = ({ history }) => {
 
     setValidated(true)
 
-    const newStudy = {
-      name,
-      description,
-      surveyIds: items,
+    if (hasDuplicates(items)) {
+      setErrorDuplicates(true)
+      findError = true
+    } else {
+      setErrorDuplicates(false)
     }
-    dispatch(createStudy(newStudy))
+
+    if (findError) {
+      e.preventDefault()
+    } else {
+      const newStudy = {
+        name,
+        description,
+        surveyIds: items,
+      }
+      dispatch(createStudy(newStudy))
+    }
   }
 
   const handleAddFields = () => {
@@ -99,6 +143,8 @@ const AddStudyModal = ({ history }) => {
             <Modal.Title>New study</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {errorDuplicates ? <Alert variant={'danger'}>{msg}</Alert> : <></>}
+
             <Form.Group controlId='validationCustom02'>
               <Form.Label className='mt-2'>
                 <h5>Name</h5>

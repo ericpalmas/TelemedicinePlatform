@@ -9,6 +9,9 @@ import { patientsByStudylist } from '../actions/studyActions'
 import { listPatientsAndDiseases } from '../actions/patientActions'
 import { listPatientsStudyResponses } from '../actions/responsesActions'
 import DownloadSurveyStudyCSV from '../components/DownloadSurveyStudyCSV'
+import DownloadMultipleCSV from '../components/DownloadMultipleCSV'
+import DownlloadMultipleCSV2 from '../components/DownlloadMultipleCSV2'
+
 import * as AiIcons from 'react-icons/ai'
 
 const PatientListByStudy = ({ history, match }) => {
@@ -62,10 +65,10 @@ const PatientListByStudy = ({ history, match }) => {
     dispatch(listPatientsStudyResponses(match.params.id))
   }, [dispatch, match])
 
-  useEffect(() => {
-    console.log(patients)
-    console.log(patientsAndDiseases)
-  }, [dispatch, patients, patientsAndDiseases])
+  // useEffect(() => {
+  //   console.log(patients)
+  //   console.log(patientsAndDiseases)
+  // }, [dispatch, patients, patientsAndDiseases])
 
   var data = []
 
@@ -83,15 +86,66 @@ const PatientListByStudy = ({ history, match }) => {
 
       {userInfo !== 'noUserInfoSaved' ? (
         <>
-          <InputGroup className='mb-3 mt-4' style={{ width: '20rem' }}>
-            <FormControl
-              placeholder='Search'
-              aria-label="Recipient's username"
-              aria-describedby='basic-addon2'
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </InputGroup>
+          {/* <Row>
+            <InputGroup className='mb-3 mt-4' style={{ width: '20rem' }}>
+              <FormControl
+                placeholder='Search'
+                aria-label="Recipient's username"
+                aria-describedby='basic-addon2'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </InputGroup>
+
+            <div id='sidebarLink' data-testid='downloadCSV'>
+              <AiIcons.AiOutlineDownload />
+              <DownloadSurveyStudyCSV
+                data={data}
+                headers={headers}
+                responses={responses}
+              />
+            </div>
+          </Row> */}
+
+          <Row className='align-items-center'>
+            <Col className='text-right' sm={6} md={4}>
+              <InputGroup className='mb-3 mt-4' style={{ width: '20rem' }}>
+                <FormControl
+                  placeholder='Search'
+                  aria-label="Recipient's username"
+                  aria-describedby='basic-addon2'
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </InputGroup>
+            </Col>
+
+            <Col sm={6}>
+              {/* <div id='sidebarLink' data-testid='downloadCSV'>
+                <AiIcons.AiOutlineDownload />
+                <DownloadSurveyStudyCSV
+                  data={data}
+                  headers={headers}
+                  responses={responses}
+                />
+              </div> */}
+
+              <div id='sidebarLink' data-testid='downloadCSV'>
+                <AiIcons.AiOutlineDownload />
+                {/* <DownloadMultipleCSV
+                  data={data}
+                  headers={headers}
+                  responses={responses}
+                /> */}
+
+                <DownlloadMultipleCSV2
+                  data={data}
+                  headers={headers}
+                  responses={responses}
+                />
+              </div>
+            </Col>
+          </Row>
 
           {loading && loadingPatientsAndDiseases ? (
             <Loader />
@@ -129,15 +183,6 @@ const PatientListByStudy = ({ history, match }) => {
                 ))}
             </Row>
           )}
-
-          <div id='sidebarLink' data-testid='downloadCSV'>
-            <AiIcons.AiOutlineDownload />
-            <DownloadSurveyStudyCSV
-              data={data}
-              headers={headers}
-              responses={responses}
-            />
-          </div>
 
           {/* <div
             className='mt-4'

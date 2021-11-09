@@ -106,18 +106,6 @@ const PatientsByDisease = ({ history, match }) => {
                 ))}
             </Row>
           )}
-
-          <div
-            className='mt-4'
-            style={{ float: 'left', display: 'inline-block' }}
-          >
-            <Button variant='primary' size='lg'>
-              New patient
-            </Button>{' '}
-            <Button variant='primary' size='lg'>
-              Remove patient
-            </Button>
-          </div>
         </>
       ) : (
         <>

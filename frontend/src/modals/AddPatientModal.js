@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import Modal from 'react-bootstrap/Modal'
-import { Button, Form, InputGroup } from 'react-bootstrap'
+import { Button, Form, InputGroup, Alert } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -24,8 +24,10 @@ const AddPatientModal = () => {
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
-  const [validated, setValidated] = useState(false)
   const [duplicates, setDuplicates] = useState(false)
+  const [validated, setValidated] = useState(false)
+  const [errorDuplicates, setErrorDuplicates] = useState(false)
+  const [msg, setMsg] = useState('Duplicates are present')
 
   const dispatch = useDispatch()
 
@@ -43,7 +45,42 @@ const AddPatientModal = () => {
   const userLogin = useSelector((state) => state.doctorLogin)
   const { userInfo } = userLogin
 
+  // const submitHandler = (e) => {
+  //   const form = e.currentTarget
+  //   if (form.checkValidity() === false) {
+  //     e.preventDefault()
+  //     e.stopPropagation()
+  //   }
+
+  //   setValidated(true)
+
+  //   const newPatient = {
+  //     doctorId: userInfo._id,
+  //     name,
+  //     surname,
+  //     age,
+  //     therapy,
+  //     items,
+  //   }
+
+  //   dispatch(createPatient(newPatient))
+  // }
+
+  function hasDuplicates(array) {
+    var valuesSoFar = Object.create(null)
+    for (var i = 0; i < array.length; ++i) {
+      var value = array[i]
+      if (value in valuesSoFar) {
+        return true
+      }
+      valuesSoFar[value] = true
+    }
+    return false
+  }
+
   const submitHandler = (e) => {
+    var findError = false
+
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -52,16 +89,27 @@ const AddPatientModal = () => {
 
     setValidated(true)
 
-    const newPatient = {
-      doctorId: userInfo._id,
-      name,
-      surname,
-      age,
-      therapy,
-      items,
+    if (hasDuplicates(items)) {
+      setErrorDuplicates(true)
+      findError = true
+    } else {
+      setErrorDuplicates(false)
     }
 
-    dispatch(createPatient(newPatient))
+    if (findError) {
+      e.preventDefault()
+    } else {
+      const newPatient = {
+        doctorId: userInfo._id,
+        name,
+        surname,
+        age,
+        therapy,
+        items,
+      }
+
+      dispatch(createPatient(newPatient))
+    }
   }
 
   useEffect(() => {
@@ -130,6 +178,8 @@ const AddPatientModal = () => {
             <Modal.Title>New patient</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {errorDuplicates ? <Alert variant={'danger'}>{msg}</Alert> : <></>}
+
             <Form.Group controlId='nameValidation'>
               <Form.Label className='mt-2'>
                 <h5>Name</h5>
@@ -147,6 +197,7 @@ const AddPatientModal = () => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
+
             <Form.Group controlId='surnameValidation'>
               <Form.Label className='mt-2'>
                 <h5>Surname</h5>
@@ -166,7 +217,7 @@ const AddPatientModal = () => {
             </Form.Group>
             <Form.Group controlId='surnameValidation'>
               <Form.Label className='mt-2'>
-                <h5>Data di nascita</h5>
+                <h5>Birth date</h5>
               </Form.Label>
               <InputGroup hasValidation>
                 <Form.Control

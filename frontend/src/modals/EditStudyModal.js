@@ -26,10 +26,6 @@ const EditDiseaseModal = ({ history, study, currentSurveys }) => {
   const [errorDuplicates, setErrorDuplicates] = useState(false)
   const [msg, setMsg] = useState('Duplicates are present')
 
-  // const [defaultSurvey, setDefaultSurvey] = useState(
-  //   surveys.length > 0 ? surveys[0] : {}
-  // )
-
   const [defaultSurvey, setDefaultSurvey] = useState({})
 
   const surveyTemplateList = useSelector((state) => state.surveyTemplateList)

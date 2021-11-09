@@ -10,10 +10,18 @@ import {
   listPatients,
   deletePatient,
   listPatientsAndDisease,
+  listPatientsAndDiseases,
 } from '../actions/patientActions'
+
+import { listDoctorPatients } from '../actions/doctorActions'
 
 const Patient = ({ patient }) => {
   const dispatch = useDispatch()
+
+  var userInfo = localStorage.getItem('userInfo') || 'noUserInfoSaved'
+
+  const patientDelete = useSelector((state) => state.patientDelete)
+  const { loading, error, success } = patientDelete
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
@@ -24,7 +32,9 @@ const Patient = ({ patient }) => {
     }
   }
 
-  useEffect(() => {}, [dispatch])
+  // useEffect(() => {
+  //
+  // }, [dispatch])
 
   return (
     <Card

@@ -233,6 +233,306 @@ router.route('/survey/:id').get(
   })
 )
 
+// router.route('/study/:id').get(
+//   protect,
+//   asyncHandler(async (req, res) => {
+//     const response = await Response.aggregate([
+//       {
+//         $lookup: {
+//           from: Patient.collection.name,
+//           localField: 'patient',
+//           foreignField: '_id',
+//           as: 'patient',
+//         },
+//       },
+
+//       {
+//         $lookup: {
+//           from: Question.collection.name,
+//           localField: 'question',
+//           foreignField: '_id',
+//           as: 'question',
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: SurveyResponse.collection.name,
+//           localField: 'surveyResponse',
+//           foreignField: '_id',
+//           as: 'surveyResponse',
+//         },
+//       },
+//       {
+//         $addFields: {
+//           survey_id: {
+//             $toObjectId: { $arrayElemAt: ['$surveyResponse.survey', 0] },
+//           },
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: Survey.collection.name,
+//           localField: 'survey_id',
+//           foreignField: '_id',
+//           as: 'survey',
+//         },
+//       },
+
+//       {
+//         $lookup: {
+//           from: SurveyStudy.collection.name,
+//           localField: 'survey_id',
+//           foreignField: 'survey',
+//           as: 'study',
+//         },
+//       },
+
+//       {
+//         $addFields: {
+//           study_id: {
+//             $toObjectId: { $arrayElemAt: ['$study.study', 0] },
+//           },
+//         },
+//       },
+
+//       {
+//         $match: { study_id: new mongoose.Types.ObjectId(req.params.id) },
+//       },
+
+//       {
+//         $group: {
+//           _id: '$surveyResponse',
+//           surveyResponses: {
+//             $push: {
+//               patient: '$patient',
+//               question: '$question',
+//               answer: '$answer',
+//               surveyResponse: '$surveyResponse',
+//               survey: '$survey',
+//             },
+//           },
+
+//           survey: { $first: '$survey' },
+//         },
+//       },
+//     ])
+
+//     res.json(response)
+//   })
+// )
+
+// router.route('/study/:id').get(
+//   protect,
+//   asyncHandler(async (req, res) => {
+//     const response = await Response.aggregate([
+//       {
+//         $lookup: {
+//           from: Patient.collection.name,
+//           localField: 'patient',
+//           foreignField: '_id',
+//           as: 'patient',
+//         },
+//       },
+
+//       {
+//         $unwind: { path: '$patient', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $lookup: {
+//           from: Question.collection.name,
+//           localField: 'question',
+//           foreignField: '_id',
+//           as: 'question',
+//         },
+//       },
+
+//       {
+//         $unwind: { path: '$question', preserveNullAndEmptyArrays: true },
+//       },
+//       {
+//         $lookup: {
+//           from: SurveyResponse.collection.name,
+//           localField: 'surveyResponse',
+//           foreignField: '_id',
+//           as: 'surveyResponse',
+//         },
+//       },
+//       {
+//         $unwind: { path: '$surveyResponse', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $lookup: {
+//           from: Survey.collection.name,
+//           localField: 'surveyResponse.survey',
+//           foreignField: '_id',
+//           as: 'survey',
+//         },
+//       },
+
+//       {
+//         $unwind: { path: '$survey', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $lookup: {
+//           from: SurveyStudy.collection.name,
+//           localField: 'surveyResponse.survey',
+//           foreignField: 'survey',
+//           as: 'study',
+//         },
+//       },
+//       {
+//         $unwind: { path: '$study', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $addFields: {
+//           study_id: {
+//             $toObjectId: '$study.study',
+//           },
+//         },
+//       },
+
+//       {
+//         $match: { study_id: new mongoose.Types.ObjectId(req.params.id) },
+//       },
+
+//       {
+//         $group: {
+//           _id: '$surveyResponse',
+//           surveyResponses: {
+//             $push: {
+//               patient: '$patient',
+//               question: '$question',
+//               answer: '$answer',
+//               surveyResponse: '$surveyResponse',
+//               survey: '$survey',
+//             },
+//           },
+
+//           //survey: { $first: '$survey' },
+//         },
+//       },
+//     ])
+
+//     res.json(response)
+//   })
+// )
+
+// router.route('/study/:id').get(
+//   protect,
+//   asyncHandler(async (req, res) => {
+//     const response = await Response.aggregate([
+//       {
+//         $lookup: {
+//           from: Patient.collection.name,
+//           localField: 'patient',
+//           foreignField: '_id',
+//           as: 'patient',
+//         },
+//       },
+
+//       {
+//         $unwind: { path: '$patient', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $lookup: {
+//           from: Question.collection.name,
+//           localField: 'question',
+//           foreignField: '_id',
+//           as: 'question',
+//         },
+//       },
+
+//       {
+//         $unwind: { path: '$question', preserveNullAndEmptyArrays: true },
+//       },
+//       {
+//         $lookup: {
+//           from: SurveyResponse.collection.name,
+//           localField: 'surveyResponse',
+//           foreignField: '_id',
+//           as: 'surveyResponse',
+//         },
+//       },
+//       {
+//         $unwind: { path: '$surveyResponse', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $lookup: {
+//           from: Survey.collection.name,
+//           localField: 'surveyResponse.survey',
+//           foreignField: '_id',
+//           as: 'survey',
+//         },
+//       },
+
+//       {
+//         $unwind: { path: '$survey', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $lookup: {
+//           from: SurveyStudy.collection.name,
+//           localField: 'surveyResponse.survey',
+//           foreignField: 'survey',
+//           as: 'study',
+//         },
+//       },
+//       {
+//         $unwind: { path: '$study', preserveNullAndEmptyArrays: true },
+//       },
+
+//       {
+//         $addFields: {
+//           study_id: {
+//             $toObjectId: '$study.study',
+//           },
+//         },
+//       },
+
+//       {
+//         $match: { study_id: new mongoose.Types.ObjectId(req.params.id) },
+//       },
+
+//       {
+//         $group: {
+//           _id: '$surveyResponse',
+//           surveyResponses: {
+//             $push: {
+//               patient: '$patient',
+//               question: '$question',
+//               answer: '$answer',
+//               surveyResponse: '$surveyResponse',
+//               survey: '$survey',
+//             },
+//           },
+//         },
+//       },
+//       // {
+//       //   $group: {
+//       //     _id: '$survey._id',
+//       //     surveyResponses: {
+//       //       $push: {
+//       //         patient: '$patient',
+//       //         question: '$question',
+//       //         answer: '$answer',
+//       //         surveyResponse: '$surveyResponse',
+//       //         survey: '$survey',
+//       //       },
+//       //     },
+//       //   },
+//       // },
+//     ])
+
+//     res.json(response)
+//   })
+// )
+
 router.route('/study/:id').get(
   protect,
   asyncHandler(async (req, res) => {
@@ -247,12 +547,20 @@ router.route('/study/:id').get(
       },
 
       {
+        $unwind: { path: '$patient', preserveNullAndEmptyArrays: true },
+      },
+
+      {
         $lookup: {
           from: Question.collection.name,
           localField: 'question',
           foreignField: '_id',
           as: 'question',
         },
+      },
+
+      {
+        $unwind: { path: '$question', preserveNullAndEmptyArrays: true },
       },
       {
         $lookup: {
@@ -263,34 +571,38 @@ router.route('/study/:id').get(
         },
       },
       {
-        $addFields: {
-          survey_id: {
-            $toObjectId: { $arrayElemAt: ['$surveyResponse.survey', 0] },
-          },
-        },
+        $unwind: { path: '$surveyResponse', preserveNullAndEmptyArrays: true },
       },
+
       {
         $lookup: {
           from: Survey.collection.name,
-          localField: 'survey_id',
+          localField: 'surveyResponse.survey',
           foreignField: '_id',
           as: 'survey',
         },
       },
 
       {
+        $unwind: { path: '$survey', preserveNullAndEmptyArrays: true },
+      },
+
+      {
         $lookup: {
           from: SurveyStudy.collection.name,
-          localField: 'survey_id',
+          localField: 'surveyResponse.survey',
           foreignField: 'survey',
           as: 'study',
         },
+      },
+      {
+        $unwind: { path: '$study', preserveNullAndEmptyArrays: true },
       },
 
       {
         $addFields: {
           study_id: {
-            $toObjectId: { $arrayElemAt: ['$study.study', 0] },
+            $toObjectId: '$study.study',
           },
         },
       },
@@ -311,8 +623,17 @@ router.route('/study/:id').get(
               survey: '$survey',
             },
           },
+        },
+      },
 
-          survey: { $first: '$survey' },
+      {
+        $group: {
+          _id: '$_id.survey',
+          survey: {
+            $push: {
+              surveyResponses: '$surveyResponses',
+            },
+          },
         },
       },
     ])
