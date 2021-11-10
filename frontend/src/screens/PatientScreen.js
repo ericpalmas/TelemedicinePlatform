@@ -21,6 +21,8 @@ import { listSurveyResponses } from '../actions/responsesActions'
 import { columns, selectRow, data, dati } from '../sensorTableData.js'
 import DownloadCSV from '../components/DownloadCSV'
 
+import DownloadMultiplePatientCSV from '../components/DownloadMultiplePatientCSV'
+
 //dentro use effect farò la query per avere il singolo paziente
 const PatientScreen = ({ history, match }) => {
   const dispatch = useDispatch()
@@ -129,7 +131,7 @@ const PatientScreen = ({ history, match }) => {
             </Col>
 
             <Col>
-              <DownloadCSV
+              <DownloadMultiplePatientCSV
                 data={data}
                 headers={headers}
                 responses={responses}
@@ -148,102 +150,119 @@ const PatientScreen = ({ history, match }) => {
             <>
               {responses ? (
                 <>
-                  {responses.map((response) => (
+                  {responses.map((survey) => (
                     <>
-                      {response._id[0] ? (
+                      {survey ? (
                         <>
-                          <Row>
-                            <Accordion
-                              defaultActiveKey='0'
-                              style={{
-                                overflow: 'hidden',
-                                position: 'relative',
-                                width: '60%',
-                              }}
-                            >
-                              <Card>
-                                <Card.Header>
-                                  <Accordion.Toggle
-                                    as={Button}
-                                    variant='link'
-                                    eventKey='1'
-                                  >
-                                    {response.survey.map((surv) => (
-                                      <>
-                                        {surv ? surv.name : <></>}
-                                        {surv ? <> - &nbsp;</> : <></>}
-                                        {response._id[0] ? (
-                                          response._id[0].updatedAt.substring(
-                                            12,
-                                            16
-                                          )
-                                        ) : (
-                                          <></>
-                                        )}
-                                        {surv ? <> - &nbsp;</> : <></>}
-                                        {response._id[0] ? (
-                                          response._id[0].updatedAt.substring(
-                                            0,
-                                            10
-                                          )
-                                        ) : (
-                                          <></>
-                                        )}
-                                      </>
-                                    ))}
+                          {survey.survey.map((surveyResponse) => (
+                            <>
+                              <Row>
+                                <Accordion
+                                  defaultActiveKey='0'
+                                  style={{
+                                    overflow: 'hidden',
+                                    position: 'relative',
+                                    width: '60%',
+                                  }}
+                                >
+                                  <Card>
+                                    <Card.Header>
+                                      <Accordion.Toggle
+                                        as={Button}
+                                        variant='link'
+                                        eventKey='1'
+                                      >
+                                        {surveyResponse.survey.name}
+                                        &nbsp;{' '}
+                                        {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
+                                          12,
+                                          16
+                                        )}{' '}
+                                        {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
+                                          0,
+                                          10
+                                        )}{' '}
+                                      </Accordion.Toggle>
+                                    </Card.Header>
 
-                                    <h4></h4>
-                                  </Accordion.Toggle>
-                                </Card.Header>
-                                {response.surveyResponses.map((survey) => (
-                                  <>
-                                    {survey.question.map((question) => (
-                                      <>
-                                        <Accordion.Collapse eventKey='1'>
-                                          <Card.Body>
-                                            <h4>{question.text}</h4>
+                                    {surveyResponse.surveyResponses.map(
+                                      (response) => (
+                                        <>
+                                          <Accordion.Collapse eventKey='1'>
+                                            <Card.Body>
+                                              {response.question !==
+                                              undefined ? (
+                                                <>
+                                                  <h4>
+                                                    {response.question.text}
+                                                  </h4>
 
-                                            {question.slider ? (
-                                              <p> {survey.answer.answer}</p>
-                                            ) : question.trueFalse ? (
-                                              <p>
-                                                {' '}
-                                                {survey.answer.answer
-                                                  ? 'true'
-                                                  : 'false'}
-                                              </p>
-                                            ) : question.incrementDecrement ? (
-                                              <p> {survey.answer.answer}</p>
-                                            ) : question.insertTime ? (
-                                              <p> {survey.answer.answer}</p>
-                                            ) : question.radio ? (
-                                              <p> {survey.answer.answer}</p>
-                                            ) : question.check ? (
-                                              <>
-                                                {survey.answer.answers.map(
-                                                  (val, index) => (
+                                                  {response.question.slider ? (
                                                     <p>
                                                       {' '}
-                                                      {index + 1}) &nbsp;{' '}
-                                                      {val.answer}{' '}
+                                                      {response.answer.answer}
                                                     </p>
-                                                  )
-                                                )}
-                                              </>
-                                            ) : question.open ? (
-                                              <p> {survey.answer.answer}</p>
-                                            ) : (
-                                              <> </>
-                                            )}
-                                          </Card.Body>
-                                        </Accordion.Collapse>
-                                      </>
-                                    ))}
-                                  </>
-                                ))}
-                              </Card>
-                            </Accordion>
-                          </Row>
+                                                  ) : response.question
+                                                      .trueFalse ? (
+                                                    <p>
+                                                      {' '}
+                                                      {response.answer.answer
+                                                        ? 'true'
+                                                        : 'false'}
+                                                    </p>
+                                                  ) : response.question
+                                                      .incrementDecrement ? (
+                                                    <p>
+                                                      {' '}
+                                                      {response.answer.answer}
+                                                    </p>
+                                                  ) : response.question
+                                                      .insertTime ? (
+                                                    <p>
+                                                      {' '}
+                                                      {response.answer.answer}
+                                                    </p>
+                                                  ) : response.question
+                                                      .radio ? (
+                                                    <p>
+                                                      {' '}
+                                                      {response.answer.answer}
+                                                    </p>
+                                                  ) : response.question
+                                                      .check ? (
+                                                    <>
+                                                      {response.answer.answers.map(
+                                                        (val, index) => (
+                                                          <p>
+                                                            {' '}
+                                                            {index + 1}) &nbsp;{' '}
+                                                            {val.answer}{' '}
+                                                          </p>
+                                                        )
+                                                      )}
+                                                    </>
+                                                  ) : response.question.open ? (
+                                                    <p>
+                                                      {' '}
+                                                      {response.answer.answer}
+                                                    </p>
+                                                  ) : (
+                                                    <> </>
+                                                  )}
+                                                </>
+                                              ) : (
+                                                <></>
+                                              )}
+                                            </Card.Body>
+                                          </Accordion.Collapse>
+                                        </>
+                                      )
+                                    )}
+                                  </Card>
+                                </Accordion>
+                              </Row>
+                            </>
+                          ))}
                         </>
                       ) : (
                         <></>
