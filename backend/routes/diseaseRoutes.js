@@ -12,7 +12,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const diseases = await Disease.find({})
     res.json(diseases)
-  }),
+  })
 )
 
 // @desc Add new disease
@@ -32,7 +32,7 @@ router.post(
       const createdDisease = await disease.save()
       res.status(201).json(createdDisease)
     }
-  }),
+  })
 )
 
 // @desc    Delete a disease
@@ -52,7 +52,7 @@ router.delete(
       res.status(404)
       throw new Error('Disease not found')
     }
-  }),
+  })
 )
 
 // @desc    Update a disease
@@ -76,7 +76,7 @@ router.put(
       res.status(404)
       throw new Error('Disease not found')
     }
-  }),
+  })
 )
 
 // @desc Fetch patientDiseases
@@ -96,7 +96,24 @@ router.get(
       res.status(404)
       throw new Error('Disease not found')
     }
-  }),
+  })
+)
+
+// @desc Fetch patientDiseases
+// @route GET /api/diseases/:patientId
+// @access Public
+router.get(
+  '/detail/:id',
+  asyncHandler(async (req, res) => {
+    const result = await Disease.findById(req.params.id)
+
+    if (result) {
+      res.json(result)
+    } else {
+      res.status(404)
+      throw new Error('Disease not found')
+    }
+  })
 )
 
 export default router

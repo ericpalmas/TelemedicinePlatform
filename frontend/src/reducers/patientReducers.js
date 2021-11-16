@@ -58,7 +58,7 @@ export const patientReducer = (state = { patient: {} }, action) => {
 // get the list of patient that have this disease
 export const patientByDiseaseListReducer = (
   state = { patients: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case PATIENT_BY_DISEASE_LIST_REQUEST:
@@ -75,7 +75,7 @@ export const patientByDiseaseListReducer = (
 // get the list of patient and the relative diseases
 export const patientsAndDiseaseListReducer = (
   state = { patients: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case PATIENT_AND_DISEASE_LIST_REQUEST:
@@ -92,7 +92,7 @@ export const patientsAndDiseaseListReducer = (
 // get the list of patient and the relative diseases
 export const patientsAndDiseasesListReducer = (
   state = { patients: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case PATIENT_AND_DISEASES_LIST_REQUEST:
@@ -156,26 +156,3 @@ export const patientUpdateReducer = (state = { patient: {} }, action) => {
       return state
   }
 }
-
-// add new patient to database
-// export const patientAssignedCreateReducer = (state = {}, action) => {
-//   switch (action.type) {
-//     case PATIENT_CREATE_ASSIGNED_REQUEST:
-//       return {
-//         loading: true,
-//       }
-//     case PATIENT_CREATE_ASSIGNED_SUCCESS:
-//       return {
-//         loading: false,
-//         success: true,
-//         patient: action.payload,
-//       }
-//     case PATIENT_CREATE_ASSIGNED_FAIL:
-//       return {
-//         loading: false,
-//         error: action.payload,
-//       }
-//     default:
-//       return state
-//   }
-// }

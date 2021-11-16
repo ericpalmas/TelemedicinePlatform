@@ -17,6 +17,7 @@ import {
   diseaseCreateReducer,
   diseaseDeleteReducer,
   diseaseUpdateReducer,
+  diseaseDetailReducer,
 } from './reducers/diseaseReducers'
 import {
   sensorListReducer,
@@ -84,6 +85,7 @@ const reducer = combineReducers({
   patientDelete: patientDeleteReducer,
   patientUpdate: patientUpdateReducer,
   diseaseList: diseaseListReducer,
+  diseaseDetail: diseaseDetailReducer,
   diseaseDelete: diseaseDeleteReducer,
   diseaseUpdate: diseaseUpdateReducer,
   sensorList: sensorListReducer,

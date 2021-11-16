@@ -24,6 +24,7 @@ import AdminSurveyListScreen from './screens/AdminSurveyListScreen'
 import StudyListScreen from './screens/StudyListScreen'
 import PatientListByStudy from './screens/PatientListByStudy'
 import PatientEditScreen from './screens/PatientEditScreen'
+import DiseaseEditScreen from './screens/DiseaseEditScreen'
 
 const App = () => {
   return (
@@ -48,7 +49,6 @@ const App = () => {
             component={PatientListByStudy}
             exact
           />
-
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
@@ -57,8 +57,8 @@ const App = () => {
           <Route path='/admin/addDoctor' component={AddDoctorScreen} />
           <Route path='/admin/patientList' component={AdminPatientListScreen} />
           <Route path='/admin/patient/:id/edit' component={PatientEditScreen} />
-
           <Route path='/admin/diseaseList' component={AdminDiseaseListScreen} />
+          <Route path='/admin/disease/:id/edit' component={DiseaseEditScreen} />
           <Route path='/admin/surveyList' component={AdminSurveyListScreen} />
         </Container>
       </main>

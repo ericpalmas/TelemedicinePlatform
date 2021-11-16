@@ -83,8 +83,20 @@ const AdminDiseaseListScreen = ({ history }) => {
                     </td>
                     <td>{disease.description}</td>
                     <td>
-                      <LinkContainer to={`/admin/patient/${disease._id}/edit`}>
-                        <Button variant='light' className='btn-sm'>
+                      <LinkContainer
+                        // to={`/admin/disease/${disease._id}/edit`}
+                        // params={{ testvalue: 'hello' }}
+
+                        to={{
+                          pathname: `/admin/disease/${disease._id}/edit`,
+                          state: { prova: 'ciao' },
+                        }}
+                      >
+                        <Button
+                          variant='light'
+                          className='btn-sm'
+                          //disease={disease}
+                        >
                           <i className='fas fa-edit'></i>
                         </Button>
                       </LinkContainer>

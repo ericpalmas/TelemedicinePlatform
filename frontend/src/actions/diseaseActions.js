@@ -16,6 +16,9 @@ import {
   DISEASE_UPDATE_REQUEST,
   DISEASE_UPDATE_SUCCESS,
   DISEASE_UPDATE_FAIL,
+  DISEASE_REQUEST,
+  DISEASE_SUCCESS,
+  DISEASE_FAIL,
 } from '../constants/diseaseConstants'
 
 export const listDiseases = () => async (dispatch) => {
@@ -34,6 +37,27 @@ export const listDiseases = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DISEASE_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const diseaseDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DISEASE_REQUEST })
+
+    const { data } = await axios.get(`/api/diseases/detail/${id}`)
+
+    dispatch({
+      type: DISEASE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: DISEASE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

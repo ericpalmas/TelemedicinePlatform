@@ -199,7 +199,7 @@ const PatientEditScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to='/admin/doctorlist' className='btn btn-light my-3'>
+      <Link to='/admin/patientlist' className='btn btn-light my-3'>
         Go Back
       </Link>
       <FormContainer>

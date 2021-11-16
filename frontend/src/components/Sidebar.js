@@ -173,14 +173,14 @@ const Sidebar = () => {
               <AddSurveyTIme />
             </div>
 
-            <div id='sidebarLink' data-testid='downloadCSV'>
+            {/* <div id='sidebarLink' data-testid='downloadCSV'>
               <AiIcons.AiOutlineDownload />
               <DownloadSurveyCSV
                 data={data}
                 headers={headers}
                 responses={responses}
               />
-            </div>
+            </div> */}
           </div>
         </nav>
       </IconContext.Provider>

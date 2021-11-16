@@ -55,16 +55,16 @@ const AdminSurveyListScreen = ({ history }) => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <>
           <Row>
-            <Col className="mb-2 mt-4 ml-0 pl-0">
+            <Col className='mb-2 mt-4 ml-0 pl-0'>
               <h1>Surveys</h1>
             </Col>
           </Row>
-          <Row className="align-items-center">
-            <Table striped bordered hover responsive className="table-lg">
+          <Row className='align-items-center'>
+            <Table striped bordered hover responsive className='table-lg'>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -96,14 +96,14 @@ const AdminSurveyListScreen = ({ history }) => {
                     )}
 
                     <td>
-                      {response.response ? (
+                      {response.completed ? (
                         <i
-                          className="fas fa-check"
+                          className='fas fa-check'
                           style={{ color: 'green' }}
                         ></i>
                       ) : (
                         <i
-                          className="fas fa-times"
+                          className='fas fa-times'
                           style={{ color: 'red' }}
                         ></i>
                       )}

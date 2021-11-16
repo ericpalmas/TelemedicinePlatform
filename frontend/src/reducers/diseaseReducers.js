@@ -16,6 +16,9 @@ import {
   DISEASE_UPDATE_SUCCESS,
   DISEASE_UPDATE_FAIL,
   DISEASE_UPDATE_RESET,
+  DISEASE_REQUEST,
+  DISEASE_SUCCESS,
+  DISEASE_FAIL,
 } from '../constants/diseaseConstants'
 
 export const diseaseListReducer = (state = { diseases: [] }, action) => {
@@ -31,10 +34,25 @@ export const diseaseListReducer = (state = { diseases: [] }, action) => {
   }
 }
 
+export const diseaseDetailReducer = (state = { disease: {} }, action) => {
+  switch (action.type) {
+    case DISEASE_REQUEST:
+      return { loading: true, disease: {} }
+    case DISEASE_SUCCESS:
+      return { loading: false, disease: action.payload }
+    case DISEASE_FAIL:
+      return { loading: false, error: action.payload }
+    case DISEASE_UPDATE_RESET:
+      return { disease: {} }
+    default:
+      return state
+  }
+}
+
 // get all diseases of a patient
 export const patientDiseasesListReducer = (
   state = { patientDiseases: [] },
-  action,
+  action
 ) => {
   switch (action.type) {
     case PATIENT_DISEASE_LIST_REQUEST:

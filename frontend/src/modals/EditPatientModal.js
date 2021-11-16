@@ -37,22 +37,6 @@ const EditPatientModal = ({ patient }) => {
   const userLogin = useSelector((state) => state.doctorLogin)
   const { userInfo } = userLogin
 
-  // const submitHandler = (e) => {
-  //   e.preventDefault()
-  //   const newPatient = {
-  //     _id: patient._id,
-  //     name,
-  //     surname,
-  //     age,
-  //     therapy,
-  //     items,
-  //   }
-  //   dispatch(updatePatient(newPatient)).then(() => {
-  //     dispatch(listPatients())
-  //     dispatch(listPatientsAndDisease())
-  //   })
-  // }
-
   function hasDuplicates(array) {
     var valuesSoFar = Object.create(null)
     for (var i = 0; i < array.length; ++i) {
