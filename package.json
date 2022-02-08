@@ -12,7 +12,8 @@
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.2",
+    "morgan": "^1.10.0",
     "react-scripts": "^4.0.3",
     "react-select": "^4.3.1"
   },
