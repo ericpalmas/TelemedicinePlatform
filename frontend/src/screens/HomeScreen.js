@@ -50,7 +50,7 @@ const HomeScreen = () => {
           <Card className='my-3 p-3 rounded'>
             <Link to={`/studies`}>
               <Card.Img
-                src={process.env.PUBLIC_URL + '/images/study.png'}
+                src={process.env.PUBLIC_URL + '/images/study1.png'}
                 variant='top'
               />
             </Link>
