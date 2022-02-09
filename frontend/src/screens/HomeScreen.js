@@ -50,11 +50,11 @@ const HomeScreen = () => {
           <Card className='my-3 p-3 rounded'>
             <Link to={`/studies`}>
               <Card.Img
-                src={process.env.PUBLIC_URL + '/images/study1.png'}
+                src={process.env.PUBLIC_URL + '/images/study2.png'}
                 variant='top'
               />
             </Link>
-            <Card.Body>
+            <Card.Body className='mt-2 '>
               <Link to={`/studies`}>
                 <Card.Title as='div'>
                   <strong>Manage studies</strong>
