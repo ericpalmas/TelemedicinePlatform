@@ -6,6 +6,7 @@ import PatientDisease from '../models/patientDiseaseModel.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 import DoctorPatient from '../models/doctorPatientModel.js'
 import SurveyResponse from '../models/surveyResponseModel.js'
+import PatientDevice from '../models/patientDeviceModel.js'
 
 // @desc Fetch all patients
 // @route GET /api/patients
@@ -172,6 +173,74 @@ router.post(
     } else {
       res.status(404)
       throw new Error('Disease not found')
+    }
+  })
+)
+
+router.post(
+  '/patientMacAddress/:id',
+  asyncHandler(async (req, res) => {
+    const { address } = req.body
+    const patientMacAddress = await PatientDevice.find({
+      patient: req.params.id,
+    })
+
+    if (patientMacAddress.length !== 0) {
+      const filter = { patient: req.params.id }
+      const result = await PatientDevice.updateOne(filter, {
+        macAdress: address,
+      })
+
+      if (result) {
+        res.json(result)
+      } else {
+        res.status(404)
+      }
+    } else {
+      const newPatientDevice = new PatientDevice({
+        macAdress: address,
+        patient: req.params.id,
+      })
+      const result = await newPatientDevice.save()
+
+      if (result) {
+        res.json(result)
+      } else {
+        res.status(404)
+      }
+    }
+  })
+)
+
+router.get(
+  '/patientMacAddress/:id',
+  asyncHandler(async (req, res) => {
+    const patientMacAddress = await PatientDevice.find({
+      patient: req.params.id,
+    })
+
+    if (patientMacAddress) {
+      res.json(patientMacAddress)
+    } else {
+      res.status(404)
+      throw new Error('patient not found')
+    }
+  })
+)
+
+router.delete(
+  '/patientMacAddress/:id',
+  asyncHandler(async (req, res) => {
+    const patientDevice = await PatientDevice.deleteOne({
+      patient: req.params.id,
+    })
+    const result = await patientDevice.save()
+
+    if (result) {
+      res.json({ message: 'device removed' })
+    } else {
+      res.status(404)
+      throw new Error('Patient not found')
     }
   })
 )
