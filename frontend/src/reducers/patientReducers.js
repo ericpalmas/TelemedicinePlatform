@@ -27,6 +27,15 @@ import {
   PATIENT_AND_DISEASES_LIST_REQUEST,
   PATIENT_AND_DISEASES_LIST_SUCCESS,
   PATIENT_AND_DISEASES_LIST_FAIL,
+  PATIENT_DEVICE_REQUEST,
+  PATIENT_DEVICE_SUCCESS,
+  PATIENT_DEVICE_FAIL,
+  PATIENT_DEVICE_CREATE_REQUEST,
+  PATIENT_DEVICE_CREATE_SUCCESS,
+  PATIENT_DEVICE_CREATE_FAIL,
+  PATIENT_DEVICE_DELETE_REQUEST,
+  PATIENT_DEVICE_DELETE_SUCCESS,
+  PATIENT_DEVICE_DELETE_FAIL,
 } from '../constants/patientConstants'
 
 export const patientListReducer = (state = { patients: [] }, action) => {
@@ -152,6 +161,54 @@ export const patientUpdateReducer = (state = { patient: {} }, action) => {
       return { loading: false, error: action.payload }
     case PATIENT_UPDATE_RESET:
       return { patient: {} }
+    default:
+      return state
+  }
+}
+
+// associate device to patient
+export const patientDeviceCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PATIENT_DEVICE_CREATE_REQUEST:
+      return {
+        loading: true,
+      }
+    case PATIENT_DEVICE_CREATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case PATIENT_DEVICE_CREATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      }
+    default:
+      return state
+  }
+}
+
+export const patientDeviceDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PATIENT_DEVICE_DELETE_REQUEST:
+      return { loading: true }
+    case PATIENT_DEVICE_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case PATIENT_DEVICE_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const patientDeviceReducer = (state = { device: {} }, action) => {
+  switch (action.type) {
+    case PATIENT_DEVICE_REQUEST:
+      return { loading: true, ...state }
+    case PATIENT_DEVICE_SUCCESS:
+      return { loading: false, device: action.payload }
+    case PATIENT_DEVICE_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }

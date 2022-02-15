@@ -24,6 +24,15 @@ import {
   PATIENT_AND_DISEASES_LIST_REQUEST,
   PATIENT_AND_DISEASES_LIST_SUCCESS,
   PATIENT_AND_DISEASES_LIST_FAIL,
+  PATIENT_DEVICE_REQUEST,
+  PATIENT_DEVICE_SUCCESS,
+  PATIENT_DEVICE_FAIL,
+  PATIENT_DEVICE_CREATE_REQUEST,
+  PATIENT_DEVICE_CREATE_SUCCESS,
+  PATIENT_DEVICE_CREATE_FAIL,
+  PATIENT_DEVICE_DELETE_REQUEST,
+  PATIENT_DEVICE_DELETE_SUCCESS,
+  PATIENT_DEVICE_DELETE_FAIL,
 } from '../constants/patientConstants'
 
 export const listPatients = () => async (dispatch) => {
@@ -205,6 +214,78 @@ export const updatePatient = (patient) => async (dispatch) => {
 
     dispatch({
       type: PATIENT_UPDATE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const patientDevice = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: PATIENT_DEVICE_REQUEST })
+
+    const { data } = await axios.get(`/api/patients/patientMacAddress/${id}`)
+
+    dispatch({
+      type: PATIENT_DEVICE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PATIENT_DEVICE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const createPatientDevice = (patient) => async (dispatch) => {
+  console.log(patient)
+  try {
+    dispatch({
+      type: PATIENT_DEVICE_CREATE_REQUEST,
+    })
+
+    const { data } = await axios.put(
+      `/api/patients/patientMacAddress/${patient._id}`,
+      patient
+    )
+
+    dispatch({
+      type: PATIENT_DEVICE_CREATE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PATIENT_DEVICE_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const deletePatientDevice = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: PATIENT_DEVICE_DELETE_REQUEST,
+    })
+
+    await axios.delete(`/api/patients/patientMacAddress/${id}`)
+
+    dispatch({
+      type: PATIENT_DEVICE_DELETE_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+
+    dispatch({
+      type: PATIENT_DEVICE_DELETE_FAIL,
       payload: message,
     })
   }

@@ -32,10 +32,6 @@ const Patient = ({ patient }) => {
     }
   }
 
-  // useEffect(() => {
-  //
-  // }, [dispatch])
-
   return (
     <Card
       className='my-3 p-3 rounded'

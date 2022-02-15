@@ -177,14 +177,16 @@ router.post(
   })
 )
 
-router.post(
+router.put(
   '/patientMacAddress/:id',
   asyncHandler(async (req, res) => {
+    // console.log(req.params.id)
+
     const { address } = req.body
     const patientMacAddress = await PatientDevice.find({
       patient: req.params.id,
     })
-
+    console.log(req.body)
     if (patientMacAddress.length !== 0) {
       const filter = { patient: req.params.id }
       const result = await PatientDevice.updateOne(filter, {
@@ -201,6 +203,7 @@ router.post(
         macAdress: address,
         patient: req.params.id,
       })
+
       const result = await newPatientDevice.save()
 
       if (result) {
@@ -215,7 +218,7 @@ router.post(
 router.get(
   '/patientMacAddress/:id',
   asyncHandler(async (req, res) => {
-    const patientMacAddress = await PatientDevice.find({
+    const patientMacAddress = await PatientDevice.findOne({
       patient: req.params.id,
     })
 
@@ -223,7 +226,7 @@ router.get(
       res.json(patientMacAddress)
     } else {
       res.status(404)
-      throw new Error('patient not found')
+      throw new Error('mac address not found')
     }
   })
 )

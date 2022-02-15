@@ -14,7 +14,11 @@ import BootstrapTable from 'react-bootstrap-table-next'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { patientDetails } from '../actions/patientActions'
+import {
+  patientDetails,
+  deletePatientDevice,
+  patientDevice,
+} from '../actions/patientActions'
 import { listPatientDiseases } from '../actions/diseaseActions'
 import { listSurveyResponses } from '../actions/responsesActions'
 
@@ -22,6 +26,7 @@ import { columns, selectRow, data, dati } from '../sensorTableData.js'
 import DownloadCSV from '../components/DownloadCSV'
 
 import DownloadMultiplePatientCSV from '../components/DownloadMultiplePatientCSV'
+import EditPatientDeviceModal from '../modals/EditPatientDeviceModal'
 
 //dentro use effect farò la query per avere il singolo paziente
 const PatientScreen = ({ history, match }) => {
@@ -55,6 +60,23 @@ const PatientScreen = ({ history, match }) => {
     responses,
   } = responsesList
 
+  const deviceDetail = useSelector((state) => state.patientDevice)
+  const { loading: loadingDevices, error: errorDevices, device } = deviceDetail
+
+  const createdDevice = useSelector((state) => state.patientDeviceCreate)
+  const {
+    loading: loadingCreateDevice,
+    error: errorCreateDevice,
+    success: successCreateDevice,
+  } = createdDevice
+
+  const deletedDevice = useSelector((state) => state.patientDeviceDelete)
+  const {
+    loading: loadingDeleteDevice,
+    error: errorDeleteDevice,
+    success: successDeleteDevice,
+  } = deletedDevice
+
   useEffect(() => {
     dispatch(patientDetails(match.params.id))
   }, [dispatch, match])
@@ -66,6 +88,16 @@ const PatientScreen = ({ history, match }) => {
   useEffect(() => {
     dispatch(listSurveyResponses(match.params.id))
   }, [dispatch, match])
+
+  useEffect(() => {
+    dispatch(patientDevice(match.params.id))
+  }, [dispatch, match, successCreateDevice, successDeleteDevice])
+
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure')) {
+      dispatch(deletePatientDevice(id))
+    }
+  }
 
   return (
     <>
@@ -87,12 +119,60 @@ const PatientScreen = ({ history, match }) => {
                 <p key={disease._id}>{disease.disease.name}</p>
               ))}
               <p>{patient.pathology}</p>
+
               <Row>
                 <Col>
                   <h2 className='mt-4 mb-4'>Treatment</h2>
                 </Col>
               </Row>
               <p>{patient.therapy}</p>
+
+              <Row>
+                <Col>
+                  <h2 className='mt-4 mb-4'>Patient device</h2>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  {loadingDevices ? (
+                    <Loader />
+                  ) : errorDevices ? (
+                    <Row>
+                      <p>Nessun dispositivo associato</p>
+                      <Col>
+                        <EditPatientDeviceModal
+                          data-testid='editButton'
+                          patientId={patient._id}
+                        />
+                      </Col>
+                    </Row>
+                  ) : (
+                    <Row className='ml-1'>
+                      <Col sm={20}>
+                        <p> Mac Address:{device.macAdress}</p>
+                      </Col>
+
+                      <Col>
+                        <Button
+                          data-testid='deleteButton'
+                          variant='danger'
+                          style={{ float: 'right' }}
+                          onClick={() => deleteHandler(patient._id)}
+                        >
+                          <i className='fas fa-trash'></i>
+                        </Button>
+
+                        <EditPatientDeviceModal
+                          data-testid='editButton'
+                          patientId={patient._id}
+                          device={device}
+                        />
+                      </Col>
+                      <Col></Col>
+                    </Row>
+                  )}
+                </Col>
+              </Row>
             </Col>
           </Row>
 
