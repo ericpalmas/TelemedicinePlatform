@@ -255,12 +255,23 @@ const PatientScreen = ({ history, match }) => {
                                         {surveyResponse.survey.name}
                                         &nbsp;{' '}
                                         {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
-                                          11,
-                                          16
-                                        )}{' '}
+                                          8,
+                                          10
+                                        )}
+                                        {'-'}
+                                        {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
+                                          5,
+                                          7
+                                        )}
+                                        {'-'}
                                         {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
                                           0,
-                                          10
+                                          4
+                                        )}
+                                        &nbsp;{' '}
+                                        {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
+                                          11,
+                                          16
                                         )}{' '}
                                       </Accordion.Toggle>
                                     </Card.Header>

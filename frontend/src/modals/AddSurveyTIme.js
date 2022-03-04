@@ -193,15 +193,12 @@ const AddSurveyTIme = () => {
   const submitHandler = (e) => {
     var findError = false
     for (var i = 0; i < items.length; i++) {
-      console.log(items[i].startMinutes)
-      console.log(items[i].endMinutes)
-
       if (items[i].startHour > items[i].endHour) {
         setErrorStartEnd(true)
         setValidated(false)
         findError = true
         break
-      } else {
+      } else if (items[i].startHour === items[i].endHour) {
         if (items[i].startMinutes > items[i].endMinutes) {
           setErrorStartEnd(true)
           setValidated(false)
@@ -211,6 +208,9 @@ const AddSurveyTIme = () => {
           setErrorStartEnd(false)
           setValidated(true)
         }
+      } else {
+        setErrorStartEnd(false)
+        setValidated(true)
       }
     }
 
