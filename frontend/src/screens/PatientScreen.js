@@ -255,7 +255,7 @@ const PatientScreen = ({ history, match }) => {
                                         {surveyResponse.survey.name}
                                         &nbsp;{' '}
                                         {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
-                                          12,
+                                          11,
                                           16
                                         )}{' '}
                                         {surveyResponse.surveyResponses[0].surveyResponse.updatedAt.substring(
