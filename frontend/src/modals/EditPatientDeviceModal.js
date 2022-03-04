@@ -49,15 +49,15 @@ const EditPatientDeviceModal = ({ patientId, device }) => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit mac address</Modal.Title>
+          <Modal.Title>Edit device code</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Label className='mt-2'>
-            <h5>Mac Address</h5>
+            <h5>Device code</h5>
           </Form.Label>
           <Form.Control
             type='name'
-            placeholder='Enter mac address'
+            placeholder='Enter device code'
             value={macAddress}
             onChange={(e) => setMacAddress(e.target.value)}
           />

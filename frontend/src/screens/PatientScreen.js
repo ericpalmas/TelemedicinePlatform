@@ -110,7 +110,12 @@ const PatientScreen = ({ history, match }) => {
           <Row className='mt-4 mb-4'>
             <Col md={6} className='mb-4'>
               <h2 className='mt-4 mb-4'>Patient Profile</h2>
-              <p>
+              <p
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'sans-serif-light',
+                }}
+              >
                 {patient.name} {patient.surname}
               </p>
 
@@ -118,14 +123,28 @@ const PatientScreen = ({ history, match }) => {
               {patientDiseases.map((disease) => (
                 <p key={disease._id}>{disease.disease.name}</p>
               ))}
-              <p>{patient.pathology}</p>
+              <p
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'sans-serif-light',
+                }}
+              >
+                {patient.pathology}
+              </p>
 
               <Row>
                 <Col>
                   <h2 className='mt-4 mb-4'>Treatment</h2>
                 </Col>
               </Row>
-              <p>{patient.therapy}</p>
+              <p
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'sans-serif-light',
+                }}
+              >
+                {patient.therapy}
+              </p>
 
               <Row>
                 <Col>
@@ -149,7 +168,15 @@ const PatientScreen = ({ history, match }) => {
                   ) : (
                     <Row className='ml-1'>
                       <Col sm={20}>
-                        <p> Mac Address:{device.macAdress}</p>
+                        <p
+                          style={{
+                            fontSize: 20,
+                            fontFamily: 'sans-serif-light',
+                          }}
+                        >
+                          {' '}
+                          Device code: {device.macAdress}
+                        </p>
                       </Col>
 
                       <Col>
